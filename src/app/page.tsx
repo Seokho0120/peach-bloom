@@ -1,3 +1,3 @@
 export default function Home() {
-  return <main>peachBloom</main>;
+  return <main className='text-red-400'>peachBloom</main>;
 }
