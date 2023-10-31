@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
 import { NextLayout, NextProvider } from './provider';
-
-const inter = Inter({ subsets: ['latin'] });
+import './globals.css';
+import { pretendardFont } from '@/utils/fontUtil';
 
 export const metadata: Metadata = {
-  title: 'PeachBloom',
-  description: 'PeachBloom 뷰티몰 입니다.',
+  title: 'Peach Bloom',
+  description: 'Peach Bloom 뷰티 쇼핑몰입니다.',
 };
 
 export default function RootLayout({
@@ -16,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='ko'>
-      <body className={inter.className}>
+    <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
+      <body>
         <NextProvider>
           <NextLayout>{children}</NextLayout>
         </NextProvider>

@@ -1,3 +1,3 @@
 export default function Footer() {
-  return <>Footer</>;
+  return <>푸터하하하하</>;
 }
