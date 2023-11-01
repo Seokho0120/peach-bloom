@@ -1,11 +1,13 @@
 import Skincare from '@/components/Skincare';
 import PostsPage from './posts/page';
+import Posts from './posts/posts';
 
 export default function Home({ skincareItems }: any) {
   return (
     <main>
-      {/* <Skincare /> */}
-      <PostsPage />
+      {/* <PostsPage /> */}
+      {/* <Posts /> */}
+      <Skincare />
     </main>
   );
 }

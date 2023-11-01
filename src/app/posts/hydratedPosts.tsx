@@ -1,6 +1,8 @@
 import getQueryClient from '../getQueryClient';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import PostsPage from './page';
+import Posts from './posts';
+import { getSkincareProducts } from '@/api/firesotre';
 
 export interface Post {
   userId: number;
@@ -18,14 +20,19 @@ export async function getPosts() {
 export default async function hydratedPosts() {
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery({
-    queryKey: ['posts'],
-    queryFn: getPosts,
+    // queryKey: ['posts'],
+    // queryFn: getPosts,
+
+    queryKey: ['skincare'],
+    queryFn: getSkincareProducts,
   });
   const dehydratedState = dehydrate(queryClient);
 
-  return (
-    <HydrationBoundary state={dehydratedState}>
-      <PostsPage />
-    </HydrationBoundary>
-  );
+  return <HydrationBoundary state={dehydratedState} />;
+
+  // return (
+  //   <HydrationBoundary state={dehydratedState}>
+  //     <Posts />
+  //   </HydrationBoundary>
+  // );
 }

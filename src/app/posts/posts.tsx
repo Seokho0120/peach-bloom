@@ -1,4 +1,5 @@
 'use client';
+
 import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
@@ -6,10 +7,10 @@ interface Props {
   price: number;
 }
 
-export default function Navbar() {
+export default function Posts() {
   const queryClient = useQueryClient();
   const data = queryClient.getQueryData<Props[]>(['skincare']);
-
+  console.log('data', data);
   return (
     <div>
       <h1>Posts</h1>

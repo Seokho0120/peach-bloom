@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
-import { NextProvider } from './provider';
+import { RecoilRoot } from 'recoil';
+import { Provider } from './provider';
 import './globals.css';
 import { pretendardFont } from '@/utils/fontUtil';
+import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
 
 export const metadata: Metadata = {
   title: 'Peach Bloom',
@@ -16,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
       <body>
-        <NextProvider>{children}</NextProvider>
+        <Provider>
+          <Navbar />
+          {children}
+          <Footer />
+        </Provider>
       </body>
     </html>
   );
