@@ -1,3 +1,11 @@
-export default function Home() {
-  return <main className='text-red-400'>peachBloom</main>;
+import Skincare from '@/components/Skincare';
+import PostsPage from './posts/page';
+
+export default function Home({ skincareItems }: any) {
+  return (
+    <main>
+      {/* <Skincare /> */}
+      <PostsPage />
+    </main>
+  );
 }

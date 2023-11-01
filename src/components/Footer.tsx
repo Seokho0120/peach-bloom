@@ -1,3 +1,3 @@
 export default function Footer() {
-  return <>푸터하하하하</>;
+  return <>푸터요</>;
 }

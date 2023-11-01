@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { NextLayout, NextProvider } from './provider';
+import { NextProvider } from './provider';
 import './globals.css';
 import { pretendardFont } from '@/utils/fontUtil';
 
@@ -16,9 +16,7 @@ export default function RootLayout({
   return (
     <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
       <body>
-        <NextProvider>
-          <NextLayout>{children}</NextLayout>
-        </NextProvider>
+        <NextProvider>{children}</NextProvider>
       </body>
     </html>
   );
