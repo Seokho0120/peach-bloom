@@ -45,8 +45,8 @@ export default function Menubar() {
       </li>
       <li className='flex flex-col cursor-pointer gap-2'>
         {isOpen &&
-          PRODUCTS_MENU.map(({ title, href }) => (
-            <Link href={href} key={href}>
+          PRODUCTS_MENU.map(({ title, href }, idx) => (
+            <Link href={href} key={idx}>
               {title}
             </Link>
           ))}
