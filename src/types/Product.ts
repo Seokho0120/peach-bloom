@@ -11,3 +11,9 @@ export interface ProductListType {
   isSale: boolean;
   saleRate: number;
 }
+
+export interface ProductDetailType extends ProductListType {
+  description: string;
+  ingredients: string;
+  howToUse: string;
+}

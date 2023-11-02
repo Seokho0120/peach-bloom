@@ -1,18 +1,14 @@
 'use client';
 
 import { useProductsList } from '@/hooks/useProducts';
+import Link from 'next/link';
 
 type Props = {
   category: string;
 };
 
 export default function ProductsList({ category }: Props) {
-  const { products, isError, isLoading } = useProductsList(category);
-
-  const filteredProducts = products?.filter(
-    (product) => product.category === category
-  );
-
+  const { productsList, isError, isLoading } = useProductsList(category);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -23,10 +19,10 @@ export default function ProductsList({ category }: Props) {
 
   return (
     <div className='w-full flex items-center justify-center'>
-      {filteredProducts?.map((product) => (
-        <div key={product.productId}>
-          <h2>{product.productTitle}</h2>
-        </div>
+      {productsList?.map(({ productId, productTitle }) => (
+        <Link key={productId} href={`/detail/${productId}`}>
+          <h2>{productTitle}</h2>
+        </Link>
       ))}
     </div>
   );

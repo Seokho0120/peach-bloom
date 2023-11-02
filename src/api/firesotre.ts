@@ -28,4 +28,13 @@ export async function fetchProducts() {
   return response.json();
 }
 
+export async function fetchProductDetail() {
+  const response = await fetch('/data/productsDetailDummy.json');
+  if (!response.ok) {
+    throw new Error('Network 오류!!!!!!');
+  }
+
+  return response.json();
+}
+
 export default db;
