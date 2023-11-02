@@ -1,6 +1,23 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchProductDetail, fetchProducts } from '../api/firesotre';
+import {
+  fetchProductDetail,
+  fetchProducts,
+  getProductsList,
+} from '../api/firesotre';
 import { ProductListType, ProductDetailType } from '../types/Product';
+
+export function useGetProductList() {
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useQuery<ProductListType[]>({
+    queryKey: ['productsList'],
+    queryFn: getProductsList,
+  });
+
+  return { data: products, isLoading, isError };
+}
 
 export function useProductsList(category: string) {
   const { data, isError, isLoading } = useQuery<ProductListType[]>({

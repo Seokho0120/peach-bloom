@@ -1,14 +1,14 @@
 export interface ProductListType {
-  productId: number;
-  category: string;
   brandTitle: string;
-  productTitle: string;
+  category: string;
   imageUrl: string;
-  price: number;
-  slaeRank: number;
-  likedCount: number;
-  reviewCount: number;
   isSale: boolean;
+  likedCount: number;
+  price: number;
+  productId: number;
+  productTitle: string;
+  reviewCount: number;
+  saleRank: number;
   saleRate: number;
 }
 

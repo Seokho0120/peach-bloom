@@ -5,18 +5,18 @@ import {
   getFirestore,
 } from 'firebase/firestore';
 import app from './firebasedb';
+import { ProductListType, ProductDetailType } from '../types/Product';
 
 const db = getFirestore(app);
 
-export async function getSkincareProducts() {
-  const skincareCollection = collection(db, 'skincare');
-  return getDocs(skincareCollection) //
-    .then((snapshot: QuerySnapshot) => {
-      if (!snapshot.empty) {
-        return snapshot.docs.map((doc) => doc.data());
-      }
-      return [];
-    });
+export async function getProductsList(): Promise<ProductListType[]> {
+  const skincareCollection = collection(db, 'products');
+  return getDocs(skincareCollection).then((snapshot) => {
+    if (!snapshot.empty) {
+      return snapshot.docs.map((doc) => doc.data() as ProductListType);
+    }
+    return [];
+  });
 }
 
 export async function fetchProducts() {
