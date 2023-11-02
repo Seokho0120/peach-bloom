@@ -1,7 +1,7 @@
 [
   {
     "productId": 34638,
-    "category": "skin",
+    "category": "스킨케어",
     "brandTitle": "에프씨엠엠",
     "productTitle": "치크톤 싱글 블러셔",
     "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
@@ -14,7 +14,7 @@
   },
   {
     "productId": 3462,
-    "category": "exclusive",
+    "category": "EXCLUSIVE",
     "brandTitle": "이솝",
     "productTitle": "치크톤 싱글 블러셔",
     "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
@@ -27,7 +27,7 @@
   },
   {
     "productId": 123,
-    "category": "hair",
+    "category": "헤어케어",
     "brandTitle": "프라다",
     "productTitle": "치크톤 싱글 블러셔",
     "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
@@ -40,7 +40,7 @@
   },
   {
     "productId": 4234,
-    "category": "body",
+    "category": "바디케어",
     "brandTitle": "ACC",
     "productTitle": "치크톤 싱글 블러셔",
     "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
@@ -53,8 +53,21 @@
   },
   {
     "productId": 97,
-    "category": "makeup",
-    "brandTitle": "makeup",
+    "category": "메이크업",
+    "brandTitle": "papapapa",
+    "productTitle": "피부피부",
+    "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
+    "price": 200000,
+    "slaeRank": 13,
+    "likedCount": 70,
+    "reviewCount": 324,
+    "isSale": true,
+    "saleRate": 10
+  },
+  {
+    "productId": 97,
+    "category": "남성",
+    "brandTitle": "papapapa",
     "productTitle": "피부피부",
     "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
     "price": 200000,

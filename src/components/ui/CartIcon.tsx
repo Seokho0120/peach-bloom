@@ -1,0 +1,5 @@
+import { AiOutlineShoppingCart } from 'react-icons/ai';
+
+export default function CartIcon() {
+  return <AiOutlineShoppingCart className='w-6 h-6' />;
+}

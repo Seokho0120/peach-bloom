@@ -17,11 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
-      <body>
+      <body className='w-full p-4'>
         <Provider>
           <Navbar />
           {children}
-          <Footer />
+          {/* <Footer /> */}
         </Provider>
       </body>
     </html>
