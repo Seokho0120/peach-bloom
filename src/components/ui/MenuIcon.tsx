@@ -1,5 +1,13 @@
 import { AiOutlineMenu } from 'react-icons/ai';
 
-export default function MenuIcon() {
-  return <AiOutlineMenu className='w-6 h-6' />;
+interface Props {
+  onClick: () => void;
+}
+
+export default function MenuIcon({ onClick }: Props) {
+  return (
+    <div className='cursor-pointer'>
+      <AiOutlineMenu className='w-6 h-6' onClick={() => onClick()} />
+    </div>
+  );
 }

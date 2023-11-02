@@ -10,7 +10,6 @@ export default function Navbar() {
         <div className='flex flex-col'>
           <Link href='/'>LOGO</Link>
           <div>
-            <MenuIcon />
             <Menubar />
           </div>
         </div>
