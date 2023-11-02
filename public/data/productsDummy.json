@@ -1,0 +1,67 @@
+[
+  {
+    "productId": 34638,
+    "category": "skin",
+    "brandTitle": "에프씨엠엠",
+    "productTitle": "치크톤 싱글 블러셔",
+    "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
+    "price": 6000,
+    "slaeRank": 41,
+    "likedCount": 41,
+    "reviewCount": 234,
+    "isSale": true,
+    "saleRate": 20
+  },
+  {
+    "productId": 3462,
+    "category": "exclusive",
+    "brandTitle": "이솝",
+    "productTitle": "치크톤 싱글 블러셔",
+    "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
+    "price": 2000,
+    "slaeRank": 30,
+    "likedCount": 3,
+    "reviewCount": 123,
+    "isSale": true,
+    "saleRate": 20
+  },
+  {
+    "productId": 123,
+    "category": "hair",
+    "brandTitle": "프라다",
+    "productTitle": "치크톤 싱글 블러셔",
+    "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
+    "price": 500,
+    "slaeRank": 20,
+    "likedCount": 2,
+    "reviewCount": 224,
+    "isSale": true,
+    "saleRate": 20
+  },
+  {
+    "productId": 4234,
+    "category": "body",
+    "brandTitle": "ACC",
+    "productTitle": "치크톤 싱글 블러셔",
+    "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
+    "price": 100,
+    "slaeRank": 11,
+    "likedCount": 50,
+    "reviewCount": 144,
+    "isSale": true,
+    "saleRate": 20
+  },
+  {
+    "productId": 97,
+    "category": "makeup",
+    "brandTitle": "makeup",
+    "productTitle": "피부피부",
+    "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
+    "price": 200000,
+    "slaeRank": 13,
+    "likedCount": 70,
+    "reviewCount": 324,
+    "isSale": true,
+    "saleRate": 10
+  }
+]

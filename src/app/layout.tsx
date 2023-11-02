@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { RecoilRoot } from 'recoil';
 import { Provider } from './provider';
 import './globals.css';
 import { pretendardFont } from '@/utils/fontUtil';

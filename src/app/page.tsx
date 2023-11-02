@@ -7,7 +7,7 @@ export default function Home({ skincareItems }: any) {
     <main>
       {/* <PostsPage /> */}
       {/* <Posts /> */}
-      <Skincare />
+      {/* <Skincare /> */}
     </main>
   );
 }

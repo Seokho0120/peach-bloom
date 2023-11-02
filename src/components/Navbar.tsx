@@ -12,7 +12,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <h1>Posts</h1>
+      <h1>데이터 내용 리스트</h1>
       <ul>
         {data?.map((posts, idx) => (
           <li key={idx}>
