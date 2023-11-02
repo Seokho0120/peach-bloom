@@ -1,33 +1,15 @@
 'use client';
 
-import { fetchProducts } from '@/api/firesotre';
-import { useQuery } from '@tanstack/react-query';
+import { useProductsList } from '@/hooks/useProducts';
 
 type Props = {
   category: string;
 };
 
-type Product = {
-  productId: number;
-  category: string;
-  brandTitle: string;
-  productTitle: string;
-  imageUrl: string;
-  price: number;
-  slaeRank: number;
-  likedCount: number;
-  reviewCount: number;
-  isSale: boolean;
-  saleRate: number;
-};
-
 export default function ProductsList({ category }: Props) {
-  const { data, isError, isLoading } = useQuery<Product[]>({
-    queryKey: ['products'],
-    queryFn: fetchProducts,
-  });
+  const { products, isError, isLoading } = useProductsList(category);
 
-  const filteredProducts = data?.filter(
+  const filteredProducts = products?.filter(
     (product) => product.category === category
   );
 

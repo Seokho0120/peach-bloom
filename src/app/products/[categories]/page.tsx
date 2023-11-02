@@ -9,9 +9,7 @@ type Props = {
 export default function Products({ params: { categories } }: Props) {
   return (
     <>
-      <div>
-        <ProductsList category={categories} />
-      </div>
+      <ProductsList category={categories} />
     </>
   );
 }
