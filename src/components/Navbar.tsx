@@ -1,26 +1,29 @@
-'use client';
-import { useQueryClient } from '@tanstack/react-query';
+import Link from 'next/link';
 
-interface Props {
-  name: string;
-  price: number;
-}
+const NAV_MENU = [
+  {
+    href: '/products',
+    title: 'Products',
+  },
+  {
+    href: '/collection',
+    title: 'Collection',
+  },
+];
 
 export default function Navbar() {
-  const queryClient = useQueryClient();
-  const data = queryClient.getQueryData<Props[]>(['skincare']);
-
   return (
-    <div>
-      <h1>데이터 내용 리스트</h1>
-      <ul>
-        {data?.map((posts, idx) => (
-          <li key={idx}>
-            {posts.name}
-            <div>{posts.price}</div>
-          </li>
-        ))}
-      </ul>
+    <div className='flex justify-between items-center w-full'>
+      <Link href='/'>LOGO</Link>
+      <nav>
+        <ul className='flex gap-4 items-center'>
+          {NAV_MENU.map(({ title, href }, idx) => (
+            <li key={idx}>
+              <Link href={href}>{title}</Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 }
