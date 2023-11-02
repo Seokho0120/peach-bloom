@@ -19,4 +19,13 @@ export async function getSkincareProducts() {
     });
 }
 
+export async function fetchProducts() {
+  const response = await fetch('/data/productsDummy.json');
+  if (!response.ok) {
+    throw new Error('Network 오류!!!!!!');
+  }
+
+  return response.json();
+}
+
 export default db;

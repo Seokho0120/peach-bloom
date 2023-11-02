@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import MenuIcon from './ui/MenuIcon';
+import Link from 'next/link';
 
 const PRODUCTS_MENU = [
   {
@@ -44,7 +45,11 @@ export default function Menubar() {
       </li>
       <li className='flex flex-col cursor-pointer gap-2'>
         {isOpen &&
-          PRODUCTS_MENU.map(({ title, href }) => <div key={href}>{title}</div>)}
+          PRODUCTS_MENU.map(({ title, href }) => (
+            <Link href={href} key={href}>
+              {title}
+            </Link>
+          ))}
       </li>
     </ul>
   );
