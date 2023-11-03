@@ -4,7 +4,7 @@ import {
   getProductDetail,
   fetchProductDetail,
   fetchProducts,
-} from '../api/firesotre';
+} from '../app/api/firesotre';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { productsListAtom, productDetailAtom } from '@/atoms/productsListAtom';

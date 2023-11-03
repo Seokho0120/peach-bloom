@@ -1,6 +1,6 @@
 import getQueryClient from '../app/getQueryClient';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
-import { getSkincareProducts } from '@/api/firesotre';
+import { getSkincareProducts } from '@/app/api/firesotre';
 
 export default async function Skincare() {
   const queryClient = getQueryClient();

@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
-import { Provider } from './provider';
 import './globals.css';
-import { pretendardFont } from '@/utils/fontUtil';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
+import { pretendardFont } from '@/utils/fontUtil';
+import { Provider } from '@/context/provider';
+import AuthSession from '@/context/AuthSession';
 
 export const metadata: Metadata = {
   title: 'Peach Bloom',
@@ -18,11 +19,13 @@ export default function RootLayout({
   return (
     <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
       <body className='w-full p-4'>
-        <Provider>
-          <Navbar />
-          {children}
-          {/* <Footer /> */}
-        </Provider>
+        <AuthSession>
+          <Provider>
+            <Navbar />
+            {children}
+            {/* <Footer /> */}
+          </Provider>
+        </AuthSession>
       </body>
     </html>
   );
