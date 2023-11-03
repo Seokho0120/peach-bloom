@@ -6,15 +6,14 @@ import axios from 'axios';
 const db = getFirestore(app);
 
 export async function getProductsList(): Promise<ProductListType[]> {
-  const skincareCollection = collection(db, 'products');
-  return getDocs(skincareCollection).then((snapshot) => {
-    if (!snapshot.empty) {
-      return snapshot.docs.map((doc) => doc.data() as ProductListType);
-    }
-    return [];
-  });
+  const snapshot = await getDocs(collection(db, 'products'));
+
+  return snapshot.empty
+    ? []
+    : snapshot.docs.map((doc) => doc.data() as ProductListType);
 }
 
+// 더미 데이터 리스트
 export async function fetchProducts() {
   const response = await axios
     .get('/data/productsDummy.json')
@@ -24,7 +23,7 @@ export async function fetchProducts() {
 
   return productData;
 }
-
+// 더미 데이터 디테일
 export async function fetchProductDetail() {
   const response = await axios
     .get('/data/productsDetailDummy.json')
@@ -34,14 +33,5 @@ export async function fetchProductDetail() {
 
   return productDetailData;
 }
-
-// export async function fetchProductDetail() {
-//   const response = await fetch('/data/productsDetailDummy.json');
-//   if (!response.ok) {
-//     throw new Error('Network 오류!!!!!!');
-//   }
-
-//   return response.json();
-// }
 
 export default db;
