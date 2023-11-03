@@ -1,9 +1,4 @@
-import {
-  QuerySnapshot,
-  collection,
-  getDocs,
-  getFirestore,
-} from 'firebase/firestore';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import app from './firebasedb';
 import { ProductListType, ProductDetailType } from '../types/Product';
 

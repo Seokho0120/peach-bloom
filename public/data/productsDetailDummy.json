@@ -1,19 +1,19 @@
 [
   {
-    "productId": 34638,
-    "category": "skincare",
     "brandTitle": "에프씨엠엠",
-    "productTitle": "skincare 제품이다",
-    "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
-    "price": 6000,
-    "saleRank": 41,
-    "likedCount": 41,
-    "reviewCount": 234,
-    "isSale": true,
-    "saleRate": 20,
+    "category": "skincare",
     "description": "이 skincare 제품은 피부를 부드럽고 촉촉하게 만들어줍니다.",
+    "howToUse": "클렌징 후 적당량을 손에 덜어 얼굴과 목에 골고루 발라줍니다.",
+    "imageUrl": "https://dn5hzapyfrpio.cloudfront.net/home/glowmee/upload/20150605/1433469715332.jpg",
     "ingredients": "물, 글리세린, 하이알루론산, 페녹시에탄올, 카프릴릭/카프릭트리글리세라이드",
-    "howToUse": "클렌징 후 적당량을 손에 덜어 얼굴과 목에 골고루 발라줍니다."
+    "isSale": true,
+    "likedCount": 41,
+    "price": 6000,
+    "productId": 34638,
+    "productTitle": "skincare 제품이다",
+    "reviewCount": 234,
+    "saleRank": 41,
+    "saleRate": 20
   },
   {
     "productId": 3462,
@@ -27,6 +27,7 @@
     "reviewCount": 123,
     "isSale": true,
     "saleRate": 20,
+
     "description": "exclusive 설명!!!!",
     "ingredients": "exclusive 성분!!!!",
     "howToUse": "exclusive 사용방법!!!!"
