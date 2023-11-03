@@ -3,12 +3,8 @@
 import Link from 'next/link';
 import Menubar from './Menubar';
 import Userbar from './Userbar';
-import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function Navbar() {
-  const { data: session } = useSession();
-  console.log('session', session);
-
   return (
     <>
       <nav className='flex justify-between'>
@@ -18,15 +14,7 @@ export default function Navbar() {
             <Menubar />
           </div>
         </div>
-        {/* <Userbar /> */}
-
-        <div>
-          {session ? (
-            <button onClick={() => signOut()}>sign out</button>
-          ) : (
-            <button onClick={() => signIn()}>sign in</button>
-          )}
-        </div>
+        <Userbar />
       </nav>
     </>
   );

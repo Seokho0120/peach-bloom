@@ -23,7 +23,7 @@ const SIDE_MENU = [
 ];
 
 export default function Userbar() {
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
 
   return (
     <nav>
@@ -35,11 +35,11 @@ export default function Userbar() {
         ))}
       </ul>
 
-      {/* {session ? (
+      {session ? (
         <button onClick={() => signOut()}>sign Out</button>
       ) : (
         <button onClick={() => signIn()}>sign In</button>
-      )} */}
+      )}
     </nav>
   );
 }

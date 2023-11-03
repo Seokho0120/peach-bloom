@@ -6,7 +6,7 @@ type Props = {
   };
 };
 
-export default function Products({ params: { categories } }: Props) {
+export default function ProductsListPage({ params: { categories } }: Props) {
   return (
     <>
       <ProductsList category={categories} />

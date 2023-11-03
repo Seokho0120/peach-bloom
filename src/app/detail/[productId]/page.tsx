@@ -6,7 +6,7 @@ type Props = {
   };
 };
 
-export default function Detail({ params: { productId } }: Props) {
+export default function ProductDetailPage({ params: { productId } }: Props) {
   return (
     <>
       <ProductDetail productId={productId} />
