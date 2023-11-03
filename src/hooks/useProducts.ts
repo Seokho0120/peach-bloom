@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import {
+  getProductsList,
+  getProductDetail,
   fetchProductDetail,
   fetchProducts,
-  getProductsList,
 } from '../api/firesotre';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { productsListAtom } from '@/atoms/productsListAtom';
+import { productsListAtom, productDetailAtom } from '@/atoms/productsListAtom';
 import { ProductListType, ProductDetailType } from '../types/Product';
 
 export function useGetProductList(category: string) {
@@ -32,6 +33,31 @@ export function useGetProductList(category: string) {
   }, [category, productsList, setProductList]);
 
   return { isLoading, isError };
+}
+
+export function useGetProductDetail(productId: number) {
+  const setProductDetail = useSetRecoilState(productDetailAtom);
+
+  const {
+    data: productDetail,
+    isLoading,
+    isError,
+  } = useQuery<ProductDetailType[]>({
+    queryKey: ['productDetail', productId],
+    queryFn: getProductDetail,
+  });
+
+  useEffect(() => {
+    if (productDetail) {
+      const filteredProductDetail = productDetail?.filter(
+        (detail) => detail.productId === productId
+      );
+
+      setProductDetail(filteredProductDetail);
+    }
+  }, [productDetail, productId, setProductDetail]);
+
+  return { isError, isLoading };
 }
 
 // 더미데이터 리스트 불러오기

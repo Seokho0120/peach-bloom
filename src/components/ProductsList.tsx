@@ -1,9 +1,9 @@
 'use client';
 
-import { productsListAtom } from '@/atoms/productsListAtom';
-import { useGetProductList, useProductsList } from '@/hooks/useProducts';
 import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
+import { productsListAtom } from '@/atoms/productsListAtom';
+import { useGetProductList, useProductsList } from '@/hooks/useProducts';
 
 type Props = {
   category: string;

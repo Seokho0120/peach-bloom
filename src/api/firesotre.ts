@@ -13,6 +13,14 @@ export async function getProductsList(): Promise<ProductListType[]> {
     : snapshot.docs.map((doc) => doc.data() as ProductListType);
 }
 
+export async function getProductDetail(): Promise<ProductDetailType[]> {
+  const snapshot = await getDocs(collection(db, 'productDetail'));
+
+  return snapshot.empty
+    ? []
+    : snapshot.docs.map((doc) => doc.data() as ProductDetailType);
+}
+
 // 더미 데이터 리스트
 export async function fetchProducts() {
   const response = await axios
