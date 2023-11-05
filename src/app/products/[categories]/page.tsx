@@ -9,7 +9,7 @@ type Props = {
 
 export default function ProductsListPage({ params: { categories } }: Props) {
   return (
-    <div className='mx-36'>
+    <div className='mx-56'>
       <BrandList category={categories} />
       <ProductsList category={categories} />
     </div>

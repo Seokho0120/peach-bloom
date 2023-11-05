@@ -24,10 +24,15 @@ export default function ProductCard({ product }: Props) {
   const formatPrice = useFormatPrice;
 
   return (
-    <Link href={`/detail/${productId}`}>
+    <Link href={`/detail/${productId}`} className='relative'>
       <Image src={imageUrl} alt='productImage' width={500} height={300} />
+      {isSale && (
+        <div className='bg-pinkpoint text-white w-8 h-8 flex items-center justify-center font-bold absolute top-0'>
+          S
+        </div>
+      )}
       <div className='my-4'>
-        <p className='text-slate-800'>{brandTitle}</p>
+        <p className='text-slate-800 mb-2'>{brandTitle}</p>
         <p className='text-xl font-bold'>{productTitle}</p>
       </div>
       <div className='flex gap-4'>
@@ -38,7 +43,7 @@ export default function ProductCard({ product }: Props) {
               <p>{`<`} </p>
               <p className='line-through'>{formatPrice(price)}</p>
             </div>
-            <p className='text-red-500'>{saleRate}%</p>
+            <p className='text-pinkpoint'>{saleRate}%</p>
           </div>
         ) : (
           <>
