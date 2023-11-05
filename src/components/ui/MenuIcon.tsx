@@ -7,7 +7,7 @@ interface Props {
 export default function MenuIcon({ onClick }: Props) {
   return (
     <div className='cursor-pointer'>
-      <AiOutlineMenu className='w-6 h-6' onClick={() => onClick()} />
+      <AiOutlineMenu className='w-6 h-6 ' onClick={() => onClick()} />
     </div>
   );
 }
