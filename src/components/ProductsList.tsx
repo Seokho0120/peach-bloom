@@ -1,10 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
 import { productsListAtom } from '@/atoms/productsListAtom';
 import { useGetProductList, useProductsList } from '@/hooks/useProducts';
-import BrandList from './BrandList';
+import ProductCard from './ProductCard';
 
 type Props = {
   category: string;
@@ -23,20 +22,13 @@ export default function ProductsList({ category }: Props) {
   }
 
   return (
-    <>
-      {/* <BrandList category={category} /> */}
-      <div className='w-full flex items-center justify-center gap-5'>
-        {productsList?.map(
-          ({ productTitle, productId, brandTitle, likedCount }) => (
-            <Link key={productId} href={`/detail/${productId}`}>
-              <h2>{productTitle}</h2>
-              <div>{category}</div>
-              <div>{likedCount}</div>
-              <div>{brandTitle}</div>
-            </Link>
-          )
-        )}
-      </div>
-    </>
+    <ul className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4'>
+      {productsList &&
+        productsList.map((product) => (
+          <li key={product.productId}>
+            <ProductCard product={product} />
+          </li>
+        ))}
+    </ul>
   );
 }
