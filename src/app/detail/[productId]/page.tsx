@@ -8,8 +8,8 @@ type Props = {
 
 export default function ProductDetailPage({ params: { productId } }: Props) {
   return (
-    <>
+    <div className='mx-52 flex justify-center'>
       <ProductDetail productId={productId} />
-    </>
+    </div>
   );
 }

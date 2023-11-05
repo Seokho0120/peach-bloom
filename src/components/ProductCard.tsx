@@ -4,6 +4,8 @@ import { ProductListType } from '../types/Product';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
 import HeartIcon from './ui/HeartIcon';
+import { useRecoilValue } from 'recoil';
+import { discountedPriceAtom } from '@/atoms/productsListAtom';
 
 type Props = {
   product: ProductListType;
@@ -23,6 +25,7 @@ export default function ProductCard({ product }: Props) {
   } = product;
 
   const discountedPrice = useDisCountedPrice({ price, saleRate });
+  // const discountedPrice = useRecoilValue(discountedPriceAtom);
   const formatPrice = useFormatPrice;
 
   return (
@@ -44,7 +47,7 @@ export default function ProductCard({ product }: Props) {
         <div className='flex items-center justify-between mb-2'>
           <p className='text-slate-800'>{brandTitle}</p>
           <div className='text-pinkpoint flex items-center gap-1 text-sm'>
-            <HeartIcon /> {likedCount}
+            <HeartIcon type='' /> {likedCount}
           </div>
         </div>
         <p className='text-xl font-bold'>{productTitle}</p>

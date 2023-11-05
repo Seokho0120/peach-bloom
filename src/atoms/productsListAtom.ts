@@ -10,3 +10,8 @@ export const productDetailAtom = atom<ProductDetailType[]>({
   key: 'productDetailAtom',
   default: [],
 });
+
+export const discountedPriceAtom = atom<number>({
+  key: 'discountedPriceAtom',
+  default: 0,
+});

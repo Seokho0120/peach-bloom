@@ -6,7 +6,7 @@ import {
   fetchProducts,
 } from '../app/api/firesotre';
 import { useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { productsListAtom, productDetailAtom } from '@/atoms/productsListAtom';
 import { ProductListType, ProductDetailType } from '../types/Product';
 
@@ -58,6 +58,25 @@ export function useGetProductDetail(productId: number) {
   }, [productDetail, productId, setProductDetail]);
 
   return { isError, isLoading };
+}
+
+export function useGetSelectedProduct(productId: number) {
+  const productsList = useRecoilValue(productsListAtom);
+  const productDetails = useRecoilValue(productDetailAtom);
+
+  const selectedProduct = productsList.filter(
+    (product) => product.productId === productId
+  );
+
+  const detailedProducts = selectedProduct.map((product) => {
+    const detail = productDetails.find(
+      (detail) => detail.productId === productId
+    );
+
+    return detail ? { ...product, ...detail } : product;
+  });
+
+  return { selectedProduct: detailedProducts };
 }
 
 // 더미데이터 리스트 불러오기

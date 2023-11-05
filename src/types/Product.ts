@@ -11,6 +11,9 @@ export interface ProductListType {
   saleRank?: number;
   saleRate?: number;
   isNew?: boolean;
+  description?: string;
+  ingredients?: string;
+  howToUse?: string;
 }
 
 export interface ProductDetailType extends ProductListType {
