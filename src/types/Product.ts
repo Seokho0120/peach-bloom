@@ -10,6 +10,7 @@ export interface ProductListType {
   reviewCount: number;
   saleRank?: number;
   saleRate?: number;
+  isNew?: boolean;
 }
 
 export interface ProductDetailType extends ProductListType {

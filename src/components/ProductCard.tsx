@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ProductListType } from '../types/Product';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
+import HeartIcon from './ui/HeartIcon';
 
 type Props = {
   product: ProductListType;
@@ -18,6 +19,7 @@ export default function ProductCard({ product }: Props) {
     isSale,
     saleRate,
     likedCount,
+    isNew,
   } = product;
 
   const discountedPrice = useDisCountedPrice({ price, saleRate });
@@ -26,13 +28,25 @@ export default function ProductCard({ product }: Props) {
   return (
     <Link href={`/detail/${productId}`} className='relative'>
       <Image src={imageUrl} alt='productImage' width={500} height={300} />
-      {isSale && (
-        <div className='bg-pinkpoint text-white w-8 h-8 flex items-center justify-center font-bold absolute top-0'>
-          S
-        </div>
-      )}
+      <div className='flex'>
+        {isSale && (
+          <div className='bg-pinkpoint text-white w-8 h-8 flex items-center justify-center font-bold absolute top-0'>
+            S
+          </div>
+        )}
+        {isNew && (
+          <div className='bg-navypoint text-white w-8 h-8 flex items-center justify-center font-bold absolute top-0 left-8'>
+            N
+          </div>
+        )}
+      </div>
       <div className='my-4'>
-        <p className='text-slate-800 mb-2'>{brandTitle}</p>
+        <div className='flex items-center justify-between mb-2'>
+          <p className='text-slate-800'>{brandTitle}</p>
+          <div className='text-pinkpoint flex items-center gap-1 text-sm'>
+            <HeartIcon /> {likedCount}
+          </div>
+        </div>
         <p className='text-xl font-bold'>{productTitle}</p>
       </div>
       <div className='flex gap-4'>
