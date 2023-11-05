@@ -10,7 +10,7 @@ import Avatar from './Avatar';
 
 const SIDE_MENU = [
   {
-    href: '/login',
+    href: '/auth/signIn',
     title: <UserIcon />,
   },
   {
@@ -29,7 +29,7 @@ export default function Userbar() {
 
   return (
     <nav>
-      <ul>
+      <ul className='flex flex-col justify-center gap-8 text-navypoint'>
         {SIDE_MENU.map(({ title, href }) => (
           <li key={href}>
             <Link href={href}>{title}</Link>
@@ -37,19 +37,19 @@ export default function Userbar() {
         ))}
       </ul>
 
-      {user && (
+      {/* {session ? (
+        <button onClick={() => signOut()}>sign Out</button>
+      ) : (
+        <button onClick={() => signIn()}>sign In</button>
+      )} */}
+
+      {/* {user && (
         <div>
           <Link href={`/user/${user.username}`}>
             <Avatar image={user.image} />
           </Link>
         </div>
-      )}
-
-      {session ? (
-        <button onClick={() => signOut()}>sign Out</button>
-      ) : (
-        <button onClick={() => signIn()}>sign In</button>
-      )}
+      )} */}
     </nav>
   );
 }

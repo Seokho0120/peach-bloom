@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
-      <body className='w-full p-4'>
+      <body className='w-full p-12'>
         <AuthSession>
           <Provider>
             <Navbar />

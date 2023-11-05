@@ -19,13 +19,6 @@ export default function Signin({ providers, callbackUrl }: Props) {
             Sign in with {provider.name}
           </button>
         </div>
-
-        // <ColorButton
-        //   key={id}
-        //   text={`Sign In with ${name}`}
-        //   onClick={() => signIn(id, { callbackUrl })}
-        //   size='big'
-        // />
       ))}
     </>
   );
