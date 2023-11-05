@@ -6,6 +6,7 @@ import CartIcon from './ui/CartIcon';
 import SearchIcon from './ui/SearchIcon';
 import UserIcon from './ui/UserIcon';
 import { usePathname } from 'next/navigation';
+import Avatar from './Avatar';
 
 const SIDE_MENU = [
   {
@@ -24,6 +25,7 @@ const SIDE_MENU = [
 
 export default function Userbar() {
   const { data: session } = useSession();
+  const user = session?.user;
 
   return (
     <nav>
@@ -34,6 +36,14 @@ export default function Userbar() {
           </li>
         ))}
       </ul>
+
+      {user && (
+        <div>
+          <Link href={`/user/${user.username}`}>
+            <Avatar image={user.image} />
+          </Link>
+        </div>
+      )}
 
       {session ? (
         <button onClick={() => signOut()}>sign Out</button>

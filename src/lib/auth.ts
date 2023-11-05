@@ -8,6 +8,19 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_SECRET || '',
     }),
   ],
+  callbacks: {
+    async session({ session }) {
+      console.log('session', session);
+      const user = session?.user;
+      if (user) {
+        session.user = {
+          ...user,
+          username: user.email?.split('@')[0] || '',
+        };
+      }
+      return session;
+    },
+  },
   pages: {
     signIn: '/auth/signIn',
   },
