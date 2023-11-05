@@ -9,7 +9,7 @@ import Logo from '../../public/images/peachbloom-logo.png';
 export default function Navbar() {
   return (
     <>
-      <nav className='flex justify-between'>
+      <nav className='flex justify-between relative'>
         <div className='flex flex-col'>
           <Link href='/'>
             <Image src={Logo} alt='Logo' priority className='w-32' />
@@ -18,7 +18,6 @@ export default function Navbar() {
             <Menubar />
           </div>
         </div>
-
         <Userbar />
       </nav>
     </>

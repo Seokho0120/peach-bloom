@@ -39,17 +39,17 @@ export default function Menubar() {
   };
 
   return (
-    <ul>
+    <ul className='relative'>
       <li className='my-10 text-navypoint hover:text-pinkpoint'>
         <MenuIcon onClick={toggleMenu} />
       </li>
-      <li className='flex flex-col cursor-pointer gap-6'>
+      <li className='absolute flex flex-col cursor-pointer gap-6'>
         {isOpen &&
           PRODUCTS_MENU.map(({ title, href }, idx) => (
             <Link
               href={href}
               key={idx}
-              className=' font-semibold text-navypoint hover:text-pinkpoint'
+              className='font-semibold text-navypoint hover:text-pinkpoint'
             >
               {title}
             </Link>

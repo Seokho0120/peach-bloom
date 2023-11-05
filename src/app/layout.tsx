@@ -5,6 +5,8 @@ import Navbar from '@/components/Navbar';
 import { pretendardFont } from '@/utils/fontUtil';
 import { Provider } from '@/context/provider';
 import AuthSession from '@/context/AuthSession';
+import Menubar from '../components/Menubar';
+import Userbar from '../components/Userbar';
 
 export const metadata: Metadata = {
   title: 'Peach Bloom',
