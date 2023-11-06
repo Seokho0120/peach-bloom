@@ -9,56 +9,54 @@ import HeartOutIcon from './ui/HeartOutIcon';
 import LoginIcon from './ui/LoginIcon';
 import { useUserSession } from '@/hooks/useUserSession';
 
+const SIDE_MENU = [
+  {
+    title: <UserIcon />,
+    href: '/mypage',
+    text: 'MY PAGE',
+  },
+  {
+    title: <HeartOutIcon />,
+    href: '/mylike',
+    text: 'MY LIKE',
+  },
+  {
+    title: <CartIcon />,
+    href: '/carts',
+    text: 'CARTS',
+  },
+  // {
+  //   href: '/search',
+  //   title: <SearchIcon />,
+  //   text: 'SEARCH',
+  // },
+];
+
 export default function Userbar() {
   const { data: session } = useSession();
-
-  const SIDE_MENU = [
-    {
-      href: `${session ? '/mypage' : '/auth/signIn'}`,
-      title: <UserIcon />,
-      text: 'MY PAGE',
-    },
-    {
-      href: `${session ? '/mylike' : '/auth/signIn'}`,
-      title: <HeartOutIcon />,
-      text: 'MY LIKE',
-    },
-    {
-      href: `${session ? '/carts' : '/auth/signIn'}`,
-      title: <CartIcon />,
-      text: 'CARTS',
-    },
-    {
-      title: <LoginIcon />,
-      text: session ? 'LOGOUT' : 'LOGIN',
-      onClick: session ? () => signOut() : () => signIn(),
-    },
-    // {
-    //   href: '/search',
-    //   title: <SearchIcon />,
-    //   text: 'SEARCH',
-    // },
-  ];
 
   return (
     <nav>
       <ul className='flex justify-center items-center gap-6 text-navypoint'>
-        {SIDE_MENU.map(({ title, href, text, onClick }, index) =>
-          href ? (
-            <li key={href}>
-              <Link href={href} className='flex items-center gap-1'>
-                <p>{title}</p>
-                <p className='text-xs'>{text}</p>
-              </Link>
-            </li>
-          ) : (
-            <li key={index}>
-              <button onClick={onClick} className='flex items-center gap-1'>
-                <p>{title}</p>
-                <p className='text-xs'>{text}</p>
-              </button>
-            </li>
-          )
+        {SIDE_MENU.map(({ title, href, text }) => (
+          <li key={href}>
+            <Link href={href} className='flex items-center gap-1'>
+              <p>{title}</p>
+              <p className='text-xs'>{text}</p>
+            </Link>
+          </li>
+        ))}
+
+        {session ? (
+          <button onClick={() => signOut()} className='flex items-center gap-1'>
+            <LoginIcon />
+            <p className='text-xs'>LOGOUT</p>
+          </button>
+        ) : (
+          <button onClick={() => signIn()} className='flex items-center gap-1'>
+            <LoginIcon />
+            <p className='text-xs'>LOGIN</p>
+          </button>
         )}
       </ul>
 
