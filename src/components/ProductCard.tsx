@@ -25,7 +25,6 @@ export default function ProductCard({ product }: Props) {
   } = product;
 
   const discountedPrice = useDisCountedPrice({ price, saleRate });
-  // const discountedPrice = useRecoilValue(discountedPriceAtom);
   const formatPrice = useFormatPrice;
 
   return (
@@ -50,7 +49,7 @@ export default function ProductCard({ product }: Props) {
             <HeartIcon type='' /> {likedCount}
           </div>
         </div>
-        <p className='text-xl font-bold'>{productTitle}</p>
+        <p className='text-lg font-bold leading-5'>{productTitle}</p>
       </div>
       <div className='flex gap-4'>
         {isSale ? (

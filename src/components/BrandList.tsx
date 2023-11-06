@@ -12,7 +12,7 @@ export default function BrandList({ category }: Props) {
   const brandList = productsList.map((product) => product.brandTitle);
 
   return (
-    <section className='mb-20'>
+    <section className='mb-6'>
       <h2 className='font-bold text-4xl text-slate-600'>
         {category.toUpperCase()}
         <div className=' border-b border-navypoint mt-4' />
