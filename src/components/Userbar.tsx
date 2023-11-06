@@ -6,8 +6,7 @@ import CartIcon from './ui/CartIcon';
 import SearchIcon from './ui/SearchIcon';
 import UserIcon from './ui/UserIcon';
 import HeartOutIcon from './ui/HeartOutIcon';
-import LoginIcon from './ui/LoginIcon';
-import { useUserSession } from '@/hooks/useUserSession';
+import AuthButton from './AuthButtonProps';
 
 const SIDE_MENU = [
   {
@@ -34,30 +33,23 @@ const SIDE_MENU = [
 
 export default function Userbar() {
   const { data: session } = useSession();
-
+  console.log('session', session);
   return (
     <nav>
       <ul className='flex justify-center items-center gap-6 text-navypoint'>
         {SIDE_MENU.map(({ title, href, text }) => (
           <li key={href}>
-            <Link href={href} className='flex items-center gap-1'>
+            <Link
+              href={session ? href : '/auth/signIn'}
+              className='flex items-center gap-1'
+            >
               <p>{title}</p>
               <p className='text-xs'>{text}</p>
             </Link>
           </li>
         ))}
 
-        {session ? (
-          <button onClick={() => signOut()} className='flex items-center gap-1'>
-            <LoginIcon />
-            <p className='text-xs'>LOGOUT</p>
-          </button>
-        ) : (
-          <button onClick={() => signIn()} className='flex items-center gap-1'>
-            <LoginIcon />
-            <p className='text-xs'>LOGIN</p>
-          </button>
-        )}
+        <AuthButton session={session} onSignOut={signOut} onSignIn={signIn} />
       </ul>
 
       {/* {user && (
