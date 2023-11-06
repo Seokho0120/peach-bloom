@@ -5,11 +5,7 @@ import useFormatPrice from '@/hooks/useFormatPrice';
 import Image from 'next/image';
 import HeartIcon from './ui/HeartIcon';
 import { useGetProductDetail } from '@/hooks/useProducts';
-import {
-  ProductListType,
-  SelectedProductDetail,
-  arrProductDetailType,
-} from '@/types/Product';
+import { arrProductDetailType } from '@/types/Product';
 
 type Props = {
   productId: number;

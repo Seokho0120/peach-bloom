@@ -1,7 +1,6 @@
 import { Awaitable, NextAuthOptions, RequestInternal, User } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 // import admin from '../app/api/firebaseAdmin';
-import { getProviders } from 'next-auth/react';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const authOptions: NextAuthOptions = {

@@ -1,6 +1,4 @@
 import {
-  doc,
-  getDoc,
   collection,
   getDocs,
   getFirestore,
@@ -10,7 +8,6 @@ import {
 import app from './firebasedb';
 import { ProductListType, ProductDetailType } from '../../types/Product';
 import axios from 'axios';
-import { useEffect } from 'react';
 
 const db = getFirestore(app);
 
@@ -22,7 +19,6 @@ export async function getProductsList(): Promise<ProductListType[]> {
     : snapshot.docs.map((doc) => doc.data() as ProductListType);
 }
 
-// 수정
 export async function getProductDetail(
   productId: number
 ): Promise<ProductDetailType> {
@@ -41,14 +37,6 @@ export async function getProductDetail(
 
   return productData;
 }
-
-// export async function getProductDetail(): Promise<ProductDetailType[]> {
-//   const snapshot = await getDocs(collection(db, 'productDetail'));
-
-//   return snapshot.empty
-//     ? []
-//     : snapshot.docs.map((doc) => doc.data() as ProductDetailType);
-// }
 
 // 더미 데이터 리스트
 export async function fetchProducts() {
