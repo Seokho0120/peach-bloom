@@ -33,7 +33,7 @@ const SIDE_MENU = [
 
 export default function Userbar() {
   const { data: session } = useSession();
-  console.log('session', session);
+
   return (
     <nav>
       <ul className='flex justify-center items-center gap-6 text-navypoint'>

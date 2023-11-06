@@ -54,7 +54,7 @@ export default function ProductCard({ product }: Props) {
       <div className='flex gap-4'>
         {isSale ? (
           <div className='flex items-center gap-2'>
-            <p>{formatPrice(discountedPrice)}원</p>
+            <p>{formatPrice(discountedPrice!)}원</p>
             <div className='flex gap-1 text-slate-400'>
               <p>{`<`} </p>
               <p className='line-through'>{formatPrice(price)}</p>

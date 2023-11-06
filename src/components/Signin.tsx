@@ -10,7 +10,6 @@ type Props = {
 
 export default function Signin({ providers, callbackUrl }: Props) {
   // const user = useUserSession();
-  console.log('callbackUrl', callbackUrl);
   return (
     <div className='flex justify-center items-center'>
       {Object.values(providers).map(({ id, name }) => (
