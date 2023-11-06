@@ -9,7 +9,7 @@ type Props = {
 
 export default function Signin({ providers, callbackUrl }: Props) {
   return (
-    <>
+    <div className='flex justify-center items-center'>
       {Object.values(providers).map((provider) => (
         <div key={provider.name}>
           <button
@@ -20,6 +20,6 @@ export default function Signin({ providers, callbackUrl }: Props) {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }

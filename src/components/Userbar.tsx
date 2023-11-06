@@ -1,47 +1,45 @@
 'use client';
 
 import Link from 'next/link';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import CartIcon from './ui/CartIcon';
 import SearchIcon from './ui/SearchIcon';
 import UserIcon from './ui/UserIcon';
 import HeartOutIcon from './ui/HeartOutIcon';
 import LoginIcon from './ui/LoginIcon';
 import { usePathname } from 'next/navigation';
-import Avatar from './Avatar';
-import HeartIcon from './ui/HeartIcon';
-
-const SIDE_MENU = [
-  {
-    href: '/mypage',
-    title: <UserIcon />,
-    text: 'MY PAGE',
-  },
-  {
-    href: '/mylike',
-    title: <HeartOutIcon />,
-    text: 'MY LIKE',
-  },
-  {
-    href: '/carts',
-    title: <CartIcon />,
-    text: 'CARTS',
-  },
-  {
-    href: '/auth/signIn',
-    title: <LoginIcon />,
-    text: 'LOGIN',
-  },
-  // {
-  //   href: '/search',
-  //   title: <SearchIcon />,
-  //   text: 'SEARCH',
-  // },
-];
 
 export default function Userbar() {
   const { data: session } = useSession();
   const user = session?.user;
+
+  const SIDE_MENU = [
+    {
+      href: '/mypage',
+      title: <UserIcon />,
+      text: 'MY PAGE',
+    },
+    {
+      href: '/mylike',
+      title: <HeartOutIcon />,
+      text: 'MY LIKE',
+    },
+    {
+      href: '/carts',
+      title: <CartIcon />,
+      text: 'CARTS',
+    },
+    {
+      href: '/auth/signIn',
+      title: <LoginIcon />,
+      text: `${user ? 'LOGOUT' : 'LOGIN'}`,
+    },
+    // {
+    //   href: '/search',
+    //   title: <SearchIcon />,
+    //   text: 'SEARCH',
+    // },
+  ];
 
   return (
     <nav>
