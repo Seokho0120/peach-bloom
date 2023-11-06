@@ -5,22 +5,38 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import CartIcon from './ui/CartIcon';
 import SearchIcon from './ui/SearchIcon';
 import UserIcon from './ui/UserIcon';
+import HeartOutIcon from './ui/HeartOutIcon';
+import LoginIcon from './ui/LoginIcon';
 import { usePathname } from 'next/navigation';
 import Avatar from './Avatar';
+import HeartIcon from './ui/HeartIcon';
 
 const SIDE_MENU = [
   {
-    href: '/auth/signIn',
+    href: '/mypage',
     title: <UserIcon />,
+    text: 'MY PAGE',
   },
   {
-    href: '/search',
-    title: <SearchIcon />,
+    href: '/mylike',
+    title: <HeartOutIcon />,
+    text: 'MY LIKE',
   },
   {
     href: '/carts',
     title: <CartIcon />,
+    text: 'CARTS',
   },
+  {
+    href: '/auth/signIn',
+    title: <LoginIcon />,
+    text: 'LOGIN',
+  },
+  // {
+  //   href: '/search',
+  //   title: <SearchIcon />,
+  //   text: 'SEARCH',
+  // },
 ];
 
 export default function Userbar() {
@@ -29,10 +45,13 @@ export default function Userbar() {
 
   return (
     <nav>
-      <ul className='flex flex-col justify-center gap-8 text-navypoint'>
-        {SIDE_MENU.map(({ title, href }) => (
+      <ul className='flex justify-center items-center gap-8 text-navypoint'>
+        {SIDE_MENU.map(({ title, href, text }) => (
           <li key={href}>
-            <Link href={href}>{title}</Link>
+            <Link href={href} className='flex items-center gap-1'>
+              <p>{title}</p>
+              <p className='text-sm'>{text}</p>
+            </Link>
           </li>
         ))}
       </ul>
