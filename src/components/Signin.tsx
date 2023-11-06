@@ -1,6 +1,7 @@
 'use client';
 
-import { ClientSafeProvider, signIn } from 'next-auth/react';
+import { useUserSession } from '@/hooks/useUserSession';
+import { ClientSafeProvider, signIn, useSession } from 'next-auth/react';
 
 type Props = {
   providers: Record<string, ClientSafeProvider>;
@@ -8,15 +9,17 @@ type Props = {
 };
 
 export default function Signin({ providers, callbackUrl }: Props) {
+  // const user = useUserSession();
+  console.log('callbackUrl', callbackUrl);
   return (
     <div className='flex justify-center items-center'>
-      {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
+      {Object.values(providers).map(({ id, name }) => (
+        <div key={id}>
           <button
-            onClick={() => signIn(provider.id, { callbackUrl: callbackUrl })}
+            onClick={() => signIn(id, { callbackUrl })}
             className='bg-red-400 text-lg font-bold'
           >
-            Sign in with {provider.name}
+            Sign in with {name}
           </button>
         </div>
       ))}

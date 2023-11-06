@@ -1,21 +1,20 @@
 'use client';
 
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import CartIcon from './ui/CartIcon';
 import SearchIcon from './ui/SearchIcon';
 import UserIcon from './ui/UserIcon';
 import HeartOutIcon from './ui/HeartOutIcon';
 import LoginIcon from './ui/LoginIcon';
-import { usePathname } from 'next/navigation';
+import { useUserSession } from '@/hooks/useUserSession';
 
 export default function Userbar() {
   const { data: session } = useSession();
-  const user = session?.user;
 
   const SIDE_MENU = [
     {
-      href: '/mypage',
+      href: `${session ? '/mypage' : '/auth/signIn'}`,
       title: <UserIcon />,
       text: 'MY PAGE',
     },
@@ -30,9 +29,9 @@ export default function Userbar() {
       text: 'CARTS',
     },
     {
-      href: '/auth/signIn',
       title: <LoginIcon />,
-      text: `${user ? 'LOGOUT' : 'LOGIN'}`,
+      text: session ? 'LOGOUT' : 'LOGIN',
+      onClick: session ? () => signOut() : () => signIn(),
     },
     // {
     //   href: '/search',
@@ -43,22 +42,25 @@ export default function Userbar() {
 
   return (
     <nav>
-      <ul className='flex justify-center items-center gap-8 text-navypoint'>
-        {SIDE_MENU.map(({ title, href, text }) => (
-          <li key={href}>
-            <Link href={href} className='flex items-center gap-1'>
-              <p>{title}</p>
-              <p className='text-sm'>{text}</p>
-            </Link>
-          </li>
-        ))}
+      <ul className='flex justify-center items-center gap-6 text-navypoint'>
+        {SIDE_MENU.map(({ title, href, text, onClick }, index) =>
+          href ? (
+            <li key={href}>
+              <Link href={href} className='flex items-center gap-1'>
+                <p>{title}</p>
+                <p className='text-sm'>{text}</p>
+              </Link>
+            </li>
+          ) : (
+            <li key={index}>
+              <button onClick={onClick} className='flex items-center gap-1'>
+                <p>{title}</p>
+                <p className='text-sm'>{text}</p>
+              </button>
+            </li>
+          )
+        )}
       </ul>
-
-      {/* {session ? (
-        <button onClick={() => signOut()}>sign Out</button>
-      ) : (
-        <button onClick={() => signIn()}>sign In</button>
-      )} */}
 
       {/* {user && (
         <div>
