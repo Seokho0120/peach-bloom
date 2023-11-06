@@ -19,12 +19,12 @@ export default function Userbar() {
       text: 'MY PAGE',
     },
     {
-      href: '/mylike',
+      href: `${session ? '/mylike' : '/auth/signIn'}`,
       title: <HeartOutIcon />,
       text: 'MY LIKE',
     },
     {
-      href: '/carts',
+      href: `${session ? '/carts' : '/auth/signIn'}`,
       title: <CartIcon />,
       text: 'CARTS',
     },
@@ -48,14 +48,14 @@ export default function Userbar() {
             <li key={href}>
               <Link href={href} className='flex items-center gap-1'>
                 <p>{title}</p>
-                <p className='text-sm'>{text}</p>
+                <p className='text-xs'>{text}</p>
               </Link>
             </li>
           ) : (
             <li key={index}>
               <button onClick={onClick} className='flex items-center gap-1'>
                 <p>{title}</p>
-                <p className='text-sm'>{text}</p>
+                <p className='text-xs'>{text}</p>
               </button>
             </li>
           )
