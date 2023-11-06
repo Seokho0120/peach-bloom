@@ -1,7 +1,6 @@
 'use client';
 
-import { useUserSession } from '@/hooks/useUserSession';
-import { ClientSafeProvider, signIn, useSession } from 'next-auth/react';
+import { ClientSafeProvider, signIn } from 'next-auth/react';
 
 type Props = {
   providers: Record<string, ClientSafeProvider>;
@@ -9,7 +8,6 @@ type Props = {
 };
 
 export default function Signin({ providers, callbackUrl }: Props) {
-  // const user = useUserSession();
   return (
     <div className='flex justify-center items-center'>
       {Object.values(providers).map(({ id, name }) => (
