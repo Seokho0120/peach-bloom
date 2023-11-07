@@ -2,7 +2,10 @@
 
 import { useRecoilValue } from 'recoil';
 import { productsListAtom } from '@/atoms/productsListAtom';
-import { useGetProductList, useProductsList } from '@/hooks/useProducts';
+import {
+  useGetProductList,
+  // useProductsList
+} from '@/hooks/useProducts';
 import ProductCard from './ProductCard';
 
 type Props = {

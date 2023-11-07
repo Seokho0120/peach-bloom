@@ -29,7 +29,13 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <Link href={`/detail/${productId}`} className='relative'>
-      <Image src={imageUrl} alt='productImage' width={500} height={300} />
+      <Image
+        src={imageUrl}
+        alt='productImage'
+        width={500}
+        height={500}
+        // className='object-cover w-96 h-96'
+      />
       <div className='flex'>
         {isSale && (
           <div className='bg-pinkpoint text-white w-8 h-8 flex items-center justify-center font-bold absolute top-0'>
@@ -49,7 +55,7 @@ export default function ProductCard({ product }: Props) {
             <HeartIcon type='' /> {likedCount}
           </div>
         </div>
-        <p className='text-lg font-bold leading-5'>{productTitle}</p>
+        <p className='text-sm font-bold leading-5'>{productTitle}</p>
       </div>
       <div className='flex gap-4'>
         {isSale ? (
