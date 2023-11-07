@@ -1,6 +1,8 @@
 'use client';
 
+import { uploadImage } from '@/app/api/uploader';
 import { ProductListType } from '@/types/Product';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function NewProduct() {
@@ -18,10 +20,12 @@ export default function NewProduct() {
     saleRate: 0,
     isNew: false,
   });
-  const [file, setFile] = useState<File | null>();
+  const [file, setFile] = useState<File>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
+    if (!files) return;
+
     if (name === 'file') {
       setFile(files && files[0]);
       return;
@@ -30,13 +34,21 @@ export default function NewProduct() {
     setProduct((product) => ({ ...product, [name]: value }));
   };
 
-  console.log('file', file);
+  console.log('product', product);
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!file) return;
+
+    uploadImage(file).then((url) => console.log(url)); // 제품의 사진은 클라우디에 업로드하고 URL 획득
+
+    // FireStore에 새로운 제품 추가
+  };
 
   return (
     <section className='w-full text-center'>
       <h2 className='text-2xl font-bold my-4'>새로운 제품 등록</h2>
+
       <form
         className='flex flex-col px-12 bg-slate-50 p-10 gap-4'
         onSubmit={handleSubmit}
@@ -47,11 +59,20 @@ export default function NewProduct() {
             type='file'
             accept='image/*'
             name='file'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12 bg-white'
           />
         </div>
+        {file && (
+          <Image
+            className='w-96 mx-auto mb-2'
+            src={URL.createObjectURL(file)}
+            width={400}
+            height={400}
+            alt='local file'
+          />
+        )}
         <div className='flex items-center gap-8'>
           <div className='flex'>
             <p className='text-lg font-semibold'>세일 여부</p>
@@ -59,7 +80,7 @@ export default function NewProduct() {
               type='checkbox'
               name='isSale'
               placeholder='세일여부'
-              required
+              // required
               onChange={handleChange}
               className='w-10'
             />
@@ -70,7 +91,7 @@ export default function NewProduct() {
               type='checkbox'
               name='isNew'
               placeholder='신상순'
-              required
+              // required
               onChange={handleChange}
               className='w-10'
             />
@@ -83,7 +104,7 @@ export default function NewProduct() {
             name='brandTitle'
             value={product?.brandTitle ?? ''}
             placeholder='브랜드명'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -95,7 +116,7 @@ export default function NewProduct() {
             name='category'
             value={product?.category ?? ''}
             placeholder='카테고리'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -107,7 +128,7 @@ export default function NewProduct() {
             name='productTitle'
             value={product?.productTitle ?? 0}
             placeholder='제품명'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -119,7 +140,7 @@ export default function NewProduct() {
             name='productId'
             value={product?.productId ?? 0}
             placeholder='제품id'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -131,7 +152,7 @@ export default function NewProduct() {
             name='price'
             value={product?.price ?? 0}
             placeholder='가격'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -143,7 +164,7 @@ export default function NewProduct() {
             name='likedCount'
             value={product?.likedCount ?? 0}
             placeholder='좋아요수'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -156,7 +177,7 @@ export default function NewProduct() {
             name='reviewCount'
             value={product?.reviewCount ?? 0}
             placeholder='리뷰수'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -168,11 +189,14 @@ export default function NewProduct() {
             name='saleRank'
             value={product?.saleRank ?? 0}
             placeholder='랭크순'
-            required
+            // required
             onChange={handleChange}
             className='w-10/12'
           />
         </div>
+        <button className='bg-red-300 text-lg font-bold p-2 cursor-pointer'>
+          제품 등록하기
+        </button>
       </form>
     </section>
   );
