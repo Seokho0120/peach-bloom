@@ -51,7 +51,7 @@ export default function Userbar() {
         ))}
 
         <AuthButton session={session} onSignOut={signOut} onSignIn={signIn} />
-        {session && (
+        {session?.user.isAdmin && (
           <Link href={'/upload'} className='flex items-center gap-1'>
             <UploadIcon />
             <p className='text-xs'>UPLOAD</p>

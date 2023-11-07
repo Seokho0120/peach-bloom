@@ -8,3 +8,7 @@ body {
   height: 100vh;
   overflow-x: hidden;
 }
+
+input {
+  @apply p-4 outline-none border border-gray-300 my-1 w-96;
+}
