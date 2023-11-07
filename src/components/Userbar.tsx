@@ -7,6 +7,7 @@ import SearchIcon from './ui/SearchIcon';
 import UserIcon from './ui/UserIcon';
 import HeartOutIcon from './ui/HeartOutIcon';
 import AuthButton from './AuthButtonProps';
+import UploadIcon from './ui/UploadIcon';
 
 const SIDE_MENU = [
   {
@@ -50,6 +51,12 @@ export default function Userbar() {
         ))}
 
         <AuthButton session={session} onSignOut={signOut} onSignIn={signIn} />
+        {session && (
+          <Link href={'/upload'} className='flex items-center gap-1'>
+            <UploadIcon />
+            <p className='text-xs'>UPLOAD</p>
+          </Link>
+        )}
       </ul>
 
       {/* {user && (

@@ -1,50 +1,49 @@
-import { Awaitable, NextAuthOptions, RequestInternal, User } from 'next-auth';
+import { Account, NextAuthOptions, Profile, User } from 'next-auth';
+import { AdapterUser } from 'next-auth/adapters';
+import { JWT } from 'next-auth/jwt';
 import GoogleProvider from 'next-auth/providers/google';
-// import admin from '../app/api/firebaseAdmin';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import { escape } from 'querystring';
+
+type test = {
+  token: any;
+  // token: JWT;
+  user: User | AdapterUser;
+  account: Account | null;
+  profile?: Profile | undefined;
+  trigger?: 'signIn' | 'update' | 'signUp' | undefined;
+  isNewUser?: boolean | undefined;
+  session?: any;
+};
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    // CredentialsProvider({
-    //   credentials: {
-    //     username: { label: 'Username', type: 'text' },
-    //     password: { label: 'Password', type: 'password' },
-    //   },
-    //   async authorize({ credentials }: any) {
-    //     const { username, password } = credentials;
-    //     console.log('credentials', credentials);
-
-    //     try {
-    //       const userRecord = await admin.auth().getUserByEmail(username);
-    //       console.log('userRecord', userRecord);
-    //       if (!userRecord) {
-    //         return null;
-    //       }
-
-    //       return {
-    //         id: userRecord.uid,
-    //         name: userRecord.displayName,
-    //         email: userRecord.email,
-    //         image: userRecord.photoURL,
-    //       };
-    //     } catch (error) {
-    //       return null;
-    //     }
-    //   },
-    // }),
-
     GoogleProvider({
       clientId: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID || '',
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_SECRET || '',
     }),
   ],
   callbacks: {
-    async session({ session }) {
+    jwt: async ({ token, trigger, user, session }: test) => {
+      if (user) {
+        token.user = {};
+        token.user.id = user.id;
+        token.user.name = user.name;
+      }
+      if (trigger === 'update' && session.name) {
+        // session 업데이트 (닉네임 수정)
+        token.user.name = session.name;
+      }
+      return token;
+    },
+    async session({ session, token }) {
       const user = session?.user;
+      console.log('token >>>>>>>>', token);
+      console.log('user.id >>>>>>>>', user.id);
       if (user) {
         session.user = {
           ...user,
           username: user.email?.split('@')[0] || '',
+          isAdmin: token.sub === process.env.NEXT_PUBLIC_ADMIN_UID,
         };
       }
 
