@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
-  fetchProductDetail,
-  fetchProducts,
+  // fetchProductDetail,
+  // fetchProducts,
 } from '../app/api/firesotre';
 import { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -68,30 +68,30 @@ export function useGetProductDetail(productId: number) {
   return { productDetail: selectedProductDetail, isLoading, isError };
 }
 
-// 더미데이터 리스트 불러오기
-export function useProductsList(category: string) {
-  const { data, isError, isLoading } = useQuery<ProductListType[]>({
-    queryKey: ['productsList'],
-    queryFn: fetchProducts,
-  });
+// // 더미데이터 리스트 불러오기
+// export function useProductsList(category: string) {
+//   const { data, isError, isLoading } = useQuery<ProductListType[]>({
+//     queryKey: ['productsList'],
+//     queryFn: fetchProducts,
+//   });
 
-  const filteredProductsList = data?.filter(
-    (product) => product.category === category
-  );
+//   const filteredProductsList = data?.filter(
+//     (product) => product.category === category
+//   );
 
-  return { productsList: filteredProductsList, isError, isLoading };
-}
+//   return { productsList: filteredProductsList, isError, isLoading };
+// }
 
-// 더미데이터 디테일 불러오기
-export function useProductDetail(productId: number) {
-  const { data, isError, isLoading } = useQuery<ProductDetailType[]>({
-    queryKey: ['productsDetail'],
-    queryFn: fetchProductDetail,
-  });
+// // 더미데이터 디테일 불러오기
+// export function useProductDetail(productId: number) {
+//   const { data, isError, isLoading } = useQuery<ProductDetailType[]>({
+//     queryKey: ['productsDetail'],
+//     queryFn: fetchProductDetail,
+//   });
 
-  const filteredProductDetail = data?.filter(
-    (product) => product.productId === productId
-  );
+//   const filteredProductDetail = data?.filter(
+//     (product) => product.productId === productId
+//   );
 
-  return { productDetail: filteredProductDetail, isError, isLoading };
-}
+//   return { productDetail: filteredProductDetail, isError, isLoading };
+// }

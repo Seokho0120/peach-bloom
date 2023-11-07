@@ -1,5 +1,6 @@
 'use client';
 
+import { addNewProduct } from '@/app/api/firesotre';
 import { uploadImage } from '@/app/api/uploader';
 import { ProductListType } from '@/types/Product';
 import Image from 'next/image';
@@ -11,6 +12,7 @@ export default function NewProduct() {
     category: '',
     imageUrl: '',
     isSale: false,
+    isNew: false,
     likedCount: 0,
     price: 0,
     productId: 0,
@@ -18,32 +20,35 @@ export default function NewProduct() {
     reviewCount: 0,
     saleRank: 0,
     saleRate: 0,
-    isNew: false,
   });
   const [file, setFile] = useState<File>();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, files } = e.target;
-    if (!files) return;
+    const { name, value, files, checked, type } = e.target;
 
     if (name === 'file') {
+      if (!files) return;
       setFile(files && files[0]);
       return;
     }
 
-    setProduct((product) => ({ ...product, [name]: value }));
+    if (type === 'checkbox') {
+      setProduct((product) => ({ ...product, [name]: checked }));
+    } else {
+      setProduct((product) => ({ ...product, [name]: value }));
+    }
   };
-
-  console.log('product', product);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!file) return;
 
-    uploadImage(file).then((url) => console.log(url)); // 제품의 사진은 클라우디에 업로드하고 URL 획득
-
-    // FireStore에 새로운 제품 추가
+    uploadImage(file).then((url: string) => {
+      addNewProduct({ product, imageUrl: url });
+    });
   };
+
+  console.log('product', product);
 
   return (
     <section className='w-full text-center'>
@@ -59,7 +64,7 @@ export default function NewProduct() {
             type='file'
             accept='image/*'
             name='file'
-            // required
+            required
             onChange={handleChange}
             className='w-10/12 bg-white'
           />
@@ -80,7 +85,7 @@ export default function NewProduct() {
               type='checkbox'
               name='isSale'
               placeholder='세일여부'
-              // required
+              required
               onChange={handleChange}
               className='w-10'
             />
@@ -91,7 +96,7 @@ export default function NewProduct() {
               type='checkbox'
               name='isNew'
               placeholder='신상순'
-              // required
+              required
               onChange={handleChange}
               className='w-10'
             />
@@ -104,7 +109,7 @@ export default function NewProduct() {
             name='brandTitle'
             value={product?.brandTitle ?? ''}
             placeholder='브랜드명'
-            // required
+            required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -116,7 +121,7 @@ export default function NewProduct() {
             name='category'
             value={product?.category ?? ''}
             placeholder='카테고리'
-            // required
+            required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -128,7 +133,7 @@ export default function NewProduct() {
             name='productTitle'
             value={product?.productTitle ?? 0}
             placeholder='제품명'
-            // required
+            required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -140,7 +145,7 @@ export default function NewProduct() {
             name='productId'
             value={product?.productId ?? 0}
             placeholder='제품id'
-            // required
+            required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -152,7 +157,7 @@ export default function NewProduct() {
             name='price'
             value={product?.price ?? 0}
             placeholder='가격'
-            // required
+            required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -164,7 +169,7 @@ export default function NewProduct() {
             name='likedCount'
             value={product?.likedCount ?? 0}
             placeholder='좋아요수'
-            // required
+            required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -177,7 +182,7 @@ export default function NewProduct() {
             name='reviewCount'
             value={product?.reviewCount ?? 0}
             placeholder='리뷰수'
-            // required
+            required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -189,7 +194,19 @@ export default function NewProduct() {
             name='saleRank'
             value={product?.saleRank ?? 0}
             placeholder='랭크순'
-            // required
+            required
+            onChange={handleChange}
+            className='w-10/12'
+          />
+        </div>
+        <div className='flex items-center justify-between'>
+          <p className='text-lg font-semibold'>세일율</p>
+          <input
+            type='number'
+            name='saleRate'
+            value={product?.saleRate ?? 0}
+            placeholder='세일율'
+            required
             onChange={handleChange}
             className='w-10/12'
           />
@@ -201,16 +218,3 @@ export default function NewProduct() {
     </section>
   );
 }
-
-// brandTitle: string; -
-// category: string; -
-// imageUrl: string; -
-// isSale?: boolean;
-// likedCount: number;
-// price: number;
-// productId: number;
-// productTitle: string; -
-// reviewCount: number;
-// saleRank?: number;
-// saleRate?: number;
-// isNew?: boolean;

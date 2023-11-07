@@ -22,11 +22,4 @@ export async function uploadImage(file: File) {
     console.error('이미지 업로드 에러 발생 🚨', error);
     throw error;
   }
-
-  // return fetch(process.env.NEXT_PUBLIC_CLOUDINANRY_URL || '', {
-  //   method: 'POST',
-  //   body: data,
-  // })
-  //   .then((res) => res.json())
-  //   .then((data) => data.url);
 }
