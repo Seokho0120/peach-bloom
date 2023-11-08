@@ -11,6 +11,7 @@ export interface ProductListType {
   saleRank?: number;
   saleRate?: number;
   isNew?: boolean;
+  discountedPrice?: number;
 }
 
 export interface ProductDetailType {

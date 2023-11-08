@@ -22,20 +22,32 @@ export function useGetProductList(category: string) {
     queryFn: getProductsList,
   });
 
-  const saleSortedList = productsList?.sort(
-    (a: ProductListType, b: ProductListType) =>
-      (a.saleRank || 0) - (b.saleRank || 0)
-  );
-
   useEffect(() => {
-    if (saleSortedList) {
-      const filteredProductList = saleSortedList?.filter(
+    if (productsList) {
+      // 랭킹순 정렬
+      const saleRankSortedList = [...productsList].sort(
+        (a: ProductListType, b: ProductListType) =>
+          (a.saleRank || 0) - (b.saleRank || 0)
+      );
+
+      // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
+      const updatedProductsList = saleRankSortedList.map((product) => {
+        const { price, saleRate, isSale } = product;
+        const discountedPrice = isSale
+          ? price - (price * (saleRate || 0)) / 100
+          : price;
+
+        return { ...product, discountedPrice };
+      });
+
+      // 카테고리에 해당하는 상품 정렬
+      const filteredProductList = updatedProductsList.filter(
         (product) => product.category === category
       );
 
       setProductList(filteredProductList);
     }
-  }, [category, saleSortedList, setProductList]);
+  }, [category, productsList, setProductList]);
 
   return { isLoading, isError };
 }

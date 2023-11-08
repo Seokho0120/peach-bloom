@@ -15,6 +15,7 @@ type Props = {
 export default function ProductsList({ category }: Props) {
   const { isLoading, isError } = useGetProductList(category);
   const productsList = useRecoilValue(productsListAtom);
+  console.log('productsList', productsList);
 
   if (isLoading) {
     return <div>Loading...</div>;
