@@ -1,5 +1,13 @@
-import { IoIosArrowDown } from 'react-icons/io';
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 
-export default function ArrowIcon() {
-  return <IoIosArrowDown className='w-5 h-5' />;
+type Props = {
+  isOpen: boolean;
+};
+
+export default function ArrowIcon({ isOpen }: Props) {
+  return isOpen ? (
+    <IoIosArrowUp className='w-5 h-5' />
+  ) : (
+    <IoIosArrowDown className='w-5 h-5' />
+  );
 }

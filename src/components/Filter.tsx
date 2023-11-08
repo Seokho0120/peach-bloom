@@ -29,9 +29,9 @@ export default function Filter() {
 
   return (
     <section className='relative'>
-      <button onClick={toggleDropdown} className='flex gap-2'>
+      <button onClick={toggleDropdown} className='flex hover:text-navypoint'>
         {selectedFilter}
-        <ArrowIcon />
+        <ArrowIcon isOpen={isOpen} />
       </button>
 
       {isOpen && (
