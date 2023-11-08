@@ -1,12 +1,17 @@
 'use client';
 
-import { addNewProduct } from '@/app/api/firesotre';
+import { addNewProduct, getProductById } from '@/app/api/firesotre';
 import { uploadImage } from '@/app/api/uploader';
 import { ProductListType } from '@/types/Product';
 import Image from 'next/image';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Router } from 'next/router';
+import { useEffect, useState } from 'react';
 
 export default function NewProduct() {
+  const router = useRouter();
+  const [file, setFile] = useState<File>();
   const [product, setProduct] = useState<ProductListType>({
     brandTitle: '',
     category: '',
@@ -21,8 +26,6 @@ export default function NewProduct() {
     saleRank: 0,
     saleRate: 0,
   });
-  const [file, setFile] = useState<File>();
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files, checked, type } = e.target;
 
@@ -32,27 +35,32 @@ export default function NewProduct() {
       return;
     }
 
+    const parsedValue = type === 'number' ? Number(value) : value;
+
     if (type === 'checkbox') {
       setProduct((product) => ({ ...product, [name]: checked }));
     } else {
-      setProduct((product) => ({ ...product, [name]: value }));
+      setProduct((product) => ({ ...product, [name]: parsedValue }));
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!file) return;
 
-    uploadImage(file).then((url: string) => {
-      addNewProduct({ product, imageUrl: url });
-    });
-  };
+    const url = await uploadImage(file);
+    const firebaseProductId = await addNewProduct({ product, imageUrl: url });
 
-  console.log('product', product);
+    const data = await getProductById(firebaseProductId);
+
+    await router.push(`/upload/${data}`);
+  };
 
   return (
     <section className='w-full text-center'>
-      <h2 className='text-2xl font-bold my-4'>새로운 제품 등록</h2>
+      <h2 className='text-3xl font-bold my-4 text-navypoint'>
+        새로운 제품 등록
+      </h2>
 
       <form
         className='flex flex-col px-12 bg-slate-50 p-10 gap-4'
@@ -211,7 +219,8 @@ export default function NewProduct() {
             className='w-10/12'
           />
         </div>
-        <button className='bg-red-300 text-lg font-bold p-2 cursor-pointer'>
+
+        <button className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white'>
           제품 등록하기
         </button>
       </form>

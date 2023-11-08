@@ -6,12 +6,16 @@ import {
   getFirestore,
   query,
   where,
-  doc,
-  updateDoc,
   addDoc,
+  doc,
+  getDoc,
 } from 'firebase/firestore';
 import app from './firebasedb';
-import { ProductListType, ProductDetailType } from '../../types/Product';
+import {
+  ProductListType,
+  ProductDetailType,
+  addProductType,
+} from '../../types/Product';
 
 const db = getFirestore(app);
 
@@ -42,30 +46,60 @@ export async function getProductDetail(
   return productData;
 }
 
-type Test = {
-  product: ProductListType;
-  imageUrl: string;
-};
-
-export const addNewProduct = async ({ product, imageUrl }: Test) => {
-  // await addDoc(collection(db, 'products'), {
-  //   ...product,
-  //   imageUrl,
-  // });
-
+export const addNewProduct = async ({ product, imageUrl }: addProductType) => {
   try {
     const docRef = await addDoc(collection(db, 'products'), {
       ...product,
       imageUrl,
     });
-    console.log('docRef.id >>>>', docRef.id);
+    return docRef.id;
   } catch (error) {
     console.error('Firestore에 상품 업로드 중 에러 발생 🚨', error);
     throw error;
   }
 };
 
-// // Dummy data List
+export const getProductById = async (productId: string) => {
+  const docRef = doc(db, 'products', productId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data().productId;
+  } else {
+    console.log('No such product!');
+    return null;
+  }
+};
+
+export const addNewDeatil = async (productDetail: ProductDetailType) => {
+  try {
+    const docRef = await addDoc(collection(db, 'productDetail'), {
+      ...productDetail,
+    });
+    return docRef.id;
+  } catch (error) {
+    console.error('Firestore에 상품 디테일 업로드 중 에러 발생 🚨', error);
+    throw error;
+  }
+};
+
+// export const uploadDetail = async (productId: string) => {
+//   const product = await getProductById(productId);
+
+//   if (product) {
+//     // detail 내용을 업로드하는 코드를 여기에 작성하세요.
+//     // 예를 들어, Firestore에 detail 내용을 업로드하는 경우 다음과 같이 작성할 수 있습니다:
+//     const docRef = await addDoc(collection(db, 'details'), {
+//       productId: product.productId,
+//       // 다른 detail 내용
+//     });
+//     console.log('docRef.id >>>>', docRef.id);
+//   } else {
+//     console.error('Product not found!');
+//   }
+// };
+
+// // Dummy data List로직
 // export async function fetchProducts() {
 //   const response = await axios
 //     .get('/data/productsDummy.json')
@@ -75,7 +109,7 @@ export const addNewProduct = async ({ product, imageUrl }: Test) => {
 
 //   return productData;
 // }
-// // Dummy data Detail
+// // Dummy data Detail로직
 // export async function fetchProductDetail() {
 //   const response = await axios
 //     .get('/data/productsDetailDummy.json')

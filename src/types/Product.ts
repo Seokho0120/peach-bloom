@@ -43,3 +43,8 @@ export interface arrProductDetailType {
   howToUse: string;
   ingredients: string;
 }
+
+export interface addProductType {
+  product: ProductListType;
+  imageUrl: string;
+}
