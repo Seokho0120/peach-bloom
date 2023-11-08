@@ -4,7 +4,7 @@ import { productsListAtom } from '@/atoms/productsListAtom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import ArrowIcon from './ui/ArrowIcon';
-import { useSortProducts } from '@/hooks/useSortedProducts';
+import { useFilterProducts } from '@/hooks/useFilterProducts';
 
 const FILTER = ['랭킹순', '좋아요순', '가격높은순', '가격낮은순', '높은할인순'];
 
@@ -13,7 +13,7 @@ export default function Filter() {
   const setFilteredProducts = useSetRecoilState(productsListAtom);
   const [selectedFilter, setSelectedFilter] = useState<string>(FILTER[0]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const sortProducts = useSortProducts();
+  const sortProducts = useFilterProducts();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);

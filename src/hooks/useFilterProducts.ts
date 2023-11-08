@@ -1,6 +1,6 @@
 import { ProductListType } from '../types/Product';
 
-export function useSortProducts() {
+export function useFilterProducts() {
   const sortProducts = (products: ProductListType[], filter: string) => {
     const sortedProducts = [...products].sort((a, b) => {
       switch (filter) {

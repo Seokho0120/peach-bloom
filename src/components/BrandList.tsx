@@ -2,7 +2,8 @@
 
 import { productsListAtom } from '@/atoms/productsListAtom';
 import { useRecoilValue } from 'recoil';
-import Filter from './\bFilter';
+import Filter from './Filter';
+import useFilterByBrand from '@/hooks/useFilterByBrand';
 
 type Props = {
   category: string;
@@ -11,6 +12,9 @@ type Props = {
 export default function BrandList({ category }: Props) {
   const productsList = useRecoilValue(productsListAtom);
   const brandList = productsList.map((product) => product.brandTitle);
+  const filterByBrand = useFilterByBrand();
+
+  console.log('productsList', productsList);
 
   return (
     <section className='mb-6'>
@@ -19,12 +23,19 @@ export default function BrandList({ category }: Props) {
         <div className=' border-b border-navypoint mt-4' />
       </h2>
       <ul className='flex p-10 bg-gray-100 gap-4 text-sm font-semibold text-slate-800'>
-        <div>
-          <Filter />
-        </div>
-        <p className='hover:text-gray-400'>전체+</p>
+        <Filter />
+        <p
+          onClick={() => filterByBrand('전체')}
+          className='hover:text-gray-400 cursor-pointer'
+        >
+          전체+
+        </p>
         {brandList.map((brand, idx) => (
-          <li className='hover:text-gray-400 cursor-pointer' key={idx}>
+          <li
+            onClick={() => filterByBrand(brand)}
+            className='hover:text-gray-400 cursor-pointer'
+            key={idx}
+          >
             {brand}
           </li>
         ))}

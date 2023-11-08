@@ -7,11 +7,16 @@ import {
 } from '../app/api/firesotre';
 import { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { productsListAtom, productDetailAtom } from '@/atoms/productsListAtom';
+import {
+  productsListAtom,
+  productDetailAtom,
+  initialProductsListAtom,
+} from '@/atoms/productsListAtom';
 import { ProductListType, ProductDetailType } from '../types/Product';
 
 export function useGetProductList(category: string) {
   const setProductList = useSetRecoilState(productsListAtom);
+  const setInitialProductList = useSetRecoilState(initialProductsListAtom);
 
   const {
     data: productsList,
@@ -46,8 +51,9 @@ export function useGetProductList(category: string) {
       );
 
       setProductList(filteredProductList);
+      setInitialProductList(filteredProductList);
     }
-  }, [category, productsList, setProductList]);
+  }, [category, productsList, setProductList, setInitialProductList]);
 
   return { isLoading, isError };
 }
