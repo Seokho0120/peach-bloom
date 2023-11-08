@@ -10,6 +10,7 @@ import {
   doc,
   getDoc,
   orderBy,
+  updateDoc,
 } from 'firebase/firestore';
 import app from './firebasedb';
 import {
@@ -17,6 +18,8 @@ import {
   ProductDetailType,
   addProductType,
 } from '../../types/Product';
+import { FieldValue } from 'firebase/firestore';
+import firebase from 'firebase/compat/app';
 
 const db = getFirestore(app);
 
@@ -82,6 +85,16 @@ export const addNewDeatil = async (productDetail: ProductDetailType) => {
     console.error('Firestore에 상품 디테일 업로드 중 에러 발생 🚨', error);
     throw error;
   }
+};
+
+export const incrementLikedCount = async (productId: number, count: number) => {
+  const productRef = doc(db, 'products', 'y7pJwzFef0MlhmrtCJj3');
+  // const productRef = doc(db, 'products', productId.toString());
+
+  await updateDoc(productRef, {
+    likedCount: count,
+    // likedCount: firebase.firestore.FieldValue.increment(1),
+  });
 };
 
 // export const uploadDetail = async (productId: string) => {
