@@ -22,15 +22,20 @@ export function useGetProductList(category: string) {
     queryFn: getProductsList,
   });
 
+  const saleSortedList = productsList?.sort(
+    (a: ProductListType, b: ProductListType) =>
+      (a.saleRank || 0) - (b.saleRank || 0)
+  );
+
   useEffect(() => {
-    if (productsList) {
-      const filteredProductList = productsList?.filter(
+    if (saleSortedList) {
+      const filteredProductList = saleSortedList?.filter(
         (product) => product.category === category
       );
 
       setProductList(filteredProductList);
     }
-  }, [category, productsList, setProductList]);
+  }, [category, saleSortedList, setProductList]);
 
   return { isLoading, isError };
 }
