@@ -106,13 +106,15 @@ export async function getLikeCountDocId(productId: number) {
   return { likeCountData, docId };
 }
 
-export const incrementLikedCount = async (productId: number, count: number) => {
-  const productRef = doc(db, 'products', 'VMwdkEejFWgBOnV6Xljs');
-  // const productRef = doc(db, 'products', productId.toString());
+export const incrementLikedCount = async (
+  docId: string | undefined,
+  count: number
+) => {
+  // docId를 받아와서 그에 해당하는 좋아요 개수 조정하기
+  const productRef = doc(db, 'products', `${docId}`);
 
   await updateDoc(productRef, {
     likedCount: count,
-    // likedCount: firebase.firestore.FieldValue.increment(1),
   });
 };
 

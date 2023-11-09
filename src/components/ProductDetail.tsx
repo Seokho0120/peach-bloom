@@ -6,7 +6,7 @@ import Image from 'next/image';
 import HeartIcon from './ui/HeartIcon';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
 import { arrProductDetailType } from '@/types/Product';
-import { incrementLikedCount, getLikeCountDocId } from '../app/api/firesotre';
+import { incrementLikedCount } from '../app/api/firesotre';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -15,16 +15,17 @@ type Props = {
 
 export default function ProductDetail({ productId }: Props) {
   const NumProductId = Number(productId);
+
+  console.log('NumProductId', NumProductId);
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
   const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
   const [like, setLike] = useState<number>(0);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
     setLike(likeCountDocId?.likeCountData);
   }, [likeCountDocId?.likeCountData]);
-
-  console.log('like', like);
 
   const arrProductDetail: arrProductDetailType[] = productDetail
     ? [{ ...productDetail }]
@@ -38,10 +39,18 @@ export default function ProductDetail({ productId }: Props) {
   });
 
   const handleLike = async () => {
-    setLike((like) => like + 1);
-
-    await incrementLikedCount(productId, like);
+    if (isLiked) {
+      setLike(like - 1);
+      setIsLiked(false);
+      await incrementLikedCount(likeCountDocId?.docId, like - 1);
+    } else {
+      setLike(like + 1);
+      setIsLiked(true);
+      await incrementLikedCount(likeCountDocId?.docId, like + 1);
+    }
   };
+
+  console.log('like', like);
 
   if (isLoading) {
     return <div>Loading...</div>;
