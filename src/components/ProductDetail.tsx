@@ -6,7 +6,13 @@ import Image from 'next/image';
 import HeartIcon from './ui/HeartIcon';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
 import { arrProductDetailType } from '@/types/Product';
-import { db, updateLikedCount } from '../app/api/firesotre';
+import {
+  checkAndCreateLikeDoc,
+  db,
+  likeRef,
+  updateLikedCount,
+  updateLikerList,
+} from '../app/api/firesotre';
 import { useEffect, useState } from 'react';
 import {
   arrayRemove,
@@ -30,6 +36,8 @@ export default function ProductDetail({ productId }: Props) {
     useGetProductDetail(NumProductId);
   const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
   const user = useUserSession();
+  const likeDocRef = likeRef(NumProductId);
+
   const formatPrice = useFormatPrice;
   const discountedPrice = useDisCountedPrice({
     price: productDetail?.price,
@@ -41,49 +49,55 @@ export default function ProductDetail({ productId }: Props) {
 
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [likerList, setLikerList] = useState<string[]>([]);
+  const [isCurrentUserLike, setIsCurrentUserLike] = useState(false);
 
   useEffect(() => {
     setLike(likeCountDocId?.likeCountData);
   }, [likeCountDocId?.likeCountData]);
 
-  const likeRef = doc(db, 'likes', productId.toString());
+  console.log('isLiked', isLiked);
 
   const handleLike = async () => {
     if (!user?.name) {
-      console.error('Username is undefined.');
+      console.error('Username이 없어요 🚨');
       return;
     }
 
-    const likeData = await getDoc(likeRef);
-
-    if (!likeData.exists()) {
-      await setDoc(likeRef, {
-        likerList: [],
-      });
-    }
-
+    await checkAndCreateLikeDoc(likeDocRef);
     if (isLiked) {
       setLike(like - 1);
       setIsLiked(false);
       await updateLikedCount(likeCountDocId?.docId, like - 1);
-      await updateDoc(likeRef, {
-        likerList: arrayRemove(user?.name),
-      });
     } else {
       setLike(like + 1);
       setIsLiked(true);
       await updateLikedCount(likeCountDocId?.docId, like + 1);
-      await updateDoc(likeRef, {
-        likerList: arrayUnion(user?.name),
-      });
     }
+    await updateLikerList({
+      likeRef: likeDocRef,
+      username: user.name,
+      isLiked,
+    });
   };
 
-  const [likerList, setLikerList] = useState<string[]>([]);
-  const [isCurrentUserLike, setIsCurrentUserLike] = useState(false);
+  useEffect(() => {
+    const getInitialLikeStatus = async () => {
+      const likeData = await getDoc(likeDocRef);
+
+      if (likeData.exists()) {
+        const likerList = likeData.data()?.likerList || [];
+        setLikerList(likerList);
+        setIsLiked(likerList.includes(user?.name));
+        setLike(likeCountDocId?.likeCountData || 0);
+      }
+    };
+
+    getInitialLikeStatus();
+  }, []);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(likeRef, (doc) => {
+    const unsubscribe = onSnapshot(likeDocRef, (doc) => {
       const likeData = doc.data();
       setLikerList(likeData?.likerList || []);
     });
@@ -98,8 +112,6 @@ export default function ProductDetail({ productId }: Props) {
       setIsCurrentUserLike(false);
     }
   }, [likerList, user?.name]);
-
-  console.log('like', like);
 
   if (isLoading) {
     return <div>Loading...</div>;

@@ -11,6 +11,11 @@ import {
   getDoc,
   orderBy,
   updateDoc,
+  DocumentData,
+  DocumentReference,
+  setDoc,
+  arrayRemove,
+  arrayUnion,
 } from 'firebase/firestore';
 import app from './firebasedb';
 import {
@@ -115,6 +120,41 @@ export const updateLikedCount = async (
   await updateDoc(productRef, {
     likedCount: count,
   });
+};
+
+export const likeRef = (productId: number) =>
+  doc(db, 'likes', productId.toString());
+
+export const checkAndCreateLikeDoc = async (
+  likeRef: DocumentReference<unknown, DocumentData>
+) => {
+  const likeData = await getDoc(likeRef);
+
+  if (!likeData.exists()) {
+    await setDoc(likeRef, { likerList: [] });
+  }
+};
+
+type updateLikerListProps = {
+  likeRef: DocumentReference<unknown, DocumentData>;
+  username: string;
+  isLiked: boolean;
+};
+
+export const updateLikerList = async ({
+  likeRef,
+  username,
+  isLiked,
+}: updateLikerListProps) => {
+  if (isLiked) {
+    await updateDoc(likeRef, {
+      likerList: arrayRemove(username),
+    });
+  } else {
+    await updateDoc(likeRef, {
+      likerList: arrayUnion(username),
+    });
+  }
 };
 
 // // Dummy data List로직
