@@ -7,15 +7,17 @@ import HeartIcon from './ui/HeartIcon';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
-import { arrProductDetailType } from '@/types/Product';
 import { useUserSession } from '@/hooks/useUserSession';
+import { arrProductDetailType } from '@/types/Product';
 import {
   checkAndCreateLikeDoc,
+  getInitialLikeStatus,
   likesRef,
+  monitoringLikesData,
   updateLikedCount,
   updateLikerList,
-} from '../app/api/firesotre';
-import { DocumentReference, getDoc, onSnapshot } from 'firebase/firestore';
+} from '@/app/api/firesotre';
+import { DocumentReference } from 'firebase/firestore';
 
 type Props = {
   productId: number;
@@ -24,10 +26,16 @@ type Props = {
 export default function ProductDetail({ productId }: Props) {
   const router = useRouter();
   const NumProductId = Number(productId);
+
   const user = useUserSession();
+  const userName = user?.name;
+
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
+
   const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
+  const initialLikeCount = likeCountDocId?.likeCountData;
+  const docId = likeCountDocId?.docId;
 
   const formatPrice = useFormatPrice;
   const discountedPrice = useDisCountedPrice({
@@ -51,21 +59,17 @@ export default function ProductDetail({ productId }: Props) {
 
   // 컴포넌트 마운트될때 초기 값 설정
   useEffect(() => {
-    const getInitialLikeStatus = async () => {
-      if (!likesDocRef) return;
-      const likesData = await getDoc(likesDocRef);
+    if (!initialLikeCount || !userName) return;
 
-      if (likesData.exists()) {
-        const likerList = likesData.data()?.likerList || [];
-
-        setLikerList(likerList);
-        setIsLiked(likerList.includes(user?.name));
-        setLike(likeCountDocId?.likeCountData || 0);
-      }
-    };
-
-    getInitialLikeStatus();
-  }, [likeCountDocId?.likeCountData, likesDocRef, user?.name]);
+    getInitialLikeStatus({
+      likesDocRef,
+      setLikerList,
+      setIsLiked,
+      setLike,
+      initialLikeCount,
+      userName,
+    });
+  }, [initialLikeCount, likesDocRef, userName]);
 
   const handleLike = async () => {
     if (!user?.name) {
@@ -75,15 +79,13 @@ export default function ProductDetail({ productId }: Props) {
     }
 
     await checkAndCreateLikeDoc(likesDocRef);
-    if (isLiked) {
-      setLike(like > 0 ? like - 1 : 0);
-      setIsLiked(false);
-      await updateLikedCount(likeCountDocId?.docId, like - 1);
-    } else {
-      setLike(like + 1);
-      setIsLiked(true);
-      await updateLikedCount(likeCountDocId?.docId, like + 1);
-    }
+
+    const newCount = isLiked && like > 0 ? like - 1 : like + 1;
+    const newIsLiked = !isLiked;
+
+    setLike(newCount);
+    setIsLiked(newIsLiked);
+    await updateLikedCount(docId, newCount);
     await updateLikerList({
       likesDocRef,
       username: user.name,
@@ -93,17 +95,17 @@ export default function ProductDetail({ productId }: Props) {
 
   // 실시간 업데이트 감지 및 중지
   useEffect(() => {
-    if (!likesDocRef) return;
-    const unsubscribe = onSnapshot(likesDocRef, (doc) => {
-      const likesData = doc.data();
-      const likerList = likesData?.likerList || [];
+    if (!userName) return;
 
-      setLikerList(likerList);
-      setIsLiked(likerList.inclues(user?.username));
+    const unsubscribe = monitoringLikesData({
+      likesDocRef,
+      setLikerList,
+      setIsLiked,
+      userName,
     });
 
     return unsubscribe;
-  }, [likesDocRef, user?.username]);
+  }, [likesDocRef, userName]);
 
   if (isLoading) {
     return <div>Loading...</div>;

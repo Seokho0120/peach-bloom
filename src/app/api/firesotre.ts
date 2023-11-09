@@ -15,13 +15,19 @@ import {
   setDoc,
   arrayRemove,
   arrayUnion,
+  onSnapshot,
 } from 'firebase/firestore';
 import app from './firebasedb';
 import {
   ProductListType,
   ProductDetailType,
   addProductType,
-} from '../../types/Product';
+} from '@/types/Product';
+import {
+  InitialLikeStatusType,
+  monitoringLikesDataType,
+  updateLikerListProps,
+} from '@/types/Firestore';
 
 export const db = getFirestore(app);
 
@@ -73,7 +79,7 @@ export const getProductById = async (productId: string) => {
   if (docSnap.exists()) {
     return docSnap.data().productId;
   } else {
-    console.log('No such product!');
+    console.log('products 찾을 수 없음 🚨');
     return null;
   }
 };
@@ -100,11 +106,8 @@ export async function getLikeCountDocId(productId: number) {
   const productDocs = querySnapshot.docs[0];
   const productData = productDocs.data();
 
-  const likeCountData = productData.likedCount;
-  const docId = productDocs.id;
-
-  console.log('likeCount', likeCountData); // likedCount 초기값
-  console.log('docId', docId); // 문서 ID
+  const likeCountData = productData.likedCount; // likedCount 초기값
+  const docId = productDocs.id; // 문서 ID
   return { likeCountData, docId };
 }
 
@@ -135,11 +138,6 @@ export const checkAndCreateLikeDoc = async (
   }
 };
 
-type updateLikerListProps = {
-  likesDocRef: DocumentReference<unknown, DocumentData> | undefined;
-  username: string;
-  isLiked: boolean;
-};
 // 좋아요 했으면, likerList에서 name삭제 및 추가
 export const updateLikerList = async ({
   likesDocRef,
@@ -156,6 +154,43 @@ export const updateLikerList = async ({
       likerList: arrayUnion(username),
     });
   }
+};
+
+export const getInitialLikeStatus = async (props: InitialLikeStatusType) => {
+  const {
+    likesDocRef,
+    setLikerList,
+    setIsLiked,
+    setLike,
+    initialLikeCount,
+    userName,
+  } = props;
+  if (!likesDocRef) return;
+
+  const likesData = await getDoc(likesDocRef);
+
+  if (likesData.exists()) {
+    const likerList = likesData.data()?.likerList || [];
+
+    setLikerList(likerList);
+    setIsLiked(likerList.includes(userName));
+    setLike(initialLikeCount);
+  }
+};
+
+export const monitoringLikesData = (props: monitoringLikesDataType) => {
+  const { likesDocRef, userName, setLikerList, setIsLiked } = props;
+  if (!likesDocRef || !userName) return;
+
+  const unsubscribe = onSnapshot(likesDocRef, (doc) => {
+    const likesData = doc.data();
+    const likerList = likesData?.likerList || [];
+
+    setLikerList(likerList);
+    setIsLiked(likerList.includes(userName));
+  });
+
+  return unsubscribe;
 };
 
 // // Dummy data List로직
