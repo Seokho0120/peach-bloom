@@ -15,16 +15,7 @@ import {
   updateLikedCount,
   updateLikerList,
 } from '../app/api/firesotre';
-import {
-  DocumentReference,
-  arrayRemove,
-  arrayUnion,
-  doc,
-  getDoc,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { DocumentReference, getDoc, onSnapshot } from 'firebase/firestore';
 
 type Props = {
   productId: number;
@@ -37,7 +28,6 @@ export default function ProductDetail({ productId }: Props) {
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
   const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
-  // const likesDocRef = likesRef(NumProductId);
 
   const formatPrice = useFormatPrice;
   const discountedPrice = useDisCountedPrice({
@@ -51,7 +41,6 @@ export default function ProductDetail({ productId }: Props) {
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likerList, setLikerList] = useState<string[]>([]);
-  const [isCurrentUserLike, setIsCurrentUserLike] = useState(false);
   const [likesDocRef, setLikesDocRef] = useState<
     DocumentReference | undefined
   >();
@@ -59,10 +48,6 @@ export default function ProductDetail({ productId }: Props) {
   useEffect(() => {
     setLikesDocRef(likesRef(NumProductId));
   }, [NumProductId]);
-
-  // useEffect(() => {
-  //   setLike(likeCountDocId?.likeCountData);
-  // }, [likeCountDocId?.likeCountData]);
 
   // 컴포넌트 마운트될때 초기 값 설정
   useEffect(() => {
@@ -81,8 +66,6 @@ export default function ProductDetail({ productId }: Props) {
 
     getInitialLikeStatus();
   }, [likeCountDocId?.likeCountData, likesDocRef, user?.name]);
-
-  console.log('like', like);
 
   const handleLike = async () => {
     if (!user?.name) {
@@ -113,19 +96,14 @@ export default function ProductDetail({ productId }: Props) {
     if (!likesDocRef) return;
     const unsubscribe = onSnapshot(likesDocRef, (doc) => {
       const likesData = doc.data();
-      setLikerList(likesData?.likerList || []);
+      const likerList = likesData?.likerList || [];
+
+      setLikerList(likerList);
+      setIsLiked(likerList.inclues(user?.username));
     });
 
     return unsubscribe;
-  }, [likesDocRef]);
-
-  useEffect(() => {
-    if (likerList.includes(`${user?.name}`)) {
-      setIsCurrentUserLike(true);
-    } else {
-      setIsCurrentUserLike(false);
-    }
-  }, [likerList, user?.name]);
+  }, [likesDocRef, user?.username]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -170,8 +148,7 @@ export default function ProductDetail({ productId }: Props) {
                     onClick={handleLike}
                     className='text-slate-200 flex items-center gap-1 cursor-pointer'
                   >
-                    {/* <HeartIcon type='detail' isLiked={isLiked} /> */}
-                    <HeartIcon type='detail' isLiked={isCurrentUserLike} />
+                    <HeartIcon type='detail' isLiked={isLiked} />
                   </button>
                 </div>
                 <p className='text-4xl font-semibold'>{productTitle}</p>
