@@ -110,46 +110,49 @@ export async function getLikeCountDocId(productId: number) {
 
 export const updateLikedCount = async (
   docId: string | undefined,
-  count: number
+  likedCount: number
 ) => {
   const productRef = doc(db, 'products', `${docId}`);
 
   await updateDoc(productRef, {
-    likedCount: count,
+    likedCount,
   });
 };
 
 // productId에 해당하는 문서를 가리키는 포인터
-export const likeRef = (productId: number) =>
+export const likesRef = (productId: number) =>
   doc(db, 'likes', productId.toString());
 
+// likes 컬렉션에 productId 문서있는지 체크 및 생성
 export const checkAndCreateLikeDoc = async (
-  likeRef: DocumentReference<unknown, DocumentData>
+  likesDocRef: DocumentReference<unknown, DocumentData> | undefined
 ) => {
-  const likeData = await getDoc(likeRef);
+  if (!likesDocRef) return;
+  const likesData = await getDoc(likesDocRef);
 
-  if (!likeData.exists()) {
-    await setDoc(likeRef, { likerList: [] });
+  if (!likesData.exists()) {
+    await setDoc(likesDocRef, { likerList: [] });
   }
 };
 
 type updateLikerListProps = {
-  likeRef: DocumentReference<unknown, DocumentData>;
+  likesDocRef: DocumentReference<unknown, DocumentData> | undefined;
   username: string;
   isLiked: boolean;
 };
-
+// 좋아요 했으면, likerList에서 name삭제 및 추가
 export const updateLikerList = async ({
-  likeRef,
+  likesDocRef,
   username,
   isLiked,
 }: updateLikerListProps) => {
+  if (!likesDocRef) return;
   if (isLiked) {
-    await updateDoc(likeRef, {
+    await updateDoc(likesDocRef, {
       likerList: arrayRemove(username),
     });
   } else {
-    await updateDoc(likeRef, {
+    await updateDoc(likesDocRef, {
       likerList: arrayUnion(username),
     });
   }
