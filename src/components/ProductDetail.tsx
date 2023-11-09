@@ -1,19 +1,20 @@
 'use client';
 
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import HeartIcon from './ui/HeartIcon';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
-import Image from 'next/image';
-import HeartIcon from './ui/HeartIcon';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
 import { arrProductDetailType } from '@/types/Product';
+import { useUserSession } from '@/hooks/useUserSession';
 import {
   checkAndCreateLikeDoc,
-  db,
   likeRef,
   updateLikedCount,
   updateLikerList,
 } from '../app/api/firesotre';
-import { useEffect, useState } from 'react';
 import {
   arrayRemove,
   arrayUnion,
@@ -23,19 +24,18 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { useSession } from 'next-auth/react';
-import { useUserSession } from '@/hooks/useUserSession';
 
 type Props = {
   productId: number;
 };
 
 export default function ProductDetail({ productId }: Props) {
+  const router = useRouter();
   const NumProductId = Number(productId);
+  const user = useUserSession();
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
   const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
-  const user = useUserSession();
   const likeDocRef = likeRef(NumProductId);
 
   const formatPrice = useFormatPrice;
@@ -52,15 +52,15 @@ export default function ProductDetail({ productId }: Props) {
   const [likerList, setLikerList] = useState<string[]>([]);
   const [isCurrentUserLike, setIsCurrentUserLike] = useState(false);
 
+  // like 초기값 설정
   useEffect(() => {
     setLike(likeCountDocId?.likeCountData);
   }, [likeCountDocId?.likeCountData]);
 
-  console.log('isLiked', isLiked);
-
   const handleLike = async () => {
     if (!user?.name) {
       console.error('Username이 없어요 🚨');
+      router.push('/auth/signIn');
       return;
     }
 

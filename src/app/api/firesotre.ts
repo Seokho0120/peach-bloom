@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+// import axios from 'axios';
+// import { v4 as uuidv4 } from 'uuid';
 import {
   collection,
   getDocs,
@@ -9,7 +9,6 @@ import {
   addDoc,
   doc,
   getDoc,
-  orderBy,
   updateDoc,
   DocumentData,
   DocumentReference,
@@ -23,8 +22,6 @@ import {
   ProductDetailType,
   addProductType,
 } from '../../types/Product';
-import { FieldValue } from 'firebase/firestore';
-import firebase from 'firebase/compat/app';
 
 export const db = getFirestore(app);
 
@@ -122,6 +119,7 @@ export const updateLikedCount = async (
   });
 };
 
+// productId에 해당하는 문서를 가리키는 포인터
 export const likeRef = (productId: number) =>
   doc(db, 'likes', productId.toString());
 
