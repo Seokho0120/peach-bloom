@@ -4,10 +4,10 @@ import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
 import Image from 'next/image';
 import HeartIcon from './ui/HeartIcon';
-import { useGetProductDetail } from '@/hooks/useProducts';
+import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
 import { arrProductDetailType } from '@/types/Product';
-import { incrementLikedCount } from '../app/api/firesotre';
-import { useState } from 'react';
+import { incrementLikedCount, getLikeCountDocId } from '../app/api/firesotre';
+import { useEffect, useState } from 'react';
 
 type Props = {
   productId: number;
@@ -17,6 +17,14 @@ export default function ProductDetail({ productId }: Props) {
   const NumProductId = Number(productId);
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
+  const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
+  const [like, setLike] = useState<number>(0);
+
+  useEffect(() => {
+    setLike(likeCountDocId?.likeCountData);
+  }, [likeCountDocId?.likeCountData]);
+
+  console.log('like', like);
 
   const arrProductDetail: arrProductDetailType[] = productDetail
     ? [{ ...productDetail }]
@@ -28,8 +36,6 @@ export default function ProductDetail({ productId }: Props) {
     price: productDetail?.price,
     saleRate: productDetail?.saleRate,
   });
-
-  const [like, setLike] = useState<number>(0);
 
   const handleLike = async () => {
     setLike((like) => like + 1);

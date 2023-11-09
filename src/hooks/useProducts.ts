@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
+  getLikeCountDocId,
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
@@ -89,6 +90,16 @@ export function useGetProductDetail(productId: number) {
       : null;
 
   return { productDetail: selectedProductDetail, isLoading, isError };
+}
+
+export function useGetLikeCountDocId(productId: number) {
+  const { data: likeCountDocId } = useQuery({
+    queryKey: ['likeCountDocId', productId],
+    queryFn: () => getLikeCountDocId(productId),
+    staleTime: 1000 * 60,
+  });
+
+  return { likeCountDocId };
 }
 
 // // 더미데이터 리스트 불러오기

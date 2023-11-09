@@ -56,6 +56,7 @@ export const addNewProduct = async ({ product, imageUrl }: addProductType) => {
       ...product,
       imageUrl,
     });
+    console.log('docRef.id', docRef.id); // 문서 ID
     return docRef.id;
   } catch (error) {
     console.error('Firestore에 상품 업로드 중 에러 발생 🚨', error);
@@ -87,8 +88,26 @@ export const addNewDeatil = async (productDetail: ProductDetailType) => {
   }
 };
 
+export async function getLikeCountDocId(productId: number) {
+  const productQuery = query(
+    collection(db, 'products'),
+    where('productId', '==', productId)
+  );
+
+  const querySnapshot = await getDocs(productQuery);
+  const productDocs = querySnapshot.docs[0];
+  const productData = productDocs.data();
+
+  const likeCountData = productData.likedCount;
+  const docId = productDocs.id;
+
+  console.log('likeCount', likeCountData); // likedCount 초기값
+  console.log('docId', docId); // 문서 ID
+  return { likeCountData, docId };
+}
+
 export const incrementLikedCount = async (productId: number, count: number) => {
-  const productRef = doc(db, 'products', 'y7pJwzFef0MlhmrtCJj3');
+  const productRef = doc(db, 'products', 'VMwdkEejFWgBOnV6Xljs');
   // const productRef = doc(db, 'products', productId.toString());
 
   await updateDoc(productRef, {

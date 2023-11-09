@@ -19,6 +19,7 @@ export interface ProductDetailType {
   howToUse: string;
   ingredients: string;
   productId: number;
+  docId?: string;
 }
 
 export interface SelectedProductDetail extends ProductListType {
