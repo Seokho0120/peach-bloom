@@ -96,7 +96,6 @@ export function useGetLikeCountDocId(productId: number) {
   const { data: likeCountDocId } = useQuery({
     queryKey: ['likeCountDocId', productId],
     queryFn: () => getLikeCountDocId(productId),
-    staleTime: 1000 * 60,
   });
 
   return { likeCountDocId };

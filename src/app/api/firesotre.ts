@@ -21,7 +21,7 @@ import {
 import { FieldValue } from 'firebase/firestore';
 import firebase from 'firebase/compat/app';
 
-const db = getFirestore(app);
+export const db = getFirestore(app);
 
 export async function getProductsList(): Promise<ProductListType[]> {
   const snapshot = await getDocs(collection(db, 'products'));
@@ -106,33 +106,16 @@ export async function getLikeCountDocId(productId: number) {
   return { likeCountData, docId };
 }
 
-export const incrementLikedCount = async (
+export const updateLikedCount = async (
   docId: string | undefined,
   count: number
 ) => {
-  // docId를 받아와서 그에 해당하는 좋아요 개수 조정하기
   const productRef = doc(db, 'products', `${docId}`);
 
   await updateDoc(productRef, {
     likedCount: count,
   });
 };
-
-// export const uploadDetail = async (productId: string) => {
-//   const product = await getProductById(productId);
-
-//   if (product) {
-//     // detail 내용을 업로드하는 코드를 여기에 작성하세요.
-//     // 예를 들어, Firestore에 detail 내용을 업로드하는 경우 다음과 같이 작성할 수 있습니다:
-//     const docRef = await addDoc(collection(db, 'details'), {
-//       productId: product.productId,
-//       // 다른 detail 내용
-//     });
-//     console.log('docRef.id >>>>', docRef.id);
-//   } else {
-//     console.error('Product not found!');
-//   }
-// };
 
 // // Dummy data List로직
 // export async function fetchProducts() {
