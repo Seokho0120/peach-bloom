@@ -134,15 +134,17 @@ export default function ProductDetail({ productId }: Props) {
             howToUse,
           }) => (
             <div key={productId} className='flex justify-between gap-16'>
-              <div className='w-96 flex-shrink-0'>
+              <div className='flex-shrink-0 relative w-[500px] h-[500px]'>
                 <Image
                   src={imageUrl}
                   alt={productTitle}
+                  layout='fill'
+                  objectFit='cover'
+                  className='absolute'
                   priority
-                  width={700}
-                  height={700}
                 />
               </div>
+
               <div className='flex-grow flex flex-col gap-4'>
                 <div className='flex items-center justify-between'>
                   <p className='text-navypoint text-2xl'>{brandTitle}</p>
@@ -153,11 +155,25 @@ export default function ProductDetail({ productId }: Props) {
                     <HeartIcon type='detail' isLiked={isLiked} />
                   </button>
                 </div>
+
                 <p className='text-4xl font-semibold'>{productTitle}</p>
-                <p>{formatPrice(discountedPrice!)}원</p>
-                <p>{description}</p>
-                <p>{ingredients}</p>
-                <p>{howToUse}</p>
+                <div className='flex'>
+                  <p className='text-xl font-semibold mr-6'>
+                    {formatPrice(discountedPrice!)}원
+                  </p>
+                  <div className='text-pinkpoint flex items-center gap-1 text-sm'>
+                    <HeartIcon type='' /> {likedCount}
+                  </div>
+                </div>
+
+                <div className='flex flex-col gap-4 border-y py-6'>
+                  <p className=''>{description}</p>
+                  <p className='text-sm text-slate-600'>{howToUse}</p>
+                  <p className='text-sm text-slate-600'>성분: {ingredients}</p>
+                </div>
+                <button className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white rounded-lg'>
+                  구매하기
+                </button>
               </div>
             </div>
           )
