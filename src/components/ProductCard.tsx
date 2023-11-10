@@ -23,7 +23,7 @@ export default function ProductCard({ product }: Props) {
     likedCount,
     isNew,
   } = product;
-
+  console.log('productId', productId);
   const discountedPrice = useDisCountedPrice({ price, saleRate });
   const formatPrice = useFormatPrice;
 

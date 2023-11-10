@@ -1,5 +1,3 @@
-// import axios from 'axios';
-// import { v4 as uuidv4 } from 'uuid';
 import {
   collection,
   getDocs,
@@ -16,6 +14,7 @@ import {
   arrayRemove,
   arrayUnion,
   onSnapshot,
+  collectionGroup,
 } from 'firebase/firestore';
 import app from './firebasedb';
 import {
@@ -28,6 +27,8 @@ import {
   monitoringLikesDataType,
   updateLikerListProps,
 } from '@/types/FirestoreType';
+// import axios from 'axios';
+// import { v4 as uuidv4 } from 'uuid';
 
 export const db = getFirestore(app);
 
@@ -192,6 +193,24 @@ export const monitoringLikesData = (props: monitoringLikesDataType) => {
 
   return unsubscribe;
 };
+
+// getLikedProducst
+export async function getLikedProducst(userId: number) {
+  const likesCollection = collection(db, 'likes');
+  const likesSnapshot = await getDocs(likesCollection);
+  const likedDocIds = likesSnapshot.docs
+    .filter((doc) => doc.data().likerList.includes(userId))
+    .map((doc) => doc.id);
+  const likedDocIdsAsNumbers = likedDocIds.map(Number);
+
+  const productsCollection = collection(db, 'products');
+  const productsSnapshot = await getDocs(productsCollection);
+  const likedProducts = productsSnapshot.docs
+    .filter((doc) => likedDocIdsAsNumbers.includes(doc.data().productId))
+    .map((doc) => doc.data());
+
+  return likedProducts;
+}
 
 // // Dummy data List로직
 // export async function fetchProducts() {

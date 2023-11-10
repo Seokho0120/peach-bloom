@@ -1,12 +1,16 @@
 import { getServerUser } from '@/hooks/useUserSession';
+import LikedProductsList from '@/components/LikedProductsList';
+import { redirect } from 'next/navigation';
 
 export default async function MyLikePage() {
   const user = await getServerUser();
-  console.log('user', user);
+  if (!user) {
+    redirect('/auth/signin');
+  }
 
   return (
     <div className='mx-52'>
-      <div>zzz</div>
+      <LikedProductsList userId={user.id} />
     </div>
   );
 }

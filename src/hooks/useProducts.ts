@@ -84,6 +84,9 @@ export function useGetProductDetail(productId: number) {
   const selectedProduct = productsList.find(
     (product) => product.productId === productId
   );
+
+  console.log('productsList', productsList);
+
   const selectedProductDetail =
     selectedProduct && productDetails
       ? { ...selectedProduct, ...productDetails }
