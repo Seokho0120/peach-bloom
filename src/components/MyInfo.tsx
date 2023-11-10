@@ -1,10 +1,10 @@
 'use client';
 
+import { useUserSession } from '@/hooks/useUserSession';
 import { signOut, useSession } from 'next-auth/react';
 
 export default function MyInfo() {
-  const { data: session } = useSession();
-  const user = session?.user;
+  const user = useUserSession();
 
   const handleSignOut = async () => {
     await signOut({ callbackUrl: `/` });

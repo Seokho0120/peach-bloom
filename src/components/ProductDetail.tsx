@@ -28,7 +28,7 @@ export default function ProductDetail({ productId }: Props) {
   const NumProductId = Number(productId);
 
   const user = useUserSession();
-  const userName = user?.name;
+  const userId = user?.id;
 
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
@@ -59,7 +59,7 @@ export default function ProductDetail({ productId }: Props) {
 
   // 컴포넌트 마운트될때 초기 값 설정
   useEffect(() => {
-    if (!initialLikeCount || !userName) return;
+    if (!initialLikeCount || !userId) return;
 
     getInitialLikeStatus({
       likesDocRef,
@@ -67,13 +67,13 @@ export default function ProductDetail({ productId }: Props) {
       setIsLiked,
       setLike,
       initialLikeCount,
-      userName,
+      userId,
     });
-  }, [initialLikeCount, likesDocRef, userName]);
+  }, [initialLikeCount, likesDocRef, userId]);
 
   const handleLike = async () => {
-    if (!user?.name) {
-      console.error('Username이 없어요 🚨');
+    if (!userId) {
+      console.error('로그인 먼저 해주세요 🚨');
       router.push('/auth/signIn');
       return;
     }
@@ -88,24 +88,29 @@ export default function ProductDetail({ productId }: Props) {
     await updateLikedCount(docId, newCount);
     await updateLikerList({
       likesDocRef,
-      username: user.name,
+      userId: userId,
       isLiked,
     });
   };
 
   // 실시간 업데이트 감지 및 중지
   useEffect(() => {
-    if (!userName) return;
+    if (!userId) return;
 
     const unsubscribe = monitoringLikesData({
       likesDocRef,
       setLikerList,
       setIsLiked,
-      userName,
+      userId,
     });
 
     return unsubscribe;
-  }, [likesDocRef, userName]);
+  }, [likesDocRef, userId]);
+
+  console.log('NumProductId', NumProductId);
+  console.log('like', like);
+  console.log('isLiked', isLiked);
+  console.log('likerList', likerList);
 
   if (isLoading) {
     return <div>Loading...</div>;

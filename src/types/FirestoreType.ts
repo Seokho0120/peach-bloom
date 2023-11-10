@@ -2,7 +2,7 @@ import { DocumentData, DocumentReference } from 'firebase/firestore';
 
 export type updateLikerListProps = {
   likesDocRef: DocumentReference<unknown, DocumentData> | undefined;
-  username: string;
+  userId: number;
   isLiked: boolean;
 };
 
@@ -12,12 +12,12 @@ export type InitialLikeStatusType = {
   setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
   setLike: React.Dispatch<React.SetStateAction<number>>;
   initialLikeCount: number;
-  userName: string;
+  userId: number;
 };
 
 export type monitoringLikesDataType = {
   likesDocRef: DocumentReference | undefined;
-  userName: string;
+  userId: number;
   setLikerList: React.Dispatch<React.SetStateAction<string[]>>;
   setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
 };

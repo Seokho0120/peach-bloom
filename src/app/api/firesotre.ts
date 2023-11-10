@@ -138,20 +138,20 @@ export const checkAndCreateLikeDoc = async (
   }
 };
 
-// 좋아요 했으면, likerList에서 name삭제 및 추가
+// 좋아요 했으면, likerList에서 userId 삭제 및 추가
 export const updateLikerList = async ({
   likesDocRef,
-  username,
+  userId,
   isLiked,
 }: updateLikerListProps) => {
   if (!likesDocRef) return;
   if (isLiked) {
     await updateDoc(likesDocRef, {
-      likerList: arrayRemove(username),
+      likerList: arrayRemove(userId),
     });
   } else {
     await updateDoc(likesDocRef, {
-      likerList: arrayUnion(username),
+      likerList: arrayUnion(userId),
     });
   }
 };
@@ -163,7 +163,7 @@ export const getInitialLikeStatus = async (props: InitialLikeStatusType) => {
     setIsLiked,
     setLike,
     initialLikeCount,
-    userName,
+    userId,
   } = props;
   if (!likesDocRef) return;
 
@@ -173,21 +173,21 @@ export const getInitialLikeStatus = async (props: InitialLikeStatusType) => {
     const likerList = likesData.data()?.likerList || [];
 
     setLikerList(likerList);
-    setIsLiked(likerList.includes(userName));
+    setIsLiked(likerList.includes(userId));
     setLike(initialLikeCount);
   }
 };
 
 export const monitoringLikesData = (props: monitoringLikesDataType) => {
-  const { likesDocRef, userName, setLikerList, setIsLiked } = props;
-  if (!likesDocRef || !userName) return;
+  const { likesDocRef, userId, setLikerList, setIsLiked } = props;
+  if (!likesDocRef || !userId) return;
 
   const unsubscribe = onSnapshot(likesDocRef, (doc) => {
     const likesData = doc.data();
     const likerList = likesData?.likerList || [];
 
     setLikerList(likerList);
-    setIsLiked(likerList.includes(userName));
+    setIsLiked(likerList.includes(userId));
   });
 
   return unsubscribe;
