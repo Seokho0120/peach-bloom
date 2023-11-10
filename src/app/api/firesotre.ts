@@ -27,7 +27,7 @@ import {
   InitialLikeStatusType,
   monitoringLikesDataType,
   updateLikerListProps,
-} from '@/types/Firestore';
+} from '@/types/FirestoreType';
 
 export const db = getFirestore(app);
 

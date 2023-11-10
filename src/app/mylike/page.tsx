@@ -1,3 +1,7 @@
 export default function MyLikePage() {
-  return <>MyLikePage</>;
+  return (
+    <div className='mx-52'>
+      <div>zzz</div>
+    </div>
+  );
 }
