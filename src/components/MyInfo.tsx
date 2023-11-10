@@ -1,7 +1,7 @@
 'use client';
 
 import { useUserSession } from '@/hooks/useUserSession';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 export default function MyInfo() {
   const user = useUserSession();

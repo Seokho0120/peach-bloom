@@ -107,11 +107,6 @@ export default function ProductDetail({ productId }: Props) {
     return unsubscribe;
   }, [likesDocRef, userId]);
 
-  console.log('NumProductId', NumProductId);
-  console.log('like', like);
-  console.log('isLiked', isLiked);
-  console.log('likerList', likerList);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }

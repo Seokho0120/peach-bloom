@@ -4,10 +4,8 @@ import { addNewProduct, getProductById } from '@/app/api/firesotre';
 import { uploadImage } from '@/app/api/uploader';
 import { ProductListType } from '@/types/Product';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Router } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function NewProduct() {
   const router = useRouter();
