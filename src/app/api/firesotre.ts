@@ -15,6 +15,7 @@ import {
   arrayUnion,
   onSnapshot,
   collectionGroup,
+  FieldValue,
 } from 'firebase/firestore';
 import app from './firebasedb';
 import {
@@ -216,6 +217,41 @@ export async function getLikedProducst(userId: number) {
     .map((doc) => doc.data());
 
   return likedProducts;
+}
+
+export type addToCartType = {
+  userId: string;
+  quantity: number;
+  product: { id: number; name: string; price: number; image: string };
+};
+
+export async function addToCart({ userId, quantity, product }: addToCartType) {
+  const userCartRef = await doc(db, 'carts', userId);
+  const docSnap = await getDoc(userCartRef);
+
+  const newCartItem = {
+    productId: product.id,
+    productName: product.name,
+    price: product.price,
+    productImage: product.image,
+    quantity,
+  };
+
+  if (docSnap.exists()) {
+    await updateDoc(userCartRef, {
+      items: arrayUnion(newCartItem),
+    });
+  } else {
+    await setDoc(userCartRef, { items: [newCartItem] });
+  }
+
+  // if (docSnap.exists()) {
+  //   const userData = docSnap.data();
+  //   const updatedItems = [...userData.items, newCartItem];
+  //   await setDoc(userCartRef, { ...userData, items: updatedItems });
+  // } else {
+  //   await setDoc(userCartRef, { items: [newCartItem] });
+  // }
 }
 
 // // Dummy data List로직

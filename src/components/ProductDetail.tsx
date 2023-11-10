@@ -10,6 +10,7 @@ import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
 import { useUserSession } from '@/hooks/useUserSession';
 import { arrProductDetailType } from '@/types/Product';
 import {
+  addToCart,
   checkAndCreateLikeDoc,
   getInitialLikeStatus,
   likesRef,
@@ -145,7 +146,7 @@ export default function ProductDetail({ productId }: Props) {
                 />
               </div>
 
-              <div className='flex-grow flex flex-col gap-4'>
+              <div className='flex-grow flex flex-col gap-5'>
                 <div className='flex items-center justify-between'>
                   <p className='text-navypoint text-2xl'>{brandTitle}</p>
                   <button
@@ -158,7 +159,7 @@ export default function ProductDetail({ productId }: Props) {
 
                 <p className='text-4xl font-semibold'>{productTitle}</p>
                 <div className='flex'>
-                  <p className='text-xl font-semibold mr-6'>
+                  <p className='text-2xl font-semibold mr-6'>
                     {formatPrice(discountedPrice!)}원
                   </p>
                   <div className='text-pinkpoint flex items-center gap-1 text-sm'>
@@ -168,10 +169,21 @@ export default function ProductDetail({ productId }: Props) {
 
                 <div className='flex flex-col gap-4 border-y py-6'>
                   <p className=''>{description}</p>
-                  <p className='text-sm text-slate-600'>{howToUse}</p>
-                  <p className='text-sm text-slate-600'>성분: {ingredients}</p>
+                  <div className='flex flex-col gap-2'>
+                    <p>사용방법</p>
+                    <span className='text-sm text-slate-600'>{howToUse}</span>
+                    <p>성분</p>
+                    <span className='text-sm text-slate-600'>
+                      {ingredients}
+                    </span>
+                  </div>
                 </div>
-                <button className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white rounded-lg'>
+
+                <button
+                  // onClick={() => addToCart()}
+                  onClick={() => console.log('구매하기')}
+                  className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white rounded-lg'
+                >
                   구매하기
                 </button>
               </div>
