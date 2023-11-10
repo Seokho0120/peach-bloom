@@ -39,6 +39,11 @@ export async function getProductsList(): Promise<ProductListType[]> {
     ? []
     : snapshot.docs.map((doc) => doc.data() as ProductListType);
 }
+//
+export function listenProductsChange(callback: () => void) {
+  const productCollectionRef = collection(db, 'products');
+  return onSnapshot(productCollectionRef, callback);
+}
 
 export async function getProductDetail(
   productId: number
@@ -96,7 +101,7 @@ export const addNewDeatil = async (productDetail: ProductDetailType) => {
     throw error;
   }
 };
-
+// 초기값 설정
 export async function getLikeCountDocId(productId: number) {
   const productQuery = query(
     collection(db, 'products'),
@@ -107,8 +112,9 @@ export async function getLikeCountDocId(productId: number) {
   const productDocs = querySnapshot.docs[0];
   const productData = productDocs.data();
 
-  const likeCountData = productData.likedCount; // likedCount 초기값
+  const likeCountData = await productData.likedCount; // likedCount 초기값
   const docId = productDocs.id; // 문서 ID
+
   return { likeCountData, docId };
 }
 
@@ -194,7 +200,7 @@ export const monitoringLikesData = (props: monitoringLikesDataType) => {
   return unsubscribe;
 };
 
-// getLikedProducst
+// MY LIKE 데이터 가져오기
 export async function getLikedProducst(userId: number) {
   const likesCollection = collection(db, 'likes');
   const likesSnapshot = await getDocs(likesCollection);

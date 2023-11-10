@@ -1,12 +1,13 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
   getLikeCountDocId,
+  listenProductsChange,
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   productsListAtom,
@@ -16,6 +17,8 @@ import {
 import { ProductListType, ProductDetailType } from '../types/Product';
 
 export function useGetProductList(category: string) {
+  const queryClient = useQueryClient();
+
   const setProductList = useSetRecoilState(productsListAtom);
   const setInitialProductList = useSetRecoilState(initialProductsListAtom);
 
@@ -27,6 +30,13 @@ export function useGetProductList(category: string) {
     queryKey: ['productsList', category],
     queryFn: getProductsList,
   });
+
+  useEffect(() => {
+    const unsubscribe = listenProductsChange(() => {
+      queryClient.invalidateQueries({ queryKey: ['productsList', category] });
+    });
+    return unsubscribe;
+  }, [category, queryClient]);
 
   useEffect(() => {
     if (productsList) {
@@ -84,8 +94,6 @@ export function useGetProductDetail(productId: number) {
   const selectedProduct = productsList.find(
     (product) => product.productId === productId
   );
-
-  console.log('productsList', productsList);
 
   const selectedProductDetail =
     selectedProduct && productDetails

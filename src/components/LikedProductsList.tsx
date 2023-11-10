@@ -29,8 +29,8 @@ export default function LikedProductsList({ userId }: Props) {
 
   return (
     <section>
-      <h2 className='font-bold text-4xl text-slate-600 mb-10'>
-        좋아요
+      <h2 className='font-bold text-4xl text-slate-600 mb-6'>
+        MY LIKE
         <div className='border-b border-navypoint mt-4' />
       </h2>
 

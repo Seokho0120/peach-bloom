@@ -4,8 +4,6 @@ import { ProductListType } from '../types/Product';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
 import HeartIcon from './ui/HeartIcon';
-import { useRecoilValue } from 'recoil';
-import { discountedPriceAtom } from '@/atoms/productsListAtom';
 
 type Props = {
   product: ProductListType;
@@ -23,7 +21,6 @@ export default function ProductCard({ product }: Props) {
     likedCount,
     isNew,
   } = product;
-  console.log('productId', productId);
   const discountedPrice = useDisCountedPrice({ price, saleRate });
   const formatPrice = useFormatPrice;
 
