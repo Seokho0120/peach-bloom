@@ -21,6 +21,7 @@ import {
 import { DocumentReference } from 'firebase/firestore';
 import ProductInfo from './ProductInfo';
 import { DetailBtn } from './DetailBtn';
+import QuantityControl from './QuantityControl';
 
 type Props = {
   productId: number;
@@ -115,9 +116,7 @@ export default function ProductDetail({ productId }: Props) {
   }, [likesDocRef, userId]);
 
   const handleAddToCart = () => {
-    console.log('카트에 담기');
-
-    // addToCart()
+    console.log('장바구니에 담기');
 
     // export type addToCartType = {
     //   userId: string;
@@ -129,6 +128,12 @@ export default function ProductDetail({ productId }: Props) {
     //     imageUrl: string;
     //   };
     // };
+
+    // addToCart()
+  };
+
+  const handleBuy = () => {
+    router.push('/carts');
   };
 
   if (isLoading) {
@@ -180,35 +185,15 @@ export default function ProductDetail({ productId }: Props) {
                   ingredients={ingredients}
                 />
 
-                <div className='flex items-center justify-between'>
-                  <div className='flex items-center justify-between border border-gray-200 rounded-md gap-4  py-2'>
-                    <button
-                      onClick={() =>
-                        setPriceCount((prev) => (prev > 1 ? prev - 1 : 1))
-                      }
-                      className='border-r flex items-center justify-center px-4 hover:text-pinkpoint'
-                    >
-                      -
-                    </button>
-                    <div>{priceCount}</div>
-                    <button
-                      onClick={() => setPriceCount((prev) => prev + 1)}
-                      className='border-l flex items-center justify-center px-4 hover:text-pinkpoint'
-                    >
-                      +
-                    </button>
-                  </div>
-                  <p className='text-4xl font-semibold'>
-                    {formatPrice(discountedPrice!)}원
-                  </p>
-                </div>
+                <QuantityControl
+                  setPriceCount={setPriceCount}
+                  priceCount={priceCount}
+                  discountedPrice={discountedPrice}
+                />
 
                 <div className='flex gap-4'>
-                  <DetailBtn
-                    text='장바구니 담기'
-                    onClick={() => console.log('장바구니담기')}
-                  />
-                  <DetailBtn text='바로 구매하기' onClick={handleAddToCart} />
+                  <DetailBtn text='장바구니 담기' onClick={handleAddToCart} />
+                  <DetailBtn text='바로 구매하기' onClick={handleBuy} />
                 </div>
               </div>
             </div>
