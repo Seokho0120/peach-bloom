@@ -220,18 +220,21 @@ export async function getLikedProducst(userId: number) {
 }
 
 export type addToCartType = {
-  userId: string;
+  userId: number;
   quantity: number;
   product: {
     productId: number;
     productTitle: string;
-    price: number;
+    price: number | undefined;
+    // price: number;
     imageUrl: string;
   };
 };
 
-export async function addToCart({ userId, quantity, product }: addToCartType) {
-  const userCartRef = await doc(db, 'carts', userId);
+export async function addToCart(props: addToCartType[]) {
+  const { userId, quantity, product } = props[0];
+
+  const userCartRef = await doc(db, 'carts', userId.toString());
   const docSnap = await getDoc(userCartRef);
 
   const newCartItem = {
@@ -249,15 +252,36 @@ export async function addToCart({ userId, quantity, product }: addToCartType) {
   } else {
     await setDoc(userCartRef, { items: [newCartItem] });
   }
-
-  // if (docSnap.exists()) {
-  //   const userData = docSnap.data();
-  //   const updatedItems = [...userData.items, newCartItem];
-  //   await setDoc(userCartRef, { ...userData, items: updatedItems });
-  // } else {
-  //   await setDoc(userCartRef, { items: [newCartItem] });
-  // }
 }
+
+// export async function addToCart({ userId, quantity, product }: addToCartType) {
+//   const userCartRef = await doc(db, 'carts', userId);
+//   const docSnap = await getDoc(userCartRef);
+
+//   const newCartItem = {
+//     quantity,
+//     productId: product.productId,
+//     productTitle: product.productTitle,
+//     price: product.price,
+//     imageUrl: product.imageUrl,
+//   };
+
+//   if (docSnap.exists()) {
+//     await updateDoc(userCartRef, {
+//       items: arrayUnion(newCartItem),
+//     });
+//   } else {
+//     await setDoc(userCartRef, { items: [newCartItem] });
+//   }
+
+//   // if (docSnap.exists()) {
+//   //   const userData = docSnap.data();
+//   //   const updatedItems = [...userData.items, newCartItem];
+//   //   await setDoc(userCartRef, { ...userData, items: updatedItems });
+//   // } else {
+//   //   await setDoc(userCartRef, { items: [newCartItem] });
+//   // }
+// }
 
 // // Dummy data List로직
 // export async function fetchProducts() {

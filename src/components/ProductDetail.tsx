@@ -152,9 +152,8 @@ export default function ProductDetail({ productId }: Props) {
     if (!isAlreadyInCart && cartContent) {
       setCartItem((prev) => [...prev, cartContent]);
     }
-    // addToCart(cartItem);
+    addToCart(cartItem);
   };
-  console.log('cartItem', cartItem);
 
   // useEffect(() => {
   //   if (arrProductDetail && userId) {
