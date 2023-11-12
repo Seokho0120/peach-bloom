@@ -6,7 +6,7 @@ import CartIcon from './ui/CartIcon';
 import SearchIcon from './ui/SearchIcon';
 import UserIcon from './ui/UserIcon';
 import HeartOutIcon from './ui/HeartOutIcon';
-import AuthButton from './AuthButtonProps';
+import AuthButton from './AuthBtn';
 import UploadIcon from './ui/UploadIcon';
 
 const SIDE_MENU = [

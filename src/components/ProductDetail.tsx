@@ -20,6 +20,7 @@ import {
 } from '@/app/api/firesotre';
 import { DocumentReference } from 'firebase/firestore';
 import ProductInfo from './ProductInfo';
+import { DetailBtn } from './DetailBtn';
 
 type Props = {
   productId: number;
@@ -202,13 +203,13 @@ export default function ProductDetail({ productId }: Props) {
                   </p>
                 </div>
 
-                <button
-                  onClick={handleAddToCart}
-                  // onClick={() => console.log('구매하기')}
-                  className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white rounded-lg'
-                >
-                  구매하기
-                </button>
+                <div className='flex gap-4'>
+                  <DetailBtn
+                    text='장바구니 담기'
+                    onClick={() => console.log('장바구니담기')}
+                  />
+                  <DetailBtn text='바로 구매하기' onClick={handleAddToCart} />
+                </div>
               </div>
             </div>
           )

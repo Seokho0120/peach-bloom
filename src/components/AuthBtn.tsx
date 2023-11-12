@@ -1,5 +1,5 @@
 import { Session as NextAuthSession } from 'next-auth';
-import LoginIcon from '../components/ui/LoginIcon';
+import LoginIcon from './ui/LoginIcon';
 
 interface AuthButtonProps {
   session: NextAuthSession | null;
