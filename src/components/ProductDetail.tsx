@@ -34,8 +34,6 @@ export default function ProductDetail({ productId }: Props) {
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
 
-  console.log('productDetail', productDetail);
-
   const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
   const initialLikeCount = likeCountDocId?.likeCountData;
   const docId = likeCountDocId?.docId;
@@ -56,6 +54,8 @@ export default function ProductDetail({ productId }: Props) {
   const [likesDocRef, setLikesDocRef] = useState<
     DocumentReference | undefined
   >();
+
+  const [priceCount, setPriceCount] = useState<number>(0);
 
   useEffect(() => {
     setLikesDocRef(likesRef(NumProductId));
@@ -159,7 +159,6 @@ export default function ProductDetail({ productId }: Props) {
                     <HeartIcon type='detail' isLiked={isLiked} />
                   </button>
                 </div>
-
                 <p className='text-4xl font-semibold'>{productTitle}</p>
 
                 <div className='flex flex-col gap-4 border-y py-6'>
@@ -174,8 +173,16 @@ export default function ProductDetail({ productId }: Props) {
                   </div>
                 </div>
 
-                <div className='flex'>
-                  <div>수량 계산</div>
+                <div className='flex items-center gap-8'>
+                  <div className='flex items-center border gap-4 p-1'>
+                    <button onClick={() => setPriceCount((prev) => prev - 1)}>
+                      -
+                    </button>
+                    <div>{priceCount}</div>
+                    <button onClick={() => setPriceCount((prev) => prev + 1)}>
+                      +
+                    </button>
+                  </div>
                   <p className='text-2xl font-semibold mr-6'>
                     {formatPrice(discountedPrice!)}원
                   </p>

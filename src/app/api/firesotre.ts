@@ -222,7 +222,12 @@ export async function getLikedProducst(userId: number) {
 export type addToCartType = {
   userId: string;
   quantity: number;
-  product: { id: number; name: string; price: number; image: string };
+  product: {
+    productId: number;
+    productTitle: string;
+    price: number;
+    imageUrl: string;
+  };
 };
 
 export async function addToCart({ userId, quantity, product }: addToCartType) {
@@ -230,11 +235,11 @@ export async function addToCart({ userId, quantity, product }: addToCartType) {
   const docSnap = await getDoc(userCartRef);
 
   const newCartItem = {
-    productId: product.id,
-    productName: product.name,
-    price: product.price,
-    productImage: product.image,
     quantity,
+    productId: product.productId,
+    productTitle: product.productTitle,
+    price: product.price,
+    imageUrl: product.imageUrl,
   };
 
   if (docSnap.exists()) {
