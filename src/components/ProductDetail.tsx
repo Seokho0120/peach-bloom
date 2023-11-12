@@ -19,6 +19,7 @@ import {
   updateLikerList,
 } from '@/app/api/firesotre';
 import { DocumentReference } from 'firebase/firestore';
+import ProductInfo from './ProductInfo';
 
 type Props = {
   productId: number;
@@ -112,6 +113,23 @@ export default function ProductDetail({ productId }: Props) {
     return unsubscribe;
   }, [likesDocRef, userId]);
 
+  const handleAddToCart = () => {
+    console.log('카트에 담기');
+
+    // addToCart()
+
+    // export type addToCartType = {
+    //   userId: string;
+    //   quantity: number;
+    //   product: {
+    //     productId: number;
+    //     productTitle: string;
+    //     price: number;
+    //     imageUrl: string;
+    //   };
+    // };
+  };
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -143,36 +161,23 @@ export default function ProductDetail({ productId }: Props) {
                 <Image
                   src={imageUrl}
                   alt={productTitle}
-                  layout='fill'
-                  objectFit='cover'
+                  fill
+                  sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                   className='absolute'
-                  priority
+                  // priority
                 />
               </div>
 
               <div className='flex-grow flex flex-col gap-5'>
-                <div className='flex items-center justify-between'>
-                  <p className='text-navypoint text-2xl'>{brandTitle}</p>
-                  <button
-                    onClick={handleLike}
-                    className='text-slate-200 flex items-center gap-1 cursor-pointer'
-                  >
-                    <HeartIcon type='detail' isLiked={isLiked} />
-                  </button>
-                </div>
-                <p className='text-4xl font-semibold'>{productTitle}</p>
-
-                <div className='flex flex-col gap-4 border-y py-6'>
-                  <p className=''>{description}</p>
-                  <div className='flex flex-col gap-2'>
-                    <p>사용방법</p>
-                    <span className='text-sm text-slate-600'>{howToUse}</span>
-                    <p>성분</p>
-                    <span className='text-sm text-slate-600'>
-                      {ingredients}
-                    </span>
-                  </div>
-                </div>
+                <ProductInfo
+                  brandTitle={brandTitle}
+                  handleLike={handleLike}
+                  isLiked={isLiked}
+                  productTitle={productTitle}
+                  description={description}
+                  howToUse={howToUse}
+                  ingredients={ingredients}
+                />
 
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center justify-between border border-gray-200 rounded-md gap-4  py-2'>
@@ -195,14 +200,11 @@ export default function ProductDetail({ productId }: Props) {
                   <p className='text-4xl font-semibold'>
                     {formatPrice(discountedPrice!)}원
                   </p>
-                  {/* <div className='text-pinkpoint flex items-center gap-1 text-sm'>
-                    <HeartIcon type='' /> {likedCount}
-                  </div> */}
                 </div>
 
                 <button
-                  // onClick={() => addToCart()}
-                  onClick={() => console.log('구매하기')}
+                  onClick={handleAddToCart}
+                  // onClick={() => console.log('구매하기')}
                   className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white rounded-lg'
                 >
                   구매하기
