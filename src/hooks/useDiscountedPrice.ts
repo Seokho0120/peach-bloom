@@ -1,19 +1,22 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
 type Props = {
   price?: number;
   saleRate?: number;
+  isSale?: boolean;
 };
 
-const useDisCountedPrice = ({ price, saleRate }: Props) => {
+const useDisCountedPrice = ({ isSale, price, saleRate }: Props) => {
   const [discountedPrice, setDiscountedPrice] = useState(price);
+  const discount = isSale && price && saleRate ? price * (saleRate / 100) : 0;
 
   useEffect(() => {
-    if (saleRate) {
-      const discount = price && price * (saleRate / 100);
-      discount ? setDiscountedPrice(price && price - discount) : null;
-    }
-  }, [price, saleRate]);
+    isSale
+      ? setDiscountedPrice(price && price - discount)
+      : setDiscountedPrice(price);
+  }, [discount, isSale, price, discountedPrice]);
 
   return discountedPrice;
 };

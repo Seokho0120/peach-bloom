@@ -34,6 +34,8 @@ export default function ProductDetail({ productId }: Props) {
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
 
+  console.log('productDetail', productDetail);
+
   const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
   const initialLikeCount = likeCountDocId?.likeCountData;
   const docId = likeCountDocId?.docId;
@@ -42,6 +44,7 @@ export default function ProductDetail({ productId }: Props) {
   const discountedPrice = useDisCountedPrice({
     price: productDetail?.price,
     saleRate: productDetail?.saleRate,
+    isSale: productDetail?.isSale,
   });
   const arrProductDetail: arrProductDetailType[] = productDetail
     ? [{ ...productDetail }]
@@ -158,14 +161,6 @@ export default function ProductDetail({ productId }: Props) {
                 </div>
 
                 <p className='text-4xl font-semibold'>{productTitle}</p>
-                <div className='flex'>
-                  <p className='text-2xl font-semibold mr-6'>
-                    {formatPrice(discountedPrice!)}원
-                  </p>
-                  <div className='text-pinkpoint flex items-center gap-1 text-sm'>
-                    <HeartIcon type='' /> {likedCount}
-                  </div>
-                </div>
 
                 <div className='flex flex-col gap-4 border-y py-6'>
                   <p className=''>{description}</p>
@@ -177,6 +172,16 @@ export default function ProductDetail({ productId }: Props) {
                       {ingredients}
                     </span>
                   </div>
+                </div>
+
+                <div className='flex'>
+                  <div>수량 계산</div>
+                  <p className='text-2xl font-semibold mr-6'>
+                    {formatPrice(discountedPrice!)}원
+                  </p>
+                  {/* <div className='text-pinkpoint flex items-center gap-1 text-sm'>
+                    <HeartIcon type='' /> {likedCount}
+                  </div> */}
                 </div>
 
                 <button

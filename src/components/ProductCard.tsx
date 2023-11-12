@@ -21,7 +21,7 @@ export default function ProductCard({ product }: Props) {
     likedCount,
     isNew,
   } = product;
-  const discountedPrice = useDisCountedPrice({ price, saleRate });
+  const discountedPrice = useDisCountedPrice({ price, saleRate, isSale });
   const formatPrice = useFormatPrice;
 
   return (
