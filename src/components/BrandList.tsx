@@ -1,6 +1,6 @@
 'use client';
 
-import { productsListAtom } from '@/atoms/productsListAtom';
+import { productsListAtom } from '@/atoms/ProductsListAtom';
 import { useRecoilValue } from 'recoil';
 import Filter from './Filter';
 import useFilterByBrand from '@/hooks/useFilterByBrand';

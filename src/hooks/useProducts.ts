@@ -13,7 +13,7 @@ import {
   productsListAtom,
   productDetailAtom,
   initialProductsListAtom,
-} from '@/atoms/productsListAtom';
+} from '@/atoms/ProductsListAtom';
 import { ProductListType, ProductDetailType } from '../types/Product';
 
 export function useGetProductList(category: string) {

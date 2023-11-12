@@ -1,7 +1,7 @@
 'use client';
 
 import { useRecoilValue } from 'recoil';
-import { productsListAtom } from '@/atoms/productsListAtom';
+import { productsListAtom } from '@/atoms/ProductsListAtom';
 import {
   useGetProductList,
   // useProductsList

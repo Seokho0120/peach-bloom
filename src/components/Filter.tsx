@@ -1,6 +1,6 @@
 'use client';
 
-import { productsListAtom } from '@/atoms/productsListAtom';
+import { productsListAtom } from '@/atoms/ProductsListAtom';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import ArrowIcon from './ui/ArrowIcon';

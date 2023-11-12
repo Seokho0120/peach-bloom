@@ -3,7 +3,7 @@ import {
   initialProductsListAtom,
   productsListAtom,
   // filteredProductsListAtom,
-} from '@/atoms/productsListAtom';
+} from '@/atoms/ProductsListAtom';
 
 export default function useFilterByBrand() {
   const productsList = useRecoilValue(productsListAtom);

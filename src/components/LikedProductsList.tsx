@@ -5,7 +5,7 @@ import { ProductListType } from '@/types/Product';
 import { useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { productsListAtom } from '@/atoms/productsListAtom';
+import { productsListAtom } from '@/atoms/ProductsListAtom';
 
 type Props = {
   userId: number;
