@@ -38,11 +38,14 @@ export default function ProductDetail({ productId }: Props) {
   const initialLikeCount = likeCountDocId?.likeCountData;
   const docId = likeCountDocId?.docId;
 
+  const [priceCount, setPriceCount] = useState<number>(1);
+
   const formatPrice = useFormatPrice;
   const discountedPrice = useDisCountedPrice({
     price: productDetail?.price,
     saleRate: productDetail?.saleRate,
     isSale: productDetail?.isSale,
+    priceCount: priceCount,
   });
   const arrProductDetail: arrProductDetailType[] = productDetail
     ? [{ ...productDetail }]
@@ -54,8 +57,6 @@ export default function ProductDetail({ productId }: Props) {
   const [likesDocRef, setLikesDocRef] = useState<
     DocumentReference | undefined
   >();
-
-  const [priceCount, setPriceCount] = useState<number>(0);
 
   useEffect(() => {
     setLikesDocRef(likesRef(NumProductId));
