@@ -174,17 +174,24 @@ export default function ProductDetail({ productId }: Props) {
                   </div>
                 </div>
 
-                <div className='flex items-center gap-8'>
-                  <div className='flex items-center border gap-4 p-1'>
-                    <button onClick={() => setPriceCount((prev) => prev - 1)}>
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center justify-between border border-gray-200 rounded-md gap-4  py-2'>
+                    {/* <div className='flex items-center border gap-4 p-1'> */}
+                    <button
+                      onClick={() => setPriceCount((prev) => prev - 1)}
+                      className='border-r flex items-center justify-center px-4 hover:text-pinkpoint'
+                    >
                       -
                     </button>
                     <div>{priceCount}</div>
-                    <button onClick={() => setPriceCount((prev) => prev + 1)}>
+                    <button
+                      onClick={() => setPriceCount((prev) => prev + 1)}
+                      className='border-l flex items-center justify-center px-4 hover:text-pinkpoint'
+                    >
                       +
                     </button>
                   </div>
-                  <p className='text-2xl font-semibold mr-6'>
+                  <p className='text-4xl font-semibold'>
                     {formatPrice(discountedPrice!)}원
                   </p>
                   {/* <div className='text-pinkpoint flex items-center gap-1 text-sm'>
