@@ -176,9 +176,10 @@ export default function ProductDetail({ productId }: Props) {
 
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center justify-between border border-gray-200 rounded-md gap-4  py-2'>
-                    {/* <div className='flex items-center border gap-4 p-1'> */}
                     <button
-                      onClick={() => setPriceCount((prev) => prev - 1)}
+                      onClick={() =>
+                        setPriceCount((prev) => (prev > 1 ? prev - 1 : 1))
+                      }
                       className='border-r flex items-center justify-center px-4 hover:text-pinkpoint'
                     >
                       -
