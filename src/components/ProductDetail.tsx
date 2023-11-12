@@ -22,6 +22,8 @@ import { DocumentReference } from 'firebase/firestore';
 import ProductInfo from './ProductInfo';
 import { DetailBtn } from './DetailBtn';
 import QuantityControl from './QuantityControl';
+import { useRecoilState } from 'recoil';
+import { CartItemAtom } from '@/atoms/CartItemAtom';
 
 type Props = {
   productId: number;
@@ -41,14 +43,14 @@ export default function ProductDetail({ productId }: Props) {
   const initialLikeCount = likeCountDocId?.likeCountData;
   const docId = likeCountDocId?.docId;
 
-  const [priceCount, setPriceCount] = useState<number>(1);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [cartItem, setCartItem] = useRecoilState(CartItemAtom);
 
-  const formatPrice = useFormatPrice;
   const discountedPrice = useDisCountedPrice({
     price: productDetail?.price,
     saleRate: productDetail?.saleRate,
     isSale: productDetail?.isSale,
-    priceCount: priceCount,
+    priceCount: quantity,
   });
   const arrProductDetail: arrProductDetailType[] = productDetail
     ? [{ ...productDetail }]
@@ -115,22 +117,87 @@ export default function ProductDetail({ productId }: Props) {
     return unsubscribe;
   }, [likesDocRef, userId]);
 
-  const handleAddToCart = () => {
-    console.log('장바구니에 담기');
-
-    // export type addToCartType = {
-    //   userId: string;
-    //   quantity: number;
-    //   product: {
-    //     productId: number;
-    //     productTitle: string;
-    //     price: number;
-    //     imageUrl: string;
-    //   };
-    // };
-
-    // addToCart()
+  type CartItem = {
+    userId: number;
+    quantity: number;
+    product: {
+      productId: number;
+      productTitle: string;
+      price: number | undefined;
+      imageUrl: string;
+    };
   };
+  const [cartContent, setCartContent] = useState<CartItem>();
+
+  useEffect(() => {
+    if (productDetail && userId) {
+      const newCartContent = {
+        userId,
+        quantity,
+        product: {
+          productId: productDetail.productId,
+          productTitle: productDetail.productTitle,
+          price: discountedPrice,
+          imageUrl: productDetail.imageUrl,
+        },
+      };
+      setCartContent(newCartContent);
+    }
+  }, [quantity, discountedPrice]);
+
+  const isAlreadyInCart =
+    cartItem.findIndex((e) => e.product.productId === NumProductId) !== -1;
+
+  const handleAddToCart = () => {
+    if (!isAlreadyInCart && cartContent) {
+      setCartItem((prev) => [...prev, cartContent]);
+    }
+    // addToCart(cartItem);
+  };
+  console.log('cartItem', cartItem);
+
+  // useEffect(() => {
+  //   if (arrProductDetail && userId) {
+  //     arrProductDetail.map((item) => {
+  //       const newCartContent = {
+  //         userId,
+  //         quantity: priceCount,
+  //         product: {
+  //           productId: item.productId,
+  //           productTitle: item.productTitle,
+  //           price: discountedPrice,
+  //           imageUrl: item.imageUrl,
+  //         },
+  //       };
+  //       // setCartItem(newCartContent);
+  //       // setCartContent(newCartContent);
+  //     });
+  //   }
+  // }, [discountedPrice, priceCount]);
+
+  // const handleAddToCart = () => {
+  //   if (arrProductDetail && userId) {
+  //     arrProductDetail.map((item) => {
+  //       const cartContent = {
+  //         userId,
+  //         quantity: priceCount,
+  //         product: {
+  //           productId: item.productId,
+  //           productTitle: item.productTitle,
+  //           price: discountedPrice,
+  //           imageUrl: item.imageUrl,
+  //         },
+  //       };
+  //       console.log('cartContent >>>>>>>>', cartContent);
+  //       setCartItem((prev) => [...prev, cartContent]);
+  //       return cartContent;
+  //     });
+  //   }
+
+  //   // await addToCart(cartContent);
+  // };
+
+  // console.log('cartItem', cartItem);
 
   const handleBuy = () => {
     router.push('/carts');
@@ -186,8 +253,8 @@ export default function ProductDetail({ productId }: Props) {
                 />
 
                 <QuantityControl
-                  setPriceCount={setPriceCount}
-                  priceCount={priceCount}
+                  setQuantity={setQuantity}
+                  quantity={quantity}
                   discountedPrice={discountedPrice}
                 />
 
