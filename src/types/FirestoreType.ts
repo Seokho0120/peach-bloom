@@ -21,3 +21,15 @@ export type monitoringLikesDataType = {
   setLikerList: React.Dispatch<React.SetStateAction<string[]>>;
   setIsLiked: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+export type addToCartType = {
+  userId: number;
+  quantity: number;
+  product: {
+    productId: number;
+    productTitle: string;
+    price: number | undefined;
+    // price: number;
+    imageUrl: string;
+  };
+};

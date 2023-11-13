@@ -24,6 +24,7 @@ import { DetailBtn } from './DetailBtn';
 import QuantityControl from './QuantityControl';
 import { useRecoilState } from 'recoil';
 import { CartItemAtom } from '@/atoms/CartItemAtom';
+import Modal from './Modal';
 
 type Props = {
   productId: number;
@@ -148,55 +149,16 @@ export default function ProductDetail({ productId }: Props) {
   const isAlreadyInCart =
     cartItem.findIndex((e) => e.product.productId === NumProductId) !== -1;
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handleAddToCart = () => {
     if (!isAlreadyInCart && cartContent) {
       setCartItem((prev) => [...prev, cartContent]);
     }
     addToCart(cartItem);
+
+    setIsModalOpen(!isModalOpen);
   };
-
-  // useEffect(() => {
-  //   if (arrProductDetail && userId) {
-  //     arrProductDetail.map((item) => {
-  //       const newCartContent = {
-  //         userId,
-  //         quantity: priceCount,
-  //         product: {
-  //           productId: item.productId,
-  //           productTitle: item.productTitle,
-  //           price: discountedPrice,
-  //           imageUrl: item.imageUrl,
-  //         },
-  //       };
-  //       // setCartItem(newCartContent);
-  //       // setCartContent(newCartContent);
-  //     });
-  //   }
-  // }, [discountedPrice, priceCount]);
-
-  // const handleAddToCart = () => {
-  //   if (arrProductDetail && userId) {
-  //     arrProductDetail.map((item) => {
-  //       const cartContent = {
-  //         userId,
-  //         quantity: priceCount,
-  //         product: {
-  //           productId: item.productId,
-  //           productTitle: item.productTitle,
-  //           price: discountedPrice,
-  //           imageUrl: item.imageUrl,
-  //         },
-  //       };
-  //       console.log('cartContent >>>>>>>>', cartContent);
-  //       setCartItem((prev) => [...prev, cartContent]);
-  //       return cartContent;
-  //     });
-  //   }
-
-  //   // await addToCart(cartContent);
-  // };
-
-  // console.log('cartItem', cartItem);
 
   const handleBuy = () => {
     router.push('/carts');
@@ -260,6 +222,13 @@ export default function ProductDetail({ productId }: Props) {
                 <div className='flex gap-4'>
                   <DetailBtn text='장바구니 담기' onClick={handleAddToCart} />
                   <DetailBtn text='바로 구매하기' onClick={handleBuy} />
+                  <Modal
+                    isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                    onClick={handleAddToCart}
+                    text='장바구니에 상품이 담겼습니다.'
+                    modalText='장바구니 바로가기'
+                  />
                 </div>
               </div>
             </div>

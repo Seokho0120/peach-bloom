@@ -25,6 +25,7 @@ export default function RootLayout({
           <Provider>
             <Navbar />
             {children}
+            <div id='global-modal'></div>
             {/* <Footer /> */}
           </Provider>
         </AuthSession>
