@@ -7,6 +7,5 @@ type Props = {
 };
 
 export default function CartItem({ product }: Props) {
-  console.log('product', product);
   return <>CartItem</>;
 }
