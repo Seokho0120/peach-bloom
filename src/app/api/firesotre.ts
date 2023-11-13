@@ -1,3 +1,4 @@
+import app from './firebasedb';
 import {
   collection,
   getDocs,
@@ -14,10 +15,8 @@ import {
   arrayRemove,
   arrayUnion,
   onSnapshot,
-  collectionGroup,
-  FieldValue,
+  deleteDoc,
 } from 'firebase/firestore';
-import app from './firebasedb';
 import {
   ProductListType,
   ProductDetailType,
@@ -27,9 +26,13 @@ import {
 import {
   InitialLikeStatusType,
   addToCartType,
+  cartUpdateType,
   monitoringLikesDataType,
   updateLikerListProps,
 } from '@/types/FirestoreType';
+import { useSetRecoilState } from 'recoil';
+import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
+import { useEffect, useState } from 'react';
 // import axios from 'axios';
 // import { v4 as uuidv4 } from 'uuid';
 
@@ -263,6 +266,83 @@ export async function getCartItems(userId: number): Promise<cartItemType[]> {
   } else {
     return [];
   }
+}
+
+export function useGetCartItemss(userId: number) {
+  const setCartList = useSetRecoilState(CartItemUpdateAtom);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const userCartRef = doc(db, 'carts', userId.toString());
+
+    const unsubscribe = onSnapshot(
+      userCartRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const items = docSnap.data().items || {};
+          setCartList(Object.values(items));
+        } else {
+          setCartList([]);
+        }
+        setIsLoading(false);
+      },
+      (error) => {
+        setIsError(true);
+        setIsLoading(false);
+      }
+    );
+
+    // Cleanup function을 반환하여, 컴포넌트가 unmount될 때 snapshot listener를 해제합니다.
+    return () => unsubscribe();
+  }, [userId, setCartList]);
+
+  return { isLoading, isError };
+}
+
+export async function updateCartItem({ userId, product }: cartUpdateType) {
+  const userCartRef = await doc(db, 'carts', userId.toString());
+
+  const userCartSanp = await getDoc(userCartRef);
+  if (!userCartSanp.exists()) {
+    throw new Error('카트가 존재하지 않아요 🚨');
+  }
+
+  const items = userCartSanp.data().items;
+
+  const updatedItems = items.map((item: cartItemType) => {
+    if (item.productId === product.productId) {
+      return { ...item, quantity: product.quantity };
+    } else {
+      return item;
+    }
+  });
+
+  await updateDoc(userCartRef, {
+    items: updatedItems,
+  });
+}
+
+// export async function updateCartItem({ userId, product }: cartUpdateType) {
+//   const userCartRef = await doc(db, 'carts', userId.toString());
+//   const productRef = doc(userCartRef, 'items', product.productId.toString());
+
+//   await updateDoc(productRef, {
+//     quantity: product.quantity,
+//   });
+// }
+
+export async function removeFromCart({
+  userId,
+  productId,
+}: {
+  userId: string;
+  productId: string;
+}) {
+  const userCartRef = doc(db, 'carts', userId.toString());
+  const productRef = doc(userCartRef, 'items', productId);
+
+  await deleteDoc(productRef);
 }
 
 // // Dummy data List로직

@@ -34,3 +34,15 @@ export type addToCartType = {
     imageUrl: string;
   };
 };
+
+export type cartUpdateType = {
+  userId: number;
+  product: {
+    imageUrl: string;
+    price: number;
+    productId: number;
+    productTitle: string;
+    quantity: number;
+    brandTitle: string;
+  };
+};

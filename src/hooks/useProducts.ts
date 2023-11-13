@@ -1,14 +1,15 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
   getLikeCountDocId,
   listenProductsChange,
   getCartItems,
+  updateCartItem,
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   productsListAtom,
@@ -20,6 +21,7 @@ import {
   ProductDetailType,
   cartItemType,
 } from '../types/Product';
+import { CartItemAtom, CartItemUpdateAtom } from '@/atoms/CartItemAtom';
 
 export function useGetProductList(category: string) {
   const queryClient = useQueryClient();
@@ -118,6 +120,8 @@ export function useGetLikeCountDocId(productId: number) {
 }
 
 export function useGetCartItems(userId: number) {
+  const setCartList = useSetRecoilState(CartItemUpdateAtom);
+
   const {
     data: cartItem,
     isLoading,
@@ -127,8 +131,22 @@ export function useGetCartItems(userId: number) {
     queryFn: () => getCartItems(userId),
   });
 
+  useEffect(() => {
+    if (cartItem) {
+      setCartList(cartItem);
+    }
+  }, [cartItem, setCartList]);
+
   return { cartItem, isLoading, isError };
 }
+
+// export function removeItem() {
+//   useMutation((productId) => removeFromCart({ userId: uid, productId }), {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries(['carts', uid]);
+//     },
+//   });
+// }
 
 // // 더미데이터 리스트 불러오기
 // export function useProductsList(category: string) {

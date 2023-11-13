@@ -2,32 +2,44 @@
 
 import {
   CartItemAtom,
+  CartItemUpdateAtom,
   TotalPriceSelector,
   TotalQuantitySelector,
 } from '@/atoms/CartItemAtom';
 import { useGetCartItems } from '@/hooks/useProducts';
 import { useUserSession } from '@/hooks/useUserSession';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import CartItem from './CartItem';
 import NormalBtn from './NormalBtn';
 import PriceCard from './PriceCard';
 import PlusIcon from './ui/PlusIcon';
 import EqualIcon from './ui/EqualIcon';
+import { useEffect, useState } from 'react';
+import { useGetCartItemss } from '@/app/api/firesotre';
 
 export default function CartsList() {
   const SHIPPING = 3000;
   const user = useUserSession();
-  const userId = user?.id;
-  const { cartItem, isLoading, isError } = useGetCartItems(userId!);
-  const hadCartItem = cartItem && cartItem.length > 0;
+  const userId = user!.id;
 
-  const totalPrice =
-    cartItem &&
-    cartItem.reduce(
-      (prev, current) => prev + current.price * current.quantity,
-      0
-    );
+  const { isLoading, isError } = useGetCartItemss(userId);
+
+  const cartItem = useRecoilValue(CartItemUpdateAtom);
+  const totalPrice = useRecoilValue(TotalPriceSelector);
+  console.log('cartItem', cartItem);
+  console.log('totalPrice', totalPrice);
+
+  // const { isLoading, isError } = useGetCartItems(userId!);
+  // const { cartItem, isLoading, isError } = useGetCartItems(userId!);
+  // const totalPrice =
+  //   cartItem &&
+  //   cartItem.reduce(
+  //     (prev, current) => prev + current.price * current.quantity,
+  //     0
+  //   );
+
   const totalQuantity = cartItem?.length;
+  const hasCartItem = cartItem && cartItem.length > 0;
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -44,8 +56,8 @@ export default function CartsList() {
         <div className='border-b border-navypoint mt-4' />
       </h2>
 
-      {!hadCartItem && <p>장바구니에 상품이 없습니다. 지금 쇼핑하세요 💄</p>}
-      {hadCartItem && (
+      {!hasCartItem && <p>장바구니에 상품이 없습니다. 지금 쇼핑하세요 💄</p>}
+      {hasCartItem && (
         <>
           <ul className='flex flex-col gap-4 mb-8'>
             {cartItem &&
