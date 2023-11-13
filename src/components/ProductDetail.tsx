@@ -127,6 +127,7 @@ export default function ProductDetail({ productId }: Props) {
         product: {
           productId: productDetail.productId,
           productTitle: productDetail.productTitle,
+          brandTitle: productDetail.brandTitle,
           price: discountedPrice,
           imageUrl: productDetail.imageUrl,
         },

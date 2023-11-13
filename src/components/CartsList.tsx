@@ -29,9 +29,6 @@ export default function CartsList() {
     );
   const totalQuantity = cartItem?.length;
 
-  console.log('totalPrice', totalPrice);
-  console.log('totalQuantity', totalQuantity);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -50,15 +47,13 @@ export default function CartsList() {
       {!hadCartItem && <p>장바구니에 상품이 없습니다. 지금 쇼핑하세요 💄</p>}
       {hadCartItem && (
         <>
-          <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
+          <ul className='flex flex-col gap-4 mb-8'>
             {cartItem &&
               cartItem.map((product) => (
-                <li key={product.productId}>
-                  <CartItem product={product} />
-                </li>
+                <CartItem product={product} key={product.productId} />
               ))}
           </ul>
-          <div className='flex justify-between items-center mb-6 px-2 md:px-8 lg:px-16'>
+          <div className='flex justify-between items-center px-2 md:px-8 lg:px-16 mb-10'>
             <PriceCard text='총 주문금액' price={totalPrice} />
             <PlusIcon />
             <PriceCard text='총 배송비' price={SHIPPING} />

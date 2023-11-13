@@ -28,6 +28,7 @@ export type addToCartType = {
   product: {
     productId: number;
     productTitle: string;
+    brandTitle: string;
     price: number | undefined;
     // price: number;
     imageUrl: string;

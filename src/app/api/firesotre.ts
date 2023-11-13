@@ -227,7 +227,7 @@ export async function addToCart(cartItem: addToCartType[]) {
       const {
         userId,
         quantity,
-        product: { productId, productTitle, price, imageUrl },
+        product: { productId, productTitle, price, imageUrl, brandTitle },
       } = item;
 
       const userCartRef = await doc(db, 'carts', userId.toString());
@@ -239,6 +239,7 @@ export async function addToCart(cartItem: addToCartType[]) {
         productTitle,
         price,
         imageUrl,
+        brandTitle,
       };
 
       if (docSnap.exists()) {

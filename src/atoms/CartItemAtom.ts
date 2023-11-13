@@ -6,6 +6,7 @@ type CartItem = {
   product: {
     productId: number;
     productTitle: string;
+    brandTitle: string;
     price: number | undefined;
     imageUrl: string;
   };

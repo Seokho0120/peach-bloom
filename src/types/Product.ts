@@ -57,4 +57,5 @@ export interface cartItemType {
   productId: number;
   productTitle: string;
   quantity: number;
+  brandTitle: string;
 }
