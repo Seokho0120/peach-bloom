@@ -221,31 +221,62 @@ export async function getLikedProducst(userId: number) {
 }
 
 export async function addToCart(props: addToCartType[]) {
-  const {
-    userId,
-    quantity,
-    product: { productId, productTitle, price, imageUrl },
-  } = props[0];
+  await Promise.all(
+    props.map(async (prop) => {
+      const {
+        userId,
+        quantity,
+        product: { productId, productTitle, price, imageUrl },
+      } = prop;
 
-  const userCartRef = await doc(db, 'carts', userId.toString());
-  const docSnap = await getDoc(userCartRef);
+      const userCartRef = await doc(db, 'carts', userId.toString());
+      const docSnap = await getDoc(userCartRef);
 
-  const newCartItem = {
-    quantity,
-    productId,
-    productTitle,
-    price,
-    imageUrl,
-  };
+      const newCartItem = {
+        quantity,
+        productId,
+        productTitle,
+        price,
+        imageUrl,
+      };
 
-  if (docSnap.exists()) {
-    await updateDoc(userCartRef, {
-      items: arrayUnion(newCartItem),
-    });
-  } else {
-    await setDoc(userCartRef, { items: [newCartItem] });
-  }
+      if (docSnap.exists()) {
+        await updateDoc(userCartRef, {
+          items: arrayUnion(newCartItem),
+        });
+      } else {
+        await setDoc(userCartRef, { items: [newCartItem] });
+      }
+    })
+  );
 }
+
+// export async function addToCart(props: addToCartType[]) {
+//   const {
+//     userId,
+//     quantity,
+//     product: { productId, productTitle, price, imageUrl },
+//   } = props[0];
+
+//   const userCartRef = await doc(db, 'carts', userId.toString());
+//   const docSnap = await getDoc(userCartRef);
+
+//   const newCartItem = {
+//     quantity,
+//     productId,
+//     productTitle,
+//     price,
+//     imageUrl,
+//   };
+
+//   if (docSnap.exists()) {
+//     await updateDoc(userCartRef, {
+//       items: arrayUnion(newCartItem),
+//     });
+//   } else {
+//     await setDoc(userCartRef, { items: [newCartItem] });
+//   }
+// }
 
 // // Dummy data List로직
 // export async function fetchProducts() {

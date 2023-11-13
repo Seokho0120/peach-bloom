@@ -60,6 +60,7 @@ export default function ProductDetail({ productId }: Props) {
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likerList, setLikerList] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [likesDocRef, setLikesDocRef] = useState<
     DocumentReference | undefined
   >();
@@ -131,7 +132,7 @@ export default function ProductDetail({ productId }: Props) {
   const [cartContent, setCartContent] = useState<CartItem>();
 
   useEffect(() => {
-    if (productDetail && userId) {
+    if (productDetail?.productId !== 0 && productDetail && userId) {
       const newCartContent = {
         userId,
         quantity,
@@ -144,21 +145,37 @@ export default function ProductDetail({ productId }: Props) {
       };
       setCartContent(newCartContent);
     }
-  }, [quantity, discountedPrice]);
+  }, [quantity, discountedPrice, productDetail?.productId]);
 
   const isAlreadyInCart =
-    cartItem.findIndex((e) => e.product.productId === NumProductId) !== -1;
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
+    cartItem.findIndex((item) => item.product.productId === NumProductId) !==
+    -1;
 
   const handleAddToCart = () => {
-    if (!isAlreadyInCart && cartContent) {
-      setCartItem((prev) => [...prev, cartContent]);
+    if (cartContent) {
+      if (isAlreadyInCart) {
+        addToCart(cartItem);
+      } else {
+        const newCartItem = [...cartItem, cartContent];
+        console.log('newCartItem', newCartItem);
+        setCartItem(newCartItem);
+        addToCart(newCartItem);
+      }
     }
-    addToCart(cartItem);
-
     setIsModalOpen(!isModalOpen);
   };
+
+  // const handleAddToCart = () => {
+  //   setIsModalOpen(!isModalOpen);
+
+  //   if (!isAlreadyInCart && cartContent) {
+  //     setCartItem((prev) => [...prev, cartContent]);
+  //   }
+
+  //   addToCart(cartItem);
+  // };
+
+  console.log('cartItem >>>>>', cartItem);
 
   const handleBuy = () => {
     router.push('/carts');
