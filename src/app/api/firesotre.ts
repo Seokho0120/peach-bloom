@@ -22,6 +22,7 @@ import {
   ProductListType,
   ProductDetailType,
   addProductType,
+  cartItemType,
 } from '@/types/Product';
 import {
   InitialLikeStatusType,
@@ -220,14 +221,14 @@ export async function getLikedProducst(userId: number) {
   return likedProducts;
 }
 
-export async function addToCart(props: addToCartType[]) {
+export async function addToCart(cartItem: addToCartType[]) {
   await Promise.all(
-    props.map(async (prop) => {
+    cartItem.map(async (item) => {
       const {
         userId,
         quantity,
         product: { productId, productTitle, price, imageUrl },
-      } = prop;
+      } = item;
 
       const userCartRef = await doc(db, 'carts', userId.toString());
       const docSnap = await getDoc(userCartRef);
@@ -251,32 +252,17 @@ export async function addToCart(props: addToCartType[]) {
   );
 }
 
-// export async function addToCart(props: addToCartType[]) {
-//   const {
-//     userId,
-//     quantity,
-//     product: { productId, productTitle, price, imageUrl },
-//   } = props[0];
+export async function getCartItems(userId: number): Promise<cartItemType[]> {
+  const userCartRef = doc(db, 'carts', userId.toString());
+  const docSnap = await getDoc(userCartRef);
 
-//   const userCartRef = await doc(db, 'carts', userId.toString());
-//   const docSnap = await getDoc(userCartRef);
-
-//   const newCartItem = {
-//     quantity,
-//     productId,
-//     productTitle,
-//     price,
-//     imageUrl,
-//   };
-
-//   if (docSnap.exists()) {
-//     await updateDoc(userCartRef, {
-//       items: arrayUnion(newCartItem),
-//     });
-//   } else {
-//     await setDoc(userCartRef, { items: [newCartItem] });
-//   }
-// }
+  if (docSnap.exists()) {
+    const items = docSnap.data().items || {};
+    return Object.values(items);
+  } else {
+    return [];
+  }
+}
 
 // // Dummy data List로직
 // export async function fetchProducts() {

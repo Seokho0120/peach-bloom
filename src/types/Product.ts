@@ -50,3 +50,11 @@ export interface addProductType {
   product: ProductListType;
   imageUrl: string;
 }
+
+export interface cartItemType {
+  imageUrl: string;
+  price: number;
+  productId: number;
+  productTitle: string;
+  quantity: number;
+}

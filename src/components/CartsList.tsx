@@ -1,11 +1,25 @@
 'use client';
 
 import { CartItemAtom } from '@/atoms/CartItemAtom';
+import { useGetCartItems } from '@/hooks/useProducts';
+import { useUserSession } from '@/hooks/useUserSession';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import CartItem from './CartItem';
 
 export default function CartsList() {
-  const cartItem = useRecoilValue(CartItemAtom); // 나중에 card에 전달 예정
-  // const [cartsItem, setCartItem] = useRecoilState(CartItemAtom);
+  const user = useUserSession();
+  const userId = user?.id;
+  const { cartItem, isLoading, isError } = useGetCartItems(userId!);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error loading data.</div>;
+  }
+
+  console.log('cartItem', cartItem);
 
   return (
     <article>
@@ -15,11 +29,12 @@ export default function CartsList() {
       </h2>
 
       <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
-        {cartItem.length !== 0 ? (
-          cartItem.map((item, idx) => <li key={idx}>{item}</li>)
-        ) : (
-          <p>아이템 없음</p>
-        )}
+        {cartItem &&
+          cartItem.map((product) => (
+            <li key={product.productId}>
+              <CartItem product={product} />
+            </li>
+          ))}
       </ul>
     </article>
   );

@@ -4,6 +4,7 @@ import {
   getProductDetail,
   getLikeCountDocId,
   listenProductsChange,
+  getCartItems,
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
@@ -14,7 +15,11 @@ import {
   productDetailAtom,
   initialProductsListAtom,
 } from '@/atoms/ProductsListAtom';
-import { ProductListType, ProductDetailType } from '../types/Product';
+import {
+  ProductListType,
+  ProductDetailType,
+  cartItemType,
+} from '../types/Product';
 
 export function useGetProductList(category: string) {
   const queryClient = useQueryClient();
@@ -110,6 +115,19 @@ export function useGetLikeCountDocId(productId: number) {
   });
 
   return { likeCountDocId };
+}
+
+export function useGetCartItems(userId: number) {
+  const {
+    data: cartItem,
+    isLoading,
+    isError,
+  } = useQuery<cartItemType[]>({
+    queryKey: ['cartItem', userId],
+    queryFn: () => getCartItems(userId),
+  });
+
+  return { cartItem, isLoading, isError };
 }
 
 // // 더미데이터 리스트 불러오기

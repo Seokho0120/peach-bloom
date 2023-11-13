@@ -3,12 +3,17 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import HeartIcon from './ui/HeartIcon';
+import { useRecoilState } from 'recoil';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
-import useFormatPrice from '@/hooks/useFormatPrice';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
 import { useUserSession } from '@/hooks/useUserSession';
+import ProductInfo from './ProductInfo';
+import { DetailBtn } from './DetailBtn';
+import QuantityControl from './QuantityControl';
+import Modal from './Modal';
+import { CartItemAtom } from '@/atoms/CartItemAtom';
 import { arrProductDetailType } from '@/types/Product';
+import { addToCartType } from '@/types/FirestoreType';
 import {
   addToCart,
   checkAndCreateLikeDoc,
@@ -19,12 +24,6 @@ import {
   updateLikerList,
 } from '@/app/api/firesotre';
 import { DocumentReference } from 'firebase/firestore';
-import ProductInfo from './ProductInfo';
-import { DetailBtn } from './DetailBtn';
-import QuantityControl from './QuantityControl';
-import { useRecoilState } from 'recoil';
-import { CartItemAtom } from '@/atoms/CartItemAtom';
-import Modal from './Modal';
 
 type Props = {
   productId: number;
@@ -60,7 +59,8 @@ export default function ProductDetail({ productId }: Props) {
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likerList, setLikerList] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cartContent, setCartContent] = useState<addToCartType>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [likesDocRef, setLikesDocRef] = useState<
     DocumentReference | undefined
   >();
@@ -119,18 +119,6 @@ export default function ProductDetail({ productId }: Props) {
     return unsubscribe;
   }, [likesDocRef, userId]);
 
-  type CartItem = {
-    userId: number;
-    quantity: number;
-    product: {
-      productId: number;
-      productTitle: string;
-      price: number | undefined;
-      imageUrl: string;
-    };
-  };
-  const [cartContent, setCartContent] = useState<CartItem>();
-
   useEffect(() => {
     if (productDetail?.productId !== 0 && productDetail && userId) {
       const newCartContent = {
@@ -157,25 +145,12 @@ export default function ProductDetail({ productId }: Props) {
         addToCart(cartItem);
       } else {
         const newCartItem = [...cartItem, cartContent];
-        console.log('newCartItem', newCartItem);
         setCartItem(newCartItem);
         addToCart(newCartItem);
       }
     }
     setIsModalOpen(!isModalOpen);
   };
-
-  // const handleAddToCart = () => {
-  //   setIsModalOpen(!isModalOpen);
-
-  //   if (!isAlreadyInCart && cartContent) {
-  //     setCartItem((prev) => [...prev, cartContent]);
-  //   }
-
-  //   addToCart(cartItem);
-  // };
-
-  console.log('cartItem >>>>>', cartItem);
 
   const handleBuy = () => {
     router.push('/carts');
