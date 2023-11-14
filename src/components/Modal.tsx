@@ -9,14 +9,16 @@ type Props = {
   modalText?: string;
   onClick: () => void;
   setIsModalOpen: (value: boolean) => void;
+  goToCart: () => void;
 };
 
 export default function Modal({
-  isModalOpen,
   text,
-  onClick,
-  setIsModalOpen,
   modalText,
+  isModalOpen,
+  setIsModalOpen,
+  onClick,
+  goToCart,
 }: Props) {
   if (!isModalOpen) return null;
 
@@ -34,7 +36,7 @@ export default function Modal({
           <p className='mt-4'>{text}</p>
           <button
             className='px-4 py-2 mt-10 rounded bg-navypoint hover:bg-pinkpoint text-white'
-            onClick={onClick}
+            onClick={goToCart}
           >
             {modalText}
           </button>

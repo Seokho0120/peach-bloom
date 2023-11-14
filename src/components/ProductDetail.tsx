@@ -153,7 +153,10 @@ export default function ProductDetail({ productId }: Props) {
     setIsModalOpen(!isModalOpen);
   };
 
+  const goToCart = () => router.push('/carts');
+
   const handleBuy = () => {
+    // 해당 상품이 장바구니에 업데이트되고, 장바구니 페이지로 이동
     router.push('/carts');
   };
 
@@ -219,6 +222,7 @@ export default function ProductDetail({ productId }: Props) {
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
                     onClick={handleAddToCart}
+                    goToCart={goToCart}
                     text='장바구니에 상품이 담겼습니다.'
                     modalText='장바구니 바로가기'
                   />
