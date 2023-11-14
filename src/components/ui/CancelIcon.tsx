@@ -3,7 +3,7 @@ import { GoX } from 'react-icons/go';
 export default function CancelIcon() {
   return (
     <>
-      <GoX className='w-5 h-5' />
+      <GoX className='w-4 h-4' />
     </>
   );
 }

@@ -89,7 +89,7 @@ export default function CartItem({ product }: Props) {
       </div>
       <button
         onClick={handleRemove}
-        className='absolute top-0 cursor-pointer bg-white flex items-center justify-center'
+        className='absolute top-0 cursor-pointer bg-white hover:bg-navypoint text-gray-800 hover:text-white flex items-center justify-center'
       >
         <CancelIcon />
       </button>
