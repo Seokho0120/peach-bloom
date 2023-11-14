@@ -270,8 +270,8 @@ export async function getCartItems(userId: number): Promise<cartItemType[]> {
 
 export function useGetCartItemss(userId: number) {
   const setCartList = useSetRecoilState(CartItemUpdateAtom);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
 
   useEffect(() => {
     const userCartRef = doc(db, 'carts', userId.toString());
@@ -293,7 +293,6 @@ export function useGetCartItemss(userId: number) {
       }
     );
 
-    // Cleanup function을 반환하여, 컴포넌트가 unmount될 때 snapshot listener를 해제합니다.
     return () => unsubscribe();
   }, [userId, setCartList]);
 

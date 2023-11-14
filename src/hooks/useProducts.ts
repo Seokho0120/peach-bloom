@@ -5,7 +5,6 @@ import {
   getLikeCountDocId,
   listenProductsChange,
   getCartItems,
-  updateCartItem,
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
@@ -119,26 +118,26 @@ export function useGetLikeCountDocId(productId: number) {
   return { likeCountDocId };
 }
 
-export function useGetCartItems(userId: number) {
-  const setCartList = useSetRecoilState(CartItemUpdateAtom);
+// export function useGetCartItems(userId: number) {
+//   const setCartList = useSetRecoilState(CartItemUpdateAtom);
 
-  const {
-    data: cartItem,
-    isLoading,
-    isError,
-  } = useQuery<cartItemType[]>({
-    queryKey: ['cartItem', userId],
-    queryFn: () => getCartItems(userId),
-  });
+//   const {
+//     data: cartItem,
+//     isLoading,
+//     isError,
+//   } = useQuery<cartItemType[]>({
+//     queryKey: ['cartItem', userId],
+//     queryFn: () => getCartItems(userId),
+//   });
 
-  useEffect(() => {
-    if (cartItem) {
-      setCartList(cartItem);
-    }
-  }, [cartItem, setCartList]);
+//   useEffect(() => {
+//     if (cartItem) {
+//       setCartList(cartItem);
+//     }
+//   }, [cartItem, setCartList]);
 
-  return { cartItem, isLoading, isError };
-}
+//   return { cartItem, isLoading, isError };
+// }
 
 // export function removeItem() {
 //   useMutation((productId) => removeFromCart({ userId: uid, productId }), {

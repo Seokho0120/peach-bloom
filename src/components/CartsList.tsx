@@ -6,39 +6,29 @@ import {
   TotalPriceSelector,
   TotalQuantitySelector,
 } from '@/atoms/CartItemAtom';
-import { useGetCartItems } from '@/hooks/useProducts';
 import { useUserSession } from '@/hooks/useUserSession';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import CartItem from './CartItem';
 import NormalBtn from './NormalBtn';
 import PriceCard from './PriceCard';
 import PlusIcon from './ui/PlusIcon';
 import EqualIcon from './ui/EqualIcon';
-import { useEffect, useState } from 'react';
 import { useGetCartItemss } from '@/app/api/firesotre';
 
 export default function CartsList() {
   const SHIPPING = 3000;
   const user = useUserSession();
-  const userId = user!.id;
+  const userId = user?.id;
 
-  const { isLoading, isError } = useGetCartItemss(userId);
+  const { isLoading, isError } = useGetCartItemss(userId || 0);
 
   const cartItem = useRecoilValue(CartItemUpdateAtom);
   const totalPrice = useRecoilValue(TotalPriceSelector);
   console.log('cartItem', cartItem);
   console.log('totalPrice', totalPrice);
 
-  // const { isLoading, isError } = useGetCartItems(userId!);
-  // const { cartItem, isLoading, isError } = useGetCartItems(userId!);
-  // const totalPrice =
-  //   cartItem &&
-  //   cartItem.reduce(
-  //     (prev, current) => prev + current.price * current.quantity,
-  //     0
-  //   );
-
   const totalQuantity = cartItem?.length;
+
   const hasCartItem = cartItem && cartItem.length > 0;
 
   if (isLoading) {
