@@ -8,6 +8,7 @@ import UserIcon from './ui/UserIcon';
 import HeartOutIcon from './ui/HeartOutIcon';
 import AuthButton from './AuthBtn';
 import UploadIcon from './ui/UploadIcon';
+import { useGetCartItems } from '@/hooks/useProducts';
 
 const SIDE_MENU = [
   {
@@ -34,6 +35,8 @@ const SIDE_MENU = [
 
 export default function Userbar() {
   const { data: session } = useSession();
+  const { data: cartItem } = useGetCartItems(session?.user.id || 0);
+  if (!cartItem) return;
 
   return (
     <nav>
@@ -42,9 +45,14 @@ export default function Userbar() {
           <li key={href}>
             <Link
               href={session ? href : '/auth/signIn'}
-              className='flex items-center gap-1'
+              className='flex items-center gap-1 relative'
             >
               <p>{title}</p>
+              {text === 'CARTS' && cartItem.length > 0 && (
+                <div className='leading-5 absolute top-[-7px] left-[-9px] w-5 h-5 flex items-center justify-center bg-pinkpoint text-white rounded-full'>
+                  {cartItem.length}
+                </div>
+              )}
               <p className='text-xs'>{text}</p>
             </Link>
           </li>

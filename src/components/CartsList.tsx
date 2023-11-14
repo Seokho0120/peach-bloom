@@ -14,7 +14,6 @@ import PriceCard from './PriceCard';
 import PlusIcon from './ui/PlusIcon';
 import EqualIcon from './ui/EqualIcon';
 import { useGetCartItems } from '@/hooks/useProducts';
-import { useEffect } from 'react';
 
 export default function CartsList() {
   const SHIPPING = 3000;
