@@ -26,6 +26,8 @@ export default function CartsList() {
 
   const hasCartItem = cartItem && cartItem.length > 0;
 
+  console.log('cartItem', cartItem);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }

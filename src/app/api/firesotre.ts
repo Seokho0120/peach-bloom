@@ -291,10 +291,9 @@ export function subscribeToCartItems(userId: number): Promise<cartItemType[]> {
 // 카트 아이템 수량 업데이트
 export async function updateCartItem({ userId, product }: cartUpdateType) {
   const userCartRef = await doc(db, 'carts', userId.toString());
-
   const userCartSanp = await getDoc(userCartRef);
   if (!userCartSanp.exists()) {
-    throw new Error('카트가 존재하지 않아요 🚨');
+    throw new Error('카트에 제품이 존재하지 않아요 🚨');
   }
 
   const items = userCartSanp.data().items;
@@ -312,17 +311,26 @@ export async function updateCartItem({ userId, product }: cartUpdateType) {
   });
 }
 
-export async function removeFromCart({
-  userId,
-  productId,
-}: {
-  userId: string;
-  productId: string;
-}) {
-  const userCartRef = doc(db, 'carts', userId.toString());
-  const productRef = doc(userCartRef, 'items', productId);
+type removeCartType = {
+  userId: number;
+  productId: number;
+};
 
-  await deleteDoc(productRef);
+export async function removeFromCart({ userId, productId }: removeCartType) {
+  const userCartRef = doc(db, 'carts', userId.toString());
+  const userCartSnap = await getDoc(userCartRef);
+  if (!userCartSnap.exists()) {
+    throw new Error('카트에 제품이 존재하지 않아요 🚨');
+  }
+
+  const items = userCartSnap.data().items;
+  const updatedItems = items.filter(
+    (item: cartItemType) => item.productId !== productId
+  );
+
+  await updateDoc(userCartRef, {
+    items: updatedItems,
+  });
 }
 
 // // Dummy data List로직

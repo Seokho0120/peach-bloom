@@ -5,8 +5,9 @@ import Image from 'next/image';
 import { useState } from 'react';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
-import { updateCartItem } from '@/app/api/firesotre';
+import { removeFromCart, updateCartItem } from '@/app/api/firesotre';
 import { useUserSession } from '@/hooks/useUserSession';
+import CancelIcon from './ui/CancelIcon';
 
 type Props = {
   product: cartItemType;
@@ -46,8 +47,12 @@ export default function CartItem({ product }: Props) {
     });
   };
 
+  const handleRemove = () => {
+    removeFromCart({ userId, productId });
+  };
+
   return (
-    <li className='flex items-center justify-between gap-10 w-full border-b pb-4'>
+    <li className='relative flex items-center justify-between gap-10 w-full border-b pb-4'>
       <div className='flex items-center gap-10'>
         <Image
           src={imageUrl}
@@ -82,6 +87,12 @@ export default function CartItem({ product }: Props) {
           {useFormatPrice(discountedPrice!)}원
         </p>
       </div>
+      <button
+        onClick={handleRemove}
+        className='absolute top-0 cursor-pointer bg-white flex items-center justify-center'
+      >
+        <CancelIcon />
+      </button>
     </li>
   );
 }
