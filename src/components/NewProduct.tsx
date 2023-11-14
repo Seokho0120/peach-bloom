@@ -48,7 +48,6 @@ export default function NewProduct() {
 
     const url = await uploadImage(file);
     const firebaseProductId = await addNewProduct({ product, imageUrl: url });
-    console.log('firebaseProductId', firebaseProductId); // 문서 ID
 
     const data = await getProductById(firebaseProductId);
     console.log('data', data);
