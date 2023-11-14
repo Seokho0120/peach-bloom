@@ -46,8 +46,6 @@ export default function ProductDetail({ productId }: Props) {
   const [quantity, setQuantity] = useState<number>(1);
   const [cartItem, setCartItem] = useRecoilState(CartItemAtom);
 
-  console.log('상세페이지 cartItem', cartItem);
-
   const discountedPrice = useDisCountedPrice({
     price: productDetail?.price,
     saleRate: productDetail?.saleRate,
@@ -57,6 +55,9 @@ export default function ProductDetail({ productId }: Props) {
   const arrProductDetail: arrProductDetailType[] = productDetail
     ? [{ ...productDetail }]
     : [];
+
+  // console.log('productDetail 상세페이지', productDetail);
+  // console.log('arrProductDetail 상세페이지', arrProductDetail);
 
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);

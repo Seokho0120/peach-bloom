@@ -4,6 +4,7 @@ import { ProductListType } from '../types/Product';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
 import HeartIcon from './ui/HeartIcon';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   product: ProductListType;

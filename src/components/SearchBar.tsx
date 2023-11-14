@@ -8,21 +8,11 @@ export default function SearchBar() {
   const router = useRouter();
   const [searchText, setSearchText] = useState<string>('');
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-
-  //   searchText.length > 0 &&
-  //     router.push(`/search/${encodeURIComponent(searchText)}`);
-  // };
-
-  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = e.target;
-  //   setSearchText(value);
-  // };
-
   useEffect(() => {
-    if (searchText) {
+    if (searchText.length > 0) {
       router.push(`/search/${encodeURIComponent(searchText)}`);
+    } else if (searchText.length === 0) {
+      router.push('/');
     }
   }, [router, searchText]);
 
@@ -32,9 +22,8 @@ export default function SearchBar() {
         type='text'
         name='search'
         value={searchText}
-        className='rounded-2xl p-1 w-64'
-        // onChange={handleChange}
         onChange={(e) => setSearchText(e.target.value)}
+        className='rounded-3xl w-64 text-xs p-2 box-border'
         placeholder='검색어 입력 후 엔터를 눌러주세요.'
       />
     </form>

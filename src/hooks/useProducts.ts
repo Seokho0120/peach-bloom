@@ -79,7 +79,8 @@ export function useGetProductList(category: string) {
 export function useGetProductDetail(productId: number) {
   const productsList = useRecoilValue(productsListAtom);
   const setProductDetail = useSetRecoilState(productDetailAtom);
-
+  const searchProductList = useRecoilValue(searchItemAtom);
+  console.log('searchProductList', searchProductList);
   const {
     data: productDetail,
     isLoading,
@@ -87,7 +88,8 @@ export function useGetProductDetail(productId: number) {
   } = useQuery<ProductDetailType>({
     queryKey: ['productDetail', productId],
     queryFn: () => getProductDetail(productId),
-    staleTime: 1000 * 60,
+    refetchInterval: 1000,
+    // staleTime: 1000 * 60,
   });
 
   useEffect(() => {
@@ -102,12 +104,22 @@ export function useGetProductDetail(productId: number) {
     (product) => product.productId === productId
   );
 
+  const selectedSearchProduct = searchProductList.find(
+    (product) => product.productId === productId
+  );
+
   const selectedProductDetail =
     selectedProduct && productDetails
       ? { ...selectedProduct, ...productDetails }
+      : selectedSearchProduct && productDetails
+      ? { ...selectedSearchProduct, ...productDetails }
       : null;
 
-  return { productDetail: selectedProductDetail, isLoading, isError };
+  return {
+    productDetail: selectedProductDetail,
+    isLoading,
+    isError,
+  };
 }
 
 export function useGetLikeCountDocId(productId: number) {
