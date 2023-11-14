@@ -155,8 +155,16 @@ export default function ProductDetail({ productId }: Props) {
 
   const goToCart = () => router.push('/carts');
 
-  const handleBuy = () => {
-    // 해당 상품이 장바구니에 업데이트되고, 장바구니 페이지로 이동
+  const handleBuy = async () => {
+    if (cartContent) {
+      if (isAlreadyInCart) {
+        await addToCart(cartItem);
+      } else {
+        const newCartItem = [...cartItem, cartContent];
+        setCartItem(newCartItem);
+        await addToCart(newCartItem);
+      }
+    }
     router.push('/carts');
   };
 
