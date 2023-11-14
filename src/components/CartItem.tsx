@@ -52,10 +52,9 @@ export default function CartItem({ product }: Props) {
         <Image
           src={imageUrl}
           alt='imageUrl'
-          priority
           width={200}
           height={200}
-          className=''
+          loading='lazy'
         />
         <div className='flex flex-col'>
           <p className='text-slate-800'>{brandTitle}</p>
@@ -63,7 +62,7 @@ export default function CartItem({ product }: Props) {
         </div>
       </div>
 
-      <div className='flex items-center gap-10'>
+      <div className='flex items-center gap-10  w-[300px]'>
         <div className='flex items-center justify-between border border-gray-200 rounded-md gap-4 py-2'>
           <button
             onClick={handleMinus}

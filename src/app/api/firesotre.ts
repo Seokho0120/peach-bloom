@@ -30,9 +30,6 @@ import {
   monitoringLikesDataType,
   updateLikerListProps,
 } from '@/types/FirestoreType';
-import { useSetRecoilState } from 'recoil';
-import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
-import { useEffect, useState } from 'react';
 // import axios from 'axios';
 // import { v4 as uuidv4 } from 'uuid';
 
@@ -267,38 +264,31 @@ export async function getCartItems(userId: number): Promise<cartItemType[]> {
     return [];
   }
 }
+// 카트 아이템 실시간 업데이트
+export function subscribeToCartItems(userId: number): Promise<cartItemType[]> {
+  const userCartRef = doc(db, 'carts', userId.toString());
 
-export function useGetCartItemss(userId: number) {
-  const setCartList = useSetRecoilState(CartItemUpdateAtom);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<boolean>(false);
-
-  useEffect(() => {
-    const userCartRef = doc(db, 'carts', userId.toString());
-
+  return new Promise((resolve, reject) => {
     const unsubscribe = onSnapshot(
       userCartRef,
       (docSnap) => {
         if (docSnap.exists()) {
           const items = docSnap.data().items || {};
-          setCartList(Object.values(items));
+          resolve(Object.values(items));
         } else {
-          setCartList([]);
+          resolve([]);
         }
-        setIsLoading(false);
       },
       (error) => {
-        setIsError(true);
-        setIsLoading(false);
+        reject(error);
       }
     );
 
-    return () => unsubscribe();
-  }, [userId, setCartList]);
-
-  return { isLoading, isError };
+    return unsubscribe;
+  });
 }
 
+// 카트 아이템 수량 업데이트
 export async function updateCartItem({ userId, product }: cartUpdateType) {
   const userCartRef = await doc(db, 'carts', userId.toString());
 
@@ -321,15 +311,6 @@ export async function updateCartItem({ userId, product }: cartUpdateType) {
     items: updatedItems,
   });
 }
-
-// export async function updateCartItem({ userId, product }: cartUpdateType) {
-//   const userCartRef = await doc(db, 'carts', userId.toString());
-//   const productRef = doc(userCartRef, 'items', product.productId.toString());
-
-//   await updateDoc(productRef, {
-//     quantity: product.quantity,
-//   });
-// }
 
 export async function removeFromCart({
   userId,

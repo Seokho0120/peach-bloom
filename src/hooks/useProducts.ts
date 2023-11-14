@@ -1,10 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
   getLikeCountDocId,
   listenProductsChange,
-  getCartItems,
+  subscribeToCartItems,
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
@@ -20,7 +20,7 @@ import {
   ProductDetailType,
   cartItemType,
 } from '../types/Product';
-import { CartItemAtom, CartItemUpdateAtom } from '@/atoms/CartItemAtom';
+import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
 
 export function useGetProductList(category: string) {
   const queryClient = useQueryClient();
@@ -118,34 +118,31 @@ export function useGetLikeCountDocId(productId: number) {
   return { likeCountDocId };
 }
 
-// export function useGetCartItems(userId: number) {
-//   const setCartList = useSetRecoilState(CartItemUpdateAtom);
+export function useGetCartItems(userId: number) {
+  const setCartList = useSetRecoilState(CartItemUpdateAtom);
 
-//   const {
-//     data: cartItem,
-//     isLoading,
-//     isError,
-//   } = useQuery<cartItemType[]>({
-//     queryKey: ['cartItem', userId],
-//     queryFn: () => getCartItems(userId),
-//   });
+  const {
+    isLoading,
+    isError,
+    error,
+    data: cartItems,
+  } = useQuery({
+    queryKey: ['cartItems', userId],
+    queryFn: () => subscribeToCartItems(userId),
+    refetchInterval: 100,
+  });
 
-//   useEffect(() => {
-//     if (cartItem) {
-//       setCartList(cartItem);
-//     }
-//   }, [cartItem, setCartList]);
+  useEffect(() => {
+    if (cartItems) {
+      setCartList(cartItems);
+    }
+    if (error) {
+      setCartList([]);
+    }
+  }, [cartItems, error, setCartList]);
 
-//   return { cartItem, isLoading, isError };
-// }
-
-// export function removeItem() {
-//   useMutation((productId) => removeFromCart({ userId: uid, productId }), {
-//     onSuccess: () => {
-//       queryClient.invalidateQueries(['carts', uid]);
-//     },
-//   });
-// }
+  return { isLoading, isError, data: cartItems };
+}
 
 // // 더미데이터 리스트 불러오기
 // export function useProductsList(category: string) {

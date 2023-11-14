@@ -13,21 +13,16 @@ import NormalBtn from './NormalBtn';
 import PriceCard from './PriceCard';
 import PlusIcon from './ui/PlusIcon';
 import EqualIcon from './ui/EqualIcon';
-import { useGetCartItemss } from '@/app/api/firesotre';
+import { useGetCartItems } from '@/hooks/useProducts';
 
 export default function CartsList() {
   const SHIPPING = 3000;
   const user = useUserSession();
   const userId = user?.id;
-
-  const { isLoading, isError } = useGetCartItemss(userId || 0);
-
+  const { isLoading, isError } = useGetCartItems(userId || 0);
   const cartItem = useRecoilValue(CartItemUpdateAtom);
   const totalPrice = useRecoilValue(TotalPriceSelector);
-  console.log('cartItem', cartItem);
-  console.log('totalPrice', totalPrice);
-
-  const totalQuantity = cartItem?.length;
+  const totalQuantity = useRecoilValue(TotalQuantitySelector);
 
   const hasCartItem = cartItem && cartItem.length > 0;
 
@@ -49,6 +44,11 @@ export default function CartsList() {
       {!hasCartItem && <p>장바구니에 상품이 없습니다. 지금 쇼핑하세요 💄</p>}
       {hasCartItem && (
         <>
+          <div className='flex items-center gap-1 mr-16 mb-4'>
+            <p className='text-xl font-bold'>총 상품 개수: </p>
+            <p className='text-xl font-semibold'>{totalQuantity}개</p>
+          </div>
+          <div className='border-b mb-4' />
           <ul className='flex flex-col gap-4 mb-8'>
             {cartItem &&
               cartItem.map((product) => (

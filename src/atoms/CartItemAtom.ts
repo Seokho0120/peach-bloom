@@ -41,14 +41,3 @@ export const TotalQuantitySelector = selector({
     return CartItem.length;
   },
 });
-
-// export const TotalPriceSelector = selector({
-//   key: 'TotalPriceSelector',
-//   get: ({ get }) => {
-//     const CartItem = get(CartItemUpdateAtom);
-//     CartItem.reduce(
-//       (prev, current) => prev + current.product.price! * current.quantity,
-//       0
-//     );
-//   },
-// });
