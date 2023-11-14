@@ -21,6 +21,7 @@ import {
   cartItemType,
 } from '../types/Product';
 import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
+import { searchItemAtom } from '@/atoms/SearchListAtom';
 
 export function useGetProductList(category: string) {
   const queryClient = useQueryClient();
@@ -72,7 +73,7 @@ export function useGetProductList(category: string) {
     }
   }, [category, productsList, setProductList, setInitialProductList]);
 
-  return { isLoading, isError };
+  return { isLoading, isError, productsList };
 }
 
 export function useGetProductDetail(productId: number) {
@@ -142,6 +143,35 @@ export function useGetCartItems(userId: number) {
   }, [cartItems, error, setCartList]);
 
   return { isLoading, isError, data: cartItems };
+}
+
+export function useGetSearchList(keyword: string) {
+  const setSearchList = useSetRecoilState(searchItemAtom);
+
+  const {
+    data: searchList,
+    isLoading,
+    isError,
+  } = useQuery<ProductListType[]>({
+    queryKey: ['searchList', keyword],
+    queryFn: getProductsList,
+  });
+
+  useEffect(() => {
+    if (searchList && keyword) {
+      const lowerCaseKeyword = keyword.toLowerCase();
+
+      const searchProductList = searchList.filter(
+        (product) =>
+          product.brandTitle.toLowerCase().includes(lowerCaseKeyword) ||
+          product.productTitle.toLowerCase().includes(lowerCaseKeyword)
+      );
+
+      setSearchList(searchProductList);
+    }
+  }, [keyword, searchList, setSearchList]);
+
+  return { isLoading, isError };
 }
 
 // // 더미데이터 리스트 불러오기
