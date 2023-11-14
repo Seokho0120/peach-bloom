@@ -7,13 +7,14 @@ import {
   TotalQuantitySelector,
 } from '@/atoms/CartItemAtom';
 import { useUserSession } from '@/hooks/useUserSession';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import CartItem from './CartItem';
 import NormalBtn from './NormalBtn';
 import PriceCard from './PriceCard';
 import PlusIcon from './ui/PlusIcon';
 import EqualIcon from './ui/EqualIcon';
 import { useGetCartItems } from '@/hooks/useProducts';
+import { useEffect } from 'react';
 
 export default function CartsList() {
   const SHIPPING = 3000;
@@ -23,10 +24,7 @@ export default function CartsList() {
   const cartItem = useRecoilValue(CartItemUpdateAtom);
   const totalPrice = useRecoilValue(TotalPriceSelector);
   const totalQuantity = useRecoilValue(TotalQuantitySelector);
-
   const hasCartItem = cartItem && cartItem.length > 0;
-
-  console.log('cartItem', cartItem);
 
   if (isLoading) {
     return <div>Loading...</div>;

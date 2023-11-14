@@ -46,6 +46,8 @@ export default function ProductDetail({ productId }: Props) {
   const [quantity, setQuantity] = useState<number>(1);
   const [cartItem, setCartItem] = useRecoilState(CartItemAtom);
 
+  console.log('상세페이지 cartItem', cartItem);
+
   const discountedPrice = useDisCountedPrice({
     price: productDetail?.price,
     saleRate: productDetail?.saleRate,
@@ -167,6 +169,12 @@ export default function ProductDetail({ productId }: Props) {
     }
     router.push('/carts');
   };
+
+  useEffect(() => {
+    return () => {
+      setCartItem([]);
+    };
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
