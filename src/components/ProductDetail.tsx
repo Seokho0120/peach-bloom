@@ -52,9 +52,13 @@ export default function ProductDetail({ productId }: Props) {
     isSale: productDetail?.isSale,
     priceCount: quantity,
   });
+
   const arrProductDetail: arrProductDetailType[] = productDetail
     ? [{ ...productDetail }]
     : [];
+
+  console.log('productDetail', productDetail);
+  console.log('arrProductDetail', arrProductDetail);
 
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -199,11 +203,6 @@ export default function ProductDetail({ productId }: Props) {
             productId,
             brandTitle,
             productTitle,
-            price,
-            isSale,
-            saleRate,
-            likedCount,
-            isNew,
             description,
             ingredients,
             howToUse,

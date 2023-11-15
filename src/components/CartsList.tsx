@@ -1,13 +1,12 @@
 'use client';
 
 import {
-  CartItemAtom,
   CartItemUpdateAtom,
   TotalPriceSelector,
   TotalQuantitySelector,
 } from '@/atoms/CartItemAtom';
 import { useUserSession } from '@/hooks/useUserSession';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import CartItem from './CartItem';
 import NormalBtn from './NormalBtn';
 import PriceCard from './PriceCard';

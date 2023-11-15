@@ -7,6 +7,7 @@ import {
   // useProductsList
 } from '@/hooks/useProducts';
 import ProductCard from './ProductCard';
+import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
 
 type Props = {
   category: string;

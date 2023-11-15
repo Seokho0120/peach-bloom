@@ -27,8 +27,9 @@ import {
   mainRankingAtom,
   mainSaleRateAtom,
 } from '@/atoms/MainListAtom';
+import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
 
-export function useGetProductList(category: string) {
+export function useGetProductList(category?: string) {
   const queryClient = useQueryClient();
 
   const setProductList = useSetRecoilState(productsListAtom);
@@ -78,16 +79,27 @@ export function useGetProductList(category: string) {
     }
   }, [category, productsList, setProductList, setInitialProductList]);
 
-  return { isLoading, isError, productsList };
+  return { isLoading, isError, productsList, getProductsList };
 }
 
 export function useGetProductDetail(productId: number) {
-  const productsList = useRecoilValue(productsListAtom);
+  const isLoggedIn = useRecoilValue(LoginStatusAtom);
+  const { productsList, getProductsList } = useGetProductList();
+  useEffect(() => {
+    getProductsList();
+  }, [getProductsList, isLoggedIn]);
+
+  console.log('productsList', productsList);
+
+  // const productsListt = useRecoilValue(productsListAtom);
+  // console.log('productsListt', productsListt);
   const setProductDetail = useSetRecoilState(productDetailAtom);
   const searchProductList = useRecoilValue(searchItemAtom);
   const mainRankingList = useRecoilValue(mainRankingAtom);
   const mainSaleRateList = useRecoilValue(mainSaleRateAtom);
   const mainIsNewList = useRecoilValue(mainIsNewAtom);
+
+  console.log('상세에서 불러오는productsList', productsList);
 
   const {
     data: productDetail,
@@ -108,6 +120,7 @@ export function useGetProductDetail(productId: number) {
   const productDetails = useRecoilValue(productDetailAtom);
 
   const productLists = [
+    // productsListt,
     productsList,
     searchProductList,
     mainRankingList,
@@ -115,8 +128,8 @@ export function useGetProductDetail(productId: number) {
     mainIsNewList,
   ];
 
-  const findProductById = (list: ProductListType[]) =>
-    list.find((product) => product.productId === productId);
+  const findProductById = (list: ProductListType[] | undefined) =>
+    list && list.find((product) => product.productId === productId);
 
   const filteredProductDetail = productLists
     .map(findProductById)

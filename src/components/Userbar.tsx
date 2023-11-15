@@ -28,11 +28,6 @@ const SIDE_MENU = [
     href: '/carts',
     text: 'CARTS',
   },
-  // {
-  //   href: '/search',
-  //   title: <SearchIcon />,
-  //   text: 'SEARCH',
-  // },
 ];
 
 export default function Userbar() {
