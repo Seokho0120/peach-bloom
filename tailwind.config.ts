@@ -7,6 +7,7 @@ const config: Config = {
       colors: {
         navypoint: '#5287BE',
         pinkpoint: '#F6B7C9',
+        navytext: '#275381',
       },
       fontFamily: {
         sans: ['var(--font-pretendard)'],

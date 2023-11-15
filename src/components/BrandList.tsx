@@ -1,9 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { productsListAtom } from '@/atoms/ProductsListAtom';
+import useFilterByBrand from '@/hooks/useFilterByBrand';
 import { useRecoilValue } from 'recoil';
 import Filter from './Filter';
-import useFilterByBrand from '@/hooks/useFilterByBrand';
+import Symbol from '../../public/images/symbol.png';
 
 type Props = {
   category: string;
@@ -17,6 +19,13 @@ export default function BrandList({ category }: Props) {
   return (
     <section className='mb-6'>
       <h2 className='font-bold text-4xl text-slate-600'>
+        <Image
+          src={Symbol}
+          alt='Symbol'
+          width={40}
+          height={40}
+          className='mb-4'
+        />
         {category.toUpperCase()}
         <div className='border-b border-navypoint mt-4' />
       </h2>
@@ -24,7 +33,7 @@ export default function BrandList({ category }: Props) {
         <Filter />
         <p
           onClick={() => filterByBrand('전체')}
-          className='hover:text-gray-400 cursor-pointer'
+          className='text-navypoint hover:brightness-150 cursor-pointer'
         >
           전체+
         </p>

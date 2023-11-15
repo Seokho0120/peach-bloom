@@ -40,7 +40,7 @@ export default function Menubar() {
 
   return (
     <ul className='relative'>
-      <li className='my-10 text-navypoint hover:text-pinkpoint'>
+      <li className='my-6 text-navypoint hover:text-pinkpoint'>
         <MenuIcon onClick={toggleMenu} />
       </li>
       <li className='absolute flex flex-col cursor-pointer gap-6'>
