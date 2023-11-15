@@ -22,6 +22,11 @@ import {
 } from '../types/Product';
 import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
 import { searchItemAtom } from '@/atoms/SearchListAtom';
+import {
+  mainIsNewAtom,
+  mainRankingAtom,
+  mainSaleRateAtom,
+} from '@/atoms/MainListAtom';
 
 export function useGetProductList(category: string) {
   const queryClient = useQueryClient();
@@ -80,7 +85,7 @@ export function useGetProductDetail(productId: number) {
   const productsList = useRecoilValue(productsListAtom);
   const setProductDetail = useSetRecoilState(productDetailAtom);
   const searchProductList = useRecoilValue(searchItemAtom);
-  console.log('searchProductList', searchProductList);
+
   const {
     data: productDetail,
     isLoading,
@@ -89,7 +94,6 @@ export function useGetProductDetail(productId: number) {
     queryKey: ['productDetail', productId],
     queryFn: () => getProductDetail(productId),
     refetchInterval: 1000,
-    // staleTime: 1000 * 60,
   });
 
   useEffect(() => {
@@ -184,6 +188,34 @@ export function useGetSearchList(keyword: string) {
   }, [keyword, searchList, setSearchList]);
 
   return { isLoading, isError };
+}
+
+export function useGetMainList() {
+  const productsList = useRecoilValue(productsListAtom);
+  const setMainRankingList = useSetRecoilState(mainRankingAtom);
+  const setMainSaleRateList = useSetRecoilState(mainSaleRateAtom);
+  const setMainIsNewList = useSetRecoilState(mainIsNewAtom);
+
+  useEffect(() => {
+    if (productsList) {
+      const saleRankSortedList = [...productsList].sort(
+        (a: ProductListType, b: ProductListType) =>
+          (a.saleRank || 0) - (b.saleRank || 0)
+      );
+      setMainRankingList(saleRankSortedList);
+
+      const saleSaleRateSortedList = [...productsList].sort(
+        (a: ProductListType, b: ProductListType) =>
+          (b.saleRate || 0) - (a.saleRate || 0)
+      );
+      setMainSaleRateList(saleSaleRateSortedList);
+
+      const saleIsNewSortedList = productsList.filter(
+        (product) => product.isNew
+      );
+      setMainIsNewList(saleIsNewSortedList);
+    }
+  }, [productsList, setMainIsNewList, setMainRankingList, setMainSaleRateList]);
 }
 
 // // 더미데이터 리스트 불러오기
