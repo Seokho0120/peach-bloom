@@ -34,7 +34,7 @@ export default function CartsList() {
   }
 
   return (
-    <article>
+    <article className='min-h-screen'>
       <h2 className='font-bold text-4xl text-slate-600 mb-6'>
         장바구니
         <div className='border-b border-navypoint mt-4' />
@@ -64,7 +64,11 @@ export default function CartsList() {
               price={totalPrice && totalPrice + SHIPPING}
             />
           </div>
-          <NormalBtn text='주문하기' onClick={() => console.log('주문하기')} />
+          <NormalBtn
+            text='주문하기'
+            size='large'
+            onClick={() => console.log('주문하기')}
+          />
         </>
       )}
     </article>

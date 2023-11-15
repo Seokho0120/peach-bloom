@@ -19,10 +19,6 @@ input {
 
 .swiper-button-prev,
 .swiper-button-next {
-  /* background-color: gray; */
-  /* background-color: #fff; */
-  /* height: 50px;
-  width: 50px; */
   opacity: 0.6;
   border-radius: 50px;
   color: black !important;
@@ -34,15 +30,8 @@ input {
   font-weight: 600 !important;
 }
 
-/* .swiper-button-next::after,
-.swiper-button-prev::after {
-  display: none;
+.no-pagination .swiper-button-prev:after,
+.no-pagination .swiper-button-next:after {
+  position: absolute;
+  margin-bottom: 92px;
 }
-
-.swiper-button-prev {
-  background: url();
-}
-
-.swiper-button-next {
-  background: url();
-} */

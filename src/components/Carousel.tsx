@@ -17,6 +17,7 @@ import {
 import { useGetMainList } from '@/hooks/useProducts';
 import ProductCard from './ProductCard';
 import Symbol from '../../public/images/symbol.png';
+import NormalBtn from './NormalBtn';
 
 export default function Carousel() {
   const { isError, isLoading } = useGetMainList();
@@ -24,10 +25,13 @@ export default function Carousel() {
   const mainSaleRateList = useRecoilValue(mainSaleRateAtom);
   const mainIsNewList = useRecoilValue(mainIsNewAtom);
 
-  // const router = useRouter();
-  // const handleProductClick = (productId: number) => {
-  //   router.push(`/detail/${productId}`);
-  // };
+  const router = useRouter();
+
+  const handleProductClick = (productId: number) => {
+    if (productId) {
+      router.push(`/detail/${productId}`);
+    }
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -47,7 +51,7 @@ export default function Carousel() {
         <Swiper
           className='main-pagination'
           modules={[Navigation, Pagination, Autoplay, Keyboard]}
-          // autoplay={{ delay: 2500, disableOnInteraction: false }}
+          autoplay={{ delay: 4000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
           spaceBetween={80}
           slidesPerView={1}
@@ -63,8 +67,8 @@ export default function Carousel() {
                 idx
               ) => (
                 <SwiperSlide key={productId}>
-                  <div className='relative flex items-center justify-center'>
-                    <div className='flex flex-col absolute z-10 top-10 left-10'>
+                  <div className='relative flex justify-center'>
+                    <div className='flex flex-col absolute z-10 top-10 2xl:left-72 left-16'>
                       <Image
                         src={Symbol}
                         alt='Symbol'
@@ -81,7 +85,16 @@ export default function Carousel() {
                       <p className='text-xl font-bold text-navytext w-36'>
                         {productTitle}
                       </p>
+
+                      <div className='mt-4'>
+                        <NormalBtn
+                          text='상품 확인하기'
+                          size='small'
+                          onClick={() => handleProductClick(productId)}
+                        />
+                      </div>
                     </div>
+
                     <Image
                       src={imageUrl}
                       alt={productTitle}
@@ -109,11 +122,10 @@ export default function Carousel() {
             className='my-8'
           />
         </div>
-
         <Swiper
           className='no-pagination'
           modules={[Navigation, Pagination, Autoplay, Keyboard]}
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          autoplay={{ delay: 4000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
           spaceBetween={45}
           slidesPerView={3}
@@ -147,7 +159,7 @@ export default function Carousel() {
         <Swiper
           className='no-pagination'
           modules={[Navigation, Pagination, Autoplay, Keyboard]}
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          autoplay={{ delay: 4000, disableOnInteraction: false }}
           pagination={{ clickable: true }}
           spaceBetween={20}
           slidesPerView={3}

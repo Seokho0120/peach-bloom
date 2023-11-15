@@ -85,6 +85,9 @@ export function useGetProductDetail(productId: number) {
   const productsList = useRecoilValue(productsListAtom);
   const setProductDetail = useSetRecoilState(productDetailAtom);
   const searchProductList = useRecoilValue(searchItemAtom);
+  const mainRankingList = useRecoilValue(mainRankingAtom);
+  const mainSaleRateList = useRecoilValue(mainSaleRateAtom);
+  const mainIsNewList = useRecoilValue(mainIsNewAtom);
 
   const {
     data: productDetail,
@@ -104,20 +107,24 @@ export function useGetProductDetail(productId: number) {
 
   const productDetails = useRecoilValue(productDetailAtom);
 
-  const selectedProduct = productsList.find(
-    (product) => product.productId === productId
-  );
+  const productLists = [
+    productsList,
+    searchProductList,
+    mainRankingList,
+    mainSaleRateList,
+    mainIsNewList,
+  ];
 
-  const selectedSearchProduct = searchProductList.find(
-    (product) => product.productId === productId
-  );
+  const findProductById = (list: ProductListType[]) =>
+    list.find((product) => product.productId === productId);
 
-  const selectedProductDetail =
-    selectedProduct && productDetails
-      ? { ...selectedProduct, ...productDetails }
-      : selectedSearchProduct && productDetails
-      ? { ...selectedSearchProduct, ...productDetails }
-      : null;
+  const filteredProductDetail = productLists
+    .map(findProductById)
+    .find((product) => product && productDetails);
+
+  const selectedProductDetail = filteredProductDetail
+    ? { ...filteredProductDetail, ...productDetails }
+    : null;
 
   return {
     productDetail: selectedProductDetail,
@@ -191,7 +198,6 @@ export function useGetSearchList(keyword: string) {
 }
 
 export function useGetMainList() {
-  // const productsList = useRecoilValue(productsListAtom);
   const setMainRankingList = useSetRecoilState(mainRankingAtom);
   const setMainSaleRateList = useSetRecoilState(mainSaleRateAtom);
   const setMainIsNewList = useSetRecoilState(mainIsNewAtom);

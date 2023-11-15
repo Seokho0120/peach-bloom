@@ -56,9 +56,6 @@ export default function ProductDetail({ productId }: Props) {
     ? [{ ...productDetail }]
     : [];
 
-  // console.log('productDetail 상세페이지', productDetail);
-  // console.log('arrProductDetail 상세페이지', arrProductDetail);
-
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likerList, setLikerList] = useState<string[]>([]);
@@ -144,6 +141,10 @@ export default function ProductDetail({ productId }: Props) {
     -1;
 
   const handleAddToCart = () => {
+    if (!user) {
+      router.push('/auth/signIn');
+    }
+
     if (cartContent) {
       if (isAlreadyInCart) {
         addToCart(cartItem);
@@ -159,6 +160,10 @@ export default function ProductDetail({ productId }: Props) {
   const goToCart = () => router.push('/carts');
 
   const handleBuy = async () => {
+    if (!user) {
+      router.push('/auth/signIn');
+    }
+
     if (cartContent) {
       if (isAlreadyInCart) {
         await addToCart(cartItem);
@@ -167,8 +172,8 @@ export default function ProductDetail({ productId }: Props) {
         setCartItem(newCartItem);
         await addToCart(newCartItem);
       }
+      router.push('/carts');
     }
-    router.push('/carts');
   };
 
   useEffect(() => {
