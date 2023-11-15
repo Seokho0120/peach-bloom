@@ -20,13 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
-      <body className='w-full p-12'>
+      <body className='w-full'>
         <AuthSession>
           <Provider>
             <Navbar />
-            {children}
+            <main className='grow'>{children}</main>
             <div id='global-modal'></div>
-            {/* <Footer /> */}
+            <Footer />
           </Provider>
         </AuthSession>
       </body>

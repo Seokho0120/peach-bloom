@@ -28,7 +28,7 @@ export default function SearchList({ keyword }: Props) {
         {decodeKeyword} 에 대한 검색 결과입니다.
         <div className='border-b border-navypoint mt-4' />
       </h2>
-      <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
+      <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 min-h-screen'>
         {searchProductList &&
           searchProductList.map((product) => (
             <li key={product.productId}>
