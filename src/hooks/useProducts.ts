@@ -191,31 +191,47 @@ export function useGetSearchList(keyword: string) {
 }
 
 export function useGetMainList() {
-  const productsList = useRecoilValue(productsListAtom);
+  // const productsList = useRecoilValue(productsListAtom);
   const setMainRankingList = useSetRecoilState(mainRankingAtom);
   const setMainSaleRateList = useSetRecoilState(mainSaleRateAtom);
   const setMainIsNewList = useSetRecoilState(mainIsNewAtom);
 
+  const {
+    data: productsList,
+    isLoading,
+    isError,
+  } = useQuery<ProductListType[]>({
+    queryKey: ['productsList'],
+    queryFn: getProductsList,
+  });
+
   useEffect(() => {
     if (productsList) {
-      const saleRankSortedList = [...productsList].sort(
-        (a: ProductListType, b: ProductListType) =>
-          (a.saleRank || 0) - (b.saleRank || 0)
-      );
+      const saleRankSortedList = [...productsList]
+        .sort(
+          (a: ProductListType, b: ProductListType) =>
+            (a.saleRank || 0) - (b.saleRank || 0)
+        )
+        .slice(0, 7);
+
       setMainRankingList(saleRankSortedList);
 
-      const saleSaleRateSortedList = [...productsList].sort(
-        (a: ProductListType, b: ProductListType) =>
-          (b.saleRate || 0) - (a.saleRate || 0)
-      );
+      const saleSaleRateSortedList = [...productsList]
+        .sort(
+          (a: ProductListType, b: ProductListType) =>
+            (b.saleRate || 0) - (a.saleRate || 0)
+        )
+        .slice(0, 7);
       setMainSaleRateList(saleSaleRateSortedList);
 
-      const saleIsNewSortedList = productsList.filter(
-        (product) => product.isNew
-      );
+      const saleIsNewSortedList = productsList
+        .filter((product) => product.isNew)
+        .slice(0, 7);
       setMainIsNewList(saleIsNewSortedList);
     }
   }, [productsList, setMainIsNewList, setMainRankingList, setMainSaleRateList]);
+
+  return { isLoading, isError };
 }
 
 // // 더미데이터 리스트 불러오기
