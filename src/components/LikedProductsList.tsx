@@ -34,6 +34,10 @@ export default function LikedProductsList({ userId }: Props) {
         <div className='border-b border-navypoint mt-4' />
       </h2>
 
+      {!productsList.length && (
+        <p>좋아하는 상품이 없습니다. 지금 쇼핑하세요 💄</p>
+      )}
+
       <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
         {productsList &&
           productsList.map((product) => (

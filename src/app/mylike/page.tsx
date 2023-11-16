@@ -9,8 +9,8 @@ export default async function MyLikePage() {
   }
 
   return (
-    <div className='mx-52'>
+    <section className='mx-52'>
       <LikedProductsList userId={user.id} />
-    </div>
+    </section>
   );
 }

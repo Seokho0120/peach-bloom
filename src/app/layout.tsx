@@ -24,7 +24,7 @@ export default function RootLayout({
         <AuthSession>
           <Provider>
             <Navbar />
-            <main className='grow'>{children}</main>
+            <main className='grow min-h-screen'>{children}</main>
             <div id='global-modal'></div>
             <Footer />
           </Provider>
