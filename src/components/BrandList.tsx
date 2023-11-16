@@ -32,7 +32,7 @@ export default function BrandList({ category }: Props) {
         {category.toUpperCase()}
         <div className='border-b border-navypoint mt-4' />
       </h2>
-      <ul className='flex p-10 bg-gray-100 gap-4 text-sm font-semibold text-slate-800'>
+      <ul className='flex flex-wrap p-10 bg-gray-100 gap-4 text-sm font-semibold text-slate-800'>
         <Filter />
         <p
           onClick={() => filterByBrand('전체')}

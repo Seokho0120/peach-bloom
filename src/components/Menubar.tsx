@@ -6,6 +6,10 @@ import Link from 'next/link';
 
 const PRODUCTS_MENU = [
   {
+    href: '/products/all',
+    title: 'ALL',
+  },
+  {
     href: '/products/exclusive',
     title: 'EXCLUSIVE',
   },

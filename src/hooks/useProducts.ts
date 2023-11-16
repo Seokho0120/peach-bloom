@@ -69,9 +69,12 @@ export function useGetProductList(category?: string) {
       });
 
       // 카테고리에 해당하는 상품 정렬
-      const filteredProductList = updatedProductsList.filter(
-        (product) => product.category === category
-      );
+      const filteredProductList = updatedProductsList.filter((product) => {
+        if (category === 'all') {
+          return true;
+        }
+        return product.category === category;
+      });
 
       setProductList(filteredProductList);
       setInitialProductList(filteredProductList);

@@ -2,10 +2,7 @@
 
 import { useRecoilValue } from 'recoil';
 import { productsListAtom } from '@/atoms/ProductsListAtom';
-import {
-  useGetProductList,
-  // useProductsList
-} from '@/hooks/useProducts';
+import { useGetProductList } from '@/hooks/useProducts';
 import ProductCard from './ProductCard';
 import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
 
