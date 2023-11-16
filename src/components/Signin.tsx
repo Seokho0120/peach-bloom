@@ -26,17 +26,18 @@ export default function Signin({ providers, callbackUrl }: Props) {
         <div className='w-1/6 border-b border-navypoint mt-4 mb-4' />
       </h2>
 
-      {Object.values(providers).map(({ id, name }) => (
-        <div key={id}>
+      <div className='flex flex-col gap-4'>
+        {Object.values(providers).map(({ id, name }) => (
           <button
+            key={id}
             onClick={() => signIn(id, { callbackUrl })}
-            className='flex gap-2 py-6 px-20 bg-navypoint text-white hover:brightness-110 text-xl font-semibold rounded-full'
+            className='flex gap-2 py-6 px-20 border hover:shadow text-xl font-semibold rounded-full'
           >
             <p>{name}</p>
             <p>로그인</p>
           </button>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

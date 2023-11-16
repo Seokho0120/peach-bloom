@@ -2,9 +2,14 @@
 
 import { useUserSession } from '@/hooks/useUserSession';
 import { signOut } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 
 export default function MyInfo() {
   const user = useUserSession();
+
+  if (!user) {
+    redirect('/');
+  }
 
   const handleSignOut = async () => {
     await signOut({ callbackUrl: `/` });
@@ -28,7 +33,7 @@ export default function MyInfo() {
           <div className='flex items-center gap-10 mb-6'>
             {/*eslint-disable-next-line @next/next/no-img-element*/}
             <img
-              className='rounded-full w-14'
+              className='rounded-full w-14 h-14'
               alt='user profile'
               src={user?.image ?? undefined}
             />
@@ -42,12 +47,14 @@ export default function MyInfo() {
             <p className='border-b basis-11/12 leading-7'>{user?.username}</p>
           </div>
 
-          <div className='flex items-center gap-8 mb-6'>
-            <span className='text-lg text-slate-400 basis-1/12 ml-1'>
-              이메일
-            </span>
-            <p className='border-b basis-11/12 leading-7'>{user?.email}</p>
-          </div>
+          {user?.email ? (
+            <div className='flex items-center gap-8 mb-6'>
+              <span className='text-lg text-slate-400 basis-1/12 ml-1'>
+                계정
+              </span>
+              <p className='border-b basis-11/12 leading-7'>{user?.email}</p>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
