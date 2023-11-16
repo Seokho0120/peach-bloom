@@ -22,9 +22,11 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     jwt: async ({ token, trigger, user, session }: JwtType) => {
+      const isNaver = user?.email?.includes('naver');
+
       if (user) {
         token.user = {
-          id: Number(user.id) || 0,
+          id: isNaver ? user.id : Number(user.id) || 0,
           name: user.name || '',
         };
       }
@@ -36,9 +38,8 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }: SessionType) {
-      console.log('token', token);
       const user = session?.user;
-      console.log('user???', user);
+
       if (user) {
         session.user = {
           ...user,

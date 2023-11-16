@@ -35,7 +35,7 @@ export default function ProductDetail({ productId }: Props) {
 
   const user = useUserSession();
   const userId = user?.id;
-
+  console.log('상세 user', user);
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
   const arrProductDetail: arrProductDetailType[] = productDetail

@@ -14,7 +14,6 @@ export default async function SignInPage({
   searchParams: { callbackUrl },
 }: Props) {
   const session = await getServerSession(authOptions);
-  console.log('session?.user', session?.user);
   if (session) {
     redirect('/');
   }
