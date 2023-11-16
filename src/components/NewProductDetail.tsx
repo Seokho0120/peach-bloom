@@ -2,6 +2,7 @@
 
 import { addNewDeatil } from '@/app/api/firesotre';
 import { ProductDetailType } from '@/types/Product';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function NewProductDetail({ productId }: Props) {
+  const router = useRouter();
   const [productDetail, setProductDetail] = useState<ProductDetailType>({
     description: '',
     howToUse: '',
@@ -33,7 +35,10 @@ export default function NewProductDetail({ productId }: Props) {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     await addNewDeatil(productDetail);
+    await router.push('/');
   };
 
   return (

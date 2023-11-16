@@ -13,7 +13,10 @@ type Props = {
 
 export default function BrandList({ category }: Props) {
   const productsList = useRecoilValue(productsListAtom);
-  const brandList = productsList.map((product) => product.brandTitle);
+  const brandList = [
+    ...new Set(productsList.map((product) => product.brandTitle)),
+  ];
+
   const filterByBrand = useFilterByBrand();
 
   return (

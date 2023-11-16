@@ -219,7 +219,7 @@ export default function NewProduct() {
         </div>
 
         <button className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white'>
-          제품 등록하기
+          상세 내용 등록하러 가기
         </button>
       </form>
     </section>
