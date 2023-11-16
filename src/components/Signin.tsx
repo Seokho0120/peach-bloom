@@ -1,6 +1,8 @@
 'use client';
 
 import { ClientSafeProvider, signIn } from 'next-auth/react';
+import Image from 'next/image';
+import Symbol from '../../public/images/symbol.png';
 
 type Props = {
   providers: Record<string, ClientSafeProvider>;
@@ -11,14 +13,27 @@ type Props = {
 
 export default function Signin({ providers, callbackUrl }: Props) {
   return (
-    <div className='flex justify-center items-center'>
+    <div className='flex flex-col justify-center items-center'>
+      <Image
+        src={Symbol}
+        alt='Symbol'
+        width={60}
+        height={60}
+        className='my-8'
+      />
+      <h2 className='w-full flex flex-col items-center font-bold text-4xl text-slate-600 mb-4'>
+        LOGIN
+        <div className='w-1/6 border-b border-navypoint mt-4 mb-4' />
+      </h2>
+
       {Object.values(providers).map(({ id, name }) => (
         <div key={id}>
           <button
             onClick={() => signIn(id, { callbackUrl })}
-            className='bg-red-400 text-lg font-bold'
+            className='flex gap-2 py-6 px-20 bg-navypoint text-white hover:brightness-110 text-xl font-semibold rounded-full'
           >
-            Sign in with {name}
+            <p>{name}</p>
+            <p>로그인</p>
           </button>
         </div>
       ))}

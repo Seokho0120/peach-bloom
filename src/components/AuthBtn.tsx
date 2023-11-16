@@ -1,6 +1,5 @@
 import { Session as NextAuthSession } from 'next-auth';
 import LoginIcon from './ui/LoginIcon';
-import { useRouter } from 'next/navigation';
 import { useSetRecoilState } from 'recoil';
 import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
 
@@ -16,19 +15,16 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   onSignIn,
 }) => {
   const setIsLoggedIn = useSetRecoilState(LoginStatusAtom);
-  const router = useRouter();
 
   const handleClick = async () => {
     if (session) {
       await onSignOut();
       setIsLoggedIn(false);
-      // router.push('/');
     } else {
       onSignIn();
       setIsLoggedIn(true);
     }
   };
-  // const handleClick = session ? onSignOut : onSignIn;
   const buttonText = session ? 'LOGOUT' : 'LOGIN';
 
   return (
