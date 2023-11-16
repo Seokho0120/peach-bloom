@@ -38,28 +38,16 @@ export default function ProductDetail({ productId }: Props) {
 
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
+  const arrProductDetail: arrProductDetailType[] = productDetail
+    ? [{ ...productDetail }]
+    : [];
 
   const { likeCountDocId } = useGetLikeCountDocId(NumProductId);
   const initialLikeCount = likeCountDocId?.likeCountData;
   const docId = likeCountDocId?.docId;
 
-  const [quantity, setQuantity] = useState<number>(1);
   const [cartItem, setCartItem] = useRecoilState(CartItemAtom);
-
-  const discountedPrice = useDisCountedPrice({
-    price: productDetail?.price,
-    saleRate: productDetail?.saleRate,
-    isSale: productDetail?.isSale,
-    priceCount: quantity,
-  });
-
-  const arrProductDetail: arrProductDetailType[] = productDetail
-    ? [{ ...productDetail }]
-    : [];
-
-  console.log('productDetail', productDetail);
-  console.log('arrProductDetail', arrProductDetail);
-
+  const [quantity, setQuantity] = useState<number>(1);
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likerList, setLikerList] = useState<string[]>([]);
@@ -68,6 +56,13 @@ export default function ProductDetail({ productId }: Props) {
   const [likesDocRef, setLikesDocRef] = useState<
     DocumentReference | undefined
   >();
+
+  const discountedPrice = useDisCountedPrice({
+    price: productDetail?.price,
+    saleRate: productDetail?.saleRate,
+    isSale: productDetail?.isSale,
+    priceCount: quantity,
+  });
 
   useEffect(() => {
     setLikesDocRef(likesRef(NumProductId));
@@ -161,8 +156,6 @@ export default function ProductDetail({ productId }: Props) {
     setIsModalOpen(!isModalOpen);
   };
 
-  const goToCart = () => router.push('/carts');
-
   const handleBuy = async () => {
     if (!user) {
       router.push('/auth/signIn');
@@ -180,6 +173,8 @@ export default function ProductDetail({ productId }: Props) {
     }
   };
 
+  const goToCart = () => router.push('/carts');
+
   useEffect(() => {
     return () => {
       setCartItem([]);
@@ -195,7 +190,7 @@ export default function ProductDetail({ productId }: Props) {
   }
 
   return (
-    <div className='flex flex-col'>
+    <ul className='flex flex-col'>
       {arrProductDetail &&
         arrProductDetail.map(
           ({
@@ -207,7 +202,7 @@ export default function ProductDetail({ productId }: Props) {
             ingredients,
             howToUse,
           }) => (
-            <div key={productId} className='flex justify-between gap-16'>
+            <li key={productId} className='flex justify-between gap-16'>
               <div className='flex-shrink-0 relative w-[500px] h-[500px]'>
                 <Image
                   src={imageUrl}
@@ -249,9 +244,9 @@ export default function ProductDetail({ productId }: Props) {
                   />
                 </div>
               </div>
-            </div>
+            </li>
           )
         )}
-    </div>
+    </ul>
   );
 }

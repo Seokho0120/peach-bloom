@@ -50,7 +50,7 @@ export default function NewProduct() {
     const firebaseProductId = await addNewProduct({ product, imageUrl: url });
 
     const data = await getProductById(firebaseProductId);
-    console.log('data', data);
+
     await router.push(`/upload/${data}`);
   };
 

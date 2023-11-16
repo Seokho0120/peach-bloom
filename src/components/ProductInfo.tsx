@@ -7,9 +7,9 @@ type Props = {
   handleLike: () => void;
   isLiked: boolean;
   productTitle: string;
-  description: string;
-  howToUse: string;
-  ingredients: string;
+  description?: string;
+  howToUse?: string;
+  ingredients?: string;
 };
 
 export default function ProductInfo(props: Props) {

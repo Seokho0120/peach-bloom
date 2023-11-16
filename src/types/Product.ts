@@ -41,9 +41,9 @@ export interface arrProductDetailType {
   saleRank?: number;
   saleRate?: number;
   isNew?: boolean;
-  description: string;
-  howToUse: string;
-  ingredients: string;
+  description?: string;
+  howToUse?: string;
+  ingredients?: string;
 }
 
 export interface addProductType {
