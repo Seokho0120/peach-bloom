@@ -51,9 +51,9 @@ export default function Userbar() {
               >
                 <p>{title}</p>
                 {text === 'CARTS' && cartItem.length > 0 && (
-                  <div className='leading-5 absolute top-[-7px] left-[-9px] w-5 h-5 flex items-center justify-center bg-pinkpoint text-white rounded-full'>
+                  <p className='absolute top-[-7px] left-[-9px] w-5 h-5 flex items-center justify-center text-sm bg-pinkpoint text-white rounded-full'>
                     {cartItem.length}
-                  </div>
+                  </p>
                 )}
                 <p className='text-xs'>{text}</p>
               </Link>
