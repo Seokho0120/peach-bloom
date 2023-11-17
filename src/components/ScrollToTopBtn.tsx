@@ -9,16 +9,15 @@ export default function ScrollToTopBtn() {
   const toTop = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setShowToTop(false); // 버튼 클릭 후 버튼을 숨김
   };
 
+  // 스크롤 위치
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const windowScrollHandler = () => {
-      const { scrollY } = window;
-      console.log('window.scrollY:', scrollY);
-      setShowToTop(scrollY > 200); // scrollY가 200 이상일 때만 버튼이 보이도록 수정
+      const { scrollY, innerHeight } = window;
+      setShowToTop(scrollY >= innerHeight);
     };
 
     window.addEventListener('scroll', windowScrollHandler);
@@ -30,20 +29,10 @@ export default function ScrollToTopBtn() {
 
   return (
     <>
-      {showToTop && <MainArrowIcon />}
-
       {showToTop && (
         <button
           onClick={toTop}
-          style={{
-            position: 'fixed',
-            right: '2rem',
-            bottom: '2rem',
-            cursor: 'pointer',
-            width: '50px',
-            height: '50px',
-            borderRadius: '50%',
-          }}
+          className='fixed flex items-center justify-center right-[4rem] bottom-[5rem] w-[3rem] h-[3rem] bg-navypoint text-white hover:brightness-125 rounded-full'
         >
           <MainArrowIcon />
         </button>
