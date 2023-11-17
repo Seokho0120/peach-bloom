@@ -1,17 +1,20 @@
 'use client';
 
 import { productsListAtom } from '@/atoms/ProductsListAtom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useState } from 'react';
 import ArrowIcon from './ui/ArrowIcon';
 import { useFilterProducts } from '@/hooks/useFilterProducts';
+import { FilterAtom } from '@/atoms/FilterAtom';
 
 const FILTER = ['랭킹순', '좋아요순', '가격높은순', '가격낮은순', '높은할인순'];
 
 export default function Filter() {
   const productsList = useRecoilValue(productsListAtom);
   const setFilteredProducts = useSetRecoilState(productsListAtom);
-  const [selectedFilter, setSelectedFilter] = useState<string>(FILTER[0]);
+  // const [selectedFilter, setSelectedFilter] = useState<string>(FILTER[0]);
+  const [selectedFilter, setSelectedFilter] = useRecoilState(FilterAtom);
+  console.log('selectedFilter', selectedFilter);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const sortProducts = useFilterProducts();
 
