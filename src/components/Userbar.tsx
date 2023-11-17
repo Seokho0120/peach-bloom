@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import CartIcon from './ui/CartIcon';
 import SearchIcon from './ui/SearchIcon';
@@ -8,9 +9,8 @@ import UserIcon from './ui/UserIcon';
 import HeartOutIcon from './ui/HeartOutIcon';
 import AuthButton from './AuthBtn';
 import UploadIcon from './ui/UploadIcon';
-import { useGetCartItems } from '@/hooks/useProducts';
 import SearchBar from './SearchBar';
-import { useState } from 'react';
+import { useGetCartItems } from '@/hooks/useProducts';
 
 const SIDE_MENU = [
   {

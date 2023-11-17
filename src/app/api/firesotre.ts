@@ -42,7 +42,7 @@ export async function getProductsList(): Promise<ProductListType[]> {
     ? []
     : snapshot.docs.map((doc) => doc.data() as ProductListType);
 }
-//
+
 export function listenProductsChange(callback: () => void) {
   const productCollectionRef = collection(db, 'products');
   return onSnapshot(productCollectionRef, callback);

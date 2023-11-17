@@ -9,8 +9,8 @@ type Props = {
 
 export default function SearchPage({ params: { keyword } }: Props) {
   return (
-    <div className='mx-52 flex justify-center'>
+    <section className='mx-52 flex justify-center'>
       <SearchList keyword={keyword} />
-    </div>
+    </section>
   );
 }

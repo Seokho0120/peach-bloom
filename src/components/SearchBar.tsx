@@ -1,20 +1,21 @@
 'use client';
 
-import { useGetProductList } from '@/hooks/useProducts';
+import useDebounce from '@/hooks/useDebounce';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function SearchBar() {
   const router = useRouter();
   const [searchText, setSearchText] = useState<string>('');
+  const debouncedKeyword = useDebounce(searchText);
 
   useEffect(() => {
-    if (searchText.length > 0) {
-      router.push(`/search/${encodeURIComponent(searchText)}`);
-    } else if (searchText.length === 0) {
+    if (debouncedKeyword.length > 0) {
+      router.push(`/search/${encodeURIComponent(debouncedKeyword)}`);
+    } else if (debouncedKeyword.length === 0) {
       router.push('/');
     }
-  }, [router, searchText]);
+  }, [router, debouncedKeyword]);
 
   return (
     <form>

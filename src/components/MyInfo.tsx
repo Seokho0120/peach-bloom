@@ -15,8 +15,6 @@ export default function MyInfo() {
     redirect('/');
   }
 
-  console.log('user', user);
-
   const handleSignOut = async () => {
     await signOut({ callbackUrl: `/` });
   };
