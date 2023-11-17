@@ -1,4 +1,8 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
@@ -28,61 +32,101 @@ import {
   mainSaleRateAtom,
 } from '@/atoms/MainListAtom';
 import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
+import { FirebaseError } from 'firebase/app';
+import { DocumentSnapshot } from 'firebase/firestore';
+
+interface ProductsResponse {
+  products: ProductListType[];
+  lastDoc: DocumentSnapshot | undefined;
+}
+
+// export function useGetProductList(category?: string) {
+//   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+//     useInfiniteQuery<ProductsResponse, Error>({
+//       queryKey: ['products'],
+//       queryFn: async ({ pageParam  }) => {
+//         const result = await getProductsList(category, pageParam);
+//         return result;
+//       },
+//       getNextPageParam: (lastPage) => lastPage?.lastDoc,
+//       refetchOnWindowFocus: false,
+//       retry: false,
+//       staleTime: 300000,
+//       initialPageParam: undefined,
+//     });
+
+//   return { data };
+// }
 
 export function useGetProductList(category?: string) {
-  const queryClient = useQueryClient();
-  const setProductList = useSetRecoilState(productsListAtom);
-  const setInitialProductList = useSetRecoilState(initialProductsListAtom);
-
-  const {
-    data: productsList,
-    isLoading,
-    isError,
-  } = useQuery<ProductListType[]>({
-    queryKey: ['productsList', category],
-    queryFn: getProductsList,
-  });
-
-  useEffect(() => {
-    const unsubscribe = listenProductsChange(() => {
-      queryClient.invalidateQueries({ queryKey: ['productsList', category] });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery<ProductsResponse, Error>({
+      queryKey: ['products'],
+      queryFn: (context) => getProductsList(category, context.pageParam),
+      getNextPageParam: (lastPage) => lastPage?.lastDoc || null,
+      refetchOnWindowFocus: false,
+      retry: false,
+      staleTime: 300000,
+      initialPageParam: undefined,
     });
-    return unsubscribe;
-  }, [category, queryClient]);
-
-  useEffect(() => {
-    if (productsList) {
-      // 랭킹순 정렬
-      const saleRankSortedList = [...productsList].sort(
-        (a: ProductListType, b: ProductListType) =>
-          (a.saleRank || 0) - (b.saleRank || 0)
-      );
-
-      // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
-      const updatedProductsList = saleRankSortedList.map((product) => {
-        const { price, saleRate, isSale } = product;
-        const discountedPrice = isSale
-          ? price - (price * (saleRate || 0)) / 100
-          : price;
-
-        return { ...product, discountedPrice };
-      });
-
-      // 카테고리에 해당하는 상품 정렬
-      const filteredProductList = updatedProductsList.filter((product) => {
-        if (category === 'all') {
-          return true;
-        }
-        return product.category === category;
-      });
-
-      setProductList(filteredProductList);
-      setInitialProductList(filteredProductList);
-    }
-  }, [category, productsList, setProductList, setInitialProductList]);
-
-  return { isLoading, isError, productsList, getProductsList };
+  return { data, fetchNextPage, hasNextPage, isFetchingNextPage };
 }
+
+// 기존꺼
+// export function useGetProductList(category?: string) {
+//   const queryClient = useQueryClient();
+//   const setProductList = useSetRecoilState(productsListAtom);
+//   const setInitialProductList = useSetRecoilState(initialProductsListAtom);
+
+//   const {
+//     data: productsList,
+//     isLoading,
+//     isError,
+//   } = useQuery<ProductListType[]>({
+//     queryKey: ['productsList', category],
+//     queryFn: getProductsList,
+//   });
+
+//   useEffect(() => {
+//     const unsubscribe = listenProductsChange(() => {
+//       queryClient.invalidateQueries({ queryKey: ['productsList', category] });
+//     });
+//     return unsubscribe;
+//   }, [category, queryClient]);
+
+//   useEffect(() => {
+//     if (productsList) {
+//       // 랭킹순 정렬
+//       const saleRankSortedList = [...productsList].sort(
+//         (a: ProductListType, b: ProductListType) =>
+//           (a.saleRank || 0) - (b.saleRank || 0)
+//       );
+
+//       // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
+//       const updatedProductsList = saleRankSortedList.map((product) => {
+//         const { price, saleRate, isSale } = product;
+//         const discountedPrice = isSale
+//           ? price - (price * (saleRate || 0)) / 100
+//           : price;
+
+//         return { ...product, discountedPrice };
+//       });
+
+//       // 카테고리에 해당하는 상품 정렬
+//       const filteredProductList = updatedProductsList.filter((product) => {
+//         if (category === 'all') {
+//           return true;
+//         }
+//         return product.category === category;
+//       });
+
+//       setProductList(filteredProductList);
+//       setInitialProductList(filteredProductList);
+//     }
+//   }, [category, productsList, setProductList, setInitialProductList]);
+
+//   return { isLoading, isError, productsList, getProductsList };
+// }
 
 export function useGetProductDetail(productId: number) {
   const { productsList, getProductsList } = useGetProductList();

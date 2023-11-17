@@ -10,25 +10,51 @@ type Props = {
 };
 
 export default function ProductsList({ category }: Props) {
-  const { isLoading, isError } = useGetProductList(category);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useGetProductList(category); // 원하는 카테고리를 인자로 전달합니다.
+  console.log('data', data);
+
+  const test = data?.pages.flatMap((page) => page.products); // 모든 페이지의 상품을 하나의 배열로 합칩니다.
+
+  // const { isLoading, isError } = useGetProductList(category);
   const productsList = useRecoilValue(productsListAtom);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (isError) {
-    return <div>Error loading data.</div>;
-  }
+  // if (isError) {
+  //   return <div>Error loading data.</div>;
+  // }
 
   return (
-    <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
-      {productsList &&
-        productsList.map((product) => (
-          <li key={product.productId}>
-            <ProductCard product={product} />
-          </li>
+    <div>
+      {test &&
+        test.map((product, index) => (
+          <div key={index}>
+            {/* <h2>{product.brandTitle}</h2> */}
+            <p>{product.productTitle}</p>
+            {/* 제품 정보를 원하는 대로 표시합니다. */}
+          </div>
         ))}
-    </ul>
+      <button
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || isFetchingNextPage}
+      >
+        {isFetchingNextPage
+          ? 'Loading more...'
+          : hasNextPage
+          ? 'Load More'
+          : 'Nothing more to load'}
+      </button>
+    </div>
   );
+  // <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
+  //   {productsList &&
+  //     productsList.map((product) => (
+  //       <li key={product.productId}>
+  //         <ProductCard product={product} />
+  //       </li>
+  //     ))}
+  // </ul>
 }

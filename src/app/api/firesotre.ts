@@ -16,6 +16,12 @@ import {
   arrayUnion,
   onSnapshot,
   deleteDoc,
+  DocumentSnapshot,
+  limit,
+  QueryConstraint,
+  startAfter,
+  orderBy,
+  Query,
 } from 'firebase/firestore';
 import {
   ProductListType,
@@ -30,23 +36,87 @@ import {
   monitoringLikesDataType,
   updateLikerListProps,
 } from '@/types/FirestoreType';
-// import axios from 'axios';
-// import { v4 as uuidv4 } from 'uuid';
 
 export const db = getFirestore(app);
 
-export async function getProductsList(): Promise<ProductListType[]> {
-  const snapshot = await getDocs(collection(db, 'products'));
+// export async function getProductsList(
+//   category?: string,
+//   pageParam?: DocumentData | unknown
+// ): Promise<{
+//   products: ProductListType[];
+//   lastDoc: DocumentSnapshot | undefined;
+// }> {
+//   const collectionRef = collection(db, 'products');
+//   let queryRef;
 
-  return snapshot.empty
-    ? []
-    : snapshot.docs.map((doc) => doc.data() as ProductListType);
+//   if (category) {
+//     queryRef = query(collectionRef, where('category', '==', category));
+//   } else {
+//     queryRef = query(collectionRef);
+//   }
+
+//   if (pageParam) {
+//     const lastDocRef = doc(collectionRef, (pageParam as DocumentData).id);
+//     queryRef = query(queryRef, startAfter(lastDocRef));
+//   }
+
+//   queryRef = query(queryRef, orderBy('category'), limit(8));
+
+//   const snapshot = await getDocs(queryRef);
+//   const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+
+//   if (!snapshot.empty) {
+//     return {
+//       products: snapshot.docs.map((doc) => doc.data() as ProductListType),
+//       lastDoc,
+//     };
+//   } else {
+//     console.warn('No data found in Firestore');
+//     return { products: [], lastDoc: undefined };
+//   }
+// }
+
+export async function getProductsList(
+  category?: string,
+  pageParam?: DocumentData | unknown
+): Promise<{
+  products: ProductListType[];
+  lastDoc: DocumentSnapshot | undefined;
+}> {
+  console.log('category', category);
+  const queries: QueryConstraint[] = [
+    where('category', '==', category),
+    orderBy('category'),
+    limit(8),
+  ];
+
+  if (pageParam) {
+    queries.push(startAfter(pageParam));
+  }
+
+  const productQuery = query(collection(db, 'products'), ...queries);
+  const snapshot = await getDocs(productQuery);
+  const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+
+  return {
+    products: snapshot.docs.map((doc) => doc.data() as ProductListType),
+    lastDoc,
+  };
 }
 
-export function listenProductsChange(callback: () => void) {
-  const productCollectionRef = collection(db, 'products');
-  return onSnapshot(productCollectionRef, callback);
-}
+// 기존꺼
+// export async function getProductsList(): Promise<ProductListType[]> {
+//   const snapshot = await getDocs(collection(db, 'products'));
+
+//   return snapshot.empty
+//     ? []
+//     : snapshot.docs.map((doc) => doc.data() as ProductListType);
+// }
+
+// export function listenProductsChange(callback: () => void) {
+//   const productCollectionRef = collection(db, 'products');
+//   return onSnapshot(productCollectionRef, callback);
+// }
 
 export async function getProductDetail(
   productId: number
