@@ -3,16 +3,26 @@
 import { useUserSession } from '@/hooks/useUserSession';
 import { signOut } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+import { useState } from 'react';
+
+import defaultImage from '../../public/images/initial-profile.jpg';
 
 export default function MyInfo() {
+  const [imageError, setImageError] = useState(false);
   const user = useUserSession();
 
   if (!user) {
     redirect('/');
   }
 
+  console.log('user', user);
+
   const handleSignOut = async () => {
     await signOut({ callbackUrl: `/` });
+  };
+
+  const handleError = () => {
+    setImageError(true);
   };
 
   return (
@@ -35,7 +45,13 @@ export default function MyInfo() {
             <img
               className='rounded-full w-14 h-14'
               alt='user profile'
-              src={user?.image ?? undefined}
+              src={
+                imageError
+                  ? '../../public/images/initial-profile.jpg'
+                  : user?.image ?? undefined
+              }
+              // src={user?.image ?? undefined}
+              onError={handleError}
             />
             <p className='text-xl font-semibold'>{user?.name}</p>
           </div>
