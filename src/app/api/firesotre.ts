@@ -39,43 +39,6 @@ import {
 
 export const db = getFirestore(app);
 
-// export async function getProductsList(
-//   category?: string,
-//   pageParam?: DocumentData | unknown
-// ): Promise<{
-//   products: ProductListType[];
-//   lastDoc: DocumentSnapshot | undefined;
-// }> {
-//   const collectionRef = collection(db, 'products');
-//   let queryRef;
-
-//   if (category) {
-//     queryRef = query(collectionRef, where('category', '==', category));
-//   } else {
-//     queryRef = query(collectionRef);
-//   }
-
-//   if (pageParam) {
-//     const lastDocRef = doc(collectionRef, (pageParam as DocumentData).id);
-//     queryRef = query(queryRef, startAfter(lastDocRef));
-//   }
-
-//   queryRef = query(queryRef, orderBy('category'), limit(8));
-
-//   const snapshot = await getDocs(queryRef);
-//   const lastDoc = snapshot.docs[snapshot.docs.length - 1];
-
-//   if (!snapshot.empty) {
-//     return {
-//       products: snapshot.docs.map((doc) => doc.data() as ProductListType),
-//       lastDoc,
-//     };
-//   } else {
-//     console.warn('No data found in Firestore');
-//     return { products: [], lastDoc: undefined };
-//   }
-// }
-
 export async function getProductsList(
   category?: string,
   pageParam?: DocumentData | unknown
@@ -83,10 +46,8 @@ export async function getProductsList(
   products: ProductListType[];
   lastDoc: DocumentSnapshot | undefined;
 }> {
-  console.log('category', category);
   const queries: QueryConstraint[] = [
     where('category', '==', category),
-    orderBy('category'),
     limit(8),
   ];
 

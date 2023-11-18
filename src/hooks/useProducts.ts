@@ -7,7 +7,7 @@ import {
   getProductsList,
   getProductDetail,
   getLikeCountDocId,
-  listenProductsChange,
+  // listenProductsChange,
   subscribeToCartItems,
   // fetchProductDetail,
   // fetchProducts,
@@ -32,7 +32,6 @@ import {
   mainSaleRateAtom,
 } from '@/atoms/MainListAtom';
 import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
-import { FirebaseError } from 'firebase/app';
 import { DocumentSnapshot } from 'firebase/firestore';
 
 interface ProductsResponse {
@@ -40,36 +39,70 @@ interface ProductsResponse {
   lastDoc: DocumentSnapshot | undefined;
 }
 
-// export function useGetProductList(category?: string) {
-//   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-//     useInfiniteQuery<ProductsResponse, Error>({
-//       queryKey: ['products'],
-//       queryFn: async ({ pageParam  }) => {
-//         const result = await getProductsList(category, pageParam);
-//         return result;
-//       },
-//       getNextPageParam: (lastPage) => lastPage?.lastDoc,
-//       refetchOnWindowFocus: false,
-//       retry: false,
-//       staleTime: 300000,
-//       initialPageParam: undefined,
-//     });
-
-//   return { data };
-// }
-
 export function useGetProductList(category?: string) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery<ProductsResponse, Error>({
-      queryKey: ['products'],
-      queryFn: (context) => getProductsList(category, context.pageParam),
-      getNextPageParam: (lastPage) => lastPage?.lastDoc || null,
-      refetchOnWindowFocus: false,
-      retry: false,
-      staleTime: 300000,
-      initialPageParam: undefined,
-    });
-  return { data, fetchNextPage, hasNextPage, isFetchingNextPage };
+  const setProductList = useSetRecoilState(productsListAtom);
+  const setInitialProductList = useSetRecoilState(initialProductsListAtom);
+
+  const {
+    data: productsList,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+  } = useInfiniteQuery<ProductsResponse, Error>({
+    queryKey: ['products'],
+    queryFn: (context) => getProductsList(category, context.pageParam),
+    getNextPageParam: (lastPage) => lastPage?.lastDoc || null,
+    // staleTime: 300000,
+    refetchOnWindowFocus: false,
+    retry: false,
+    initialPageParam: undefined,
+  });
+
+  useEffect(() => {
+    if (productsList) {
+      if (!productsList) return;
+      const allProductList = productsList.pages.flatMap((p) => p.products);
+
+      // 랭킹순 정렬
+      const saleRankSortedList = [...allProductList].sort(
+        (a: ProductListType, b: ProductListType) =>
+          (a.saleRank || 0) - (b.saleRank || 0)
+      );
+
+      // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
+      const updatedProductsList = saleRankSortedList.map((product) => {
+        const { price, saleRate, isSale } = product;
+        const discountedPrice = isSale
+          ? price - (price * (saleRate || 0)) / 100
+          : price;
+
+        return { ...product, discountedPrice };
+      });
+
+      // 카테고리에 해당하는 상품 정렬
+      const filteredProductList = updatedProductsList.filter((product) => {
+        if (category === 'all') {
+          return true;
+        }
+        return product.category === category;
+      });
+
+      setProductList(filteredProductList);
+      setInitialProductList(filteredProductList);
+    }
+  }, [category, productsList, setInitialProductList, setProductList]);
+
+  return {
+    isLoading,
+    isError,
+    productsList,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    getProductsList,
+  };
 }
 
 // 기존꺼
