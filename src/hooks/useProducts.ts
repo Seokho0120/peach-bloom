@@ -16,7 +16,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   productsListAtom,
   initialProductsListAtom,
-} from '@/atoms/ProductsListAtom';
+} from '@/atoms/ProductsAtom';
 import {
   ProductListType,
   ProductDetailType,

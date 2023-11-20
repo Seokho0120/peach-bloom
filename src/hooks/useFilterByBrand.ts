@@ -2,7 +2,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   initialProductsListAtom,
   productsListAtom,
-} from '@/atoms/ProductsListAtom';
+} from '@/atoms/ProductsAtom';
 import { FilterAtom } from '@/atoms/FilterAtom';
 
 export default function useFilterByBrand() {

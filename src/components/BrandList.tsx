@@ -5,7 +5,7 @@ import useFilterByBrand from '@/hooks/useFilterByBrand';
 import { useRecoilValue } from 'recoil';
 import Filter from './Filter';
 import Symbol from '../../public/images/symbol.png';
-import { productsListAtom } from '@/atoms/ProductsListAtom';
+import { productsListAtom } from '@/atoms/ProductsAtom';
 
 type Props = {
   category: string;

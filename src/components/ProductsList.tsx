@@ -1,7 +1,7 @@
 'use client';
 
 import { useRecoilValue } from 'recoil';
-import { productsListAtom } from '@/atoms/ProductsListAtom';
+import { productsListAtom } from '@/atoms/ProductsAtom';
 import { useGetProductList } from '@/hooks/useProducts';
 import ProductCard from './ProductCard';
 import ScrollToTopBtn from './ScrollToTopBtn';
