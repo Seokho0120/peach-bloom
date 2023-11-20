@@ -19,7 +19,7 @@ export default async function SignInPage({
   }
 
   const providers = (await getProviders()) ?? {};
-
+  console.log('providers', providers);
   return (
     <section className='mx-52'>
       <Signin providers={providers} callbackUrl={callbackUrl ?? '/'} />

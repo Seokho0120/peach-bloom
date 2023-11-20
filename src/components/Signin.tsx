@@ -9,8 +9,6 @@ type Props = {
   callbackUrl: string;
 };
 
-// min-h-screen 설정하기
-
 export default function Signin({ providers, callbackUrl }: Props) {
   return (
     <div className='flex flex-col justify-center items-center'>
