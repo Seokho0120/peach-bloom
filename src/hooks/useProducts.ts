@@ -1,4 +1,8 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
@@ -16,7 +20,6 @@ import {
   productsListAtom,
   productDetailAtom,
   initialProductsListAtom,
-  categoryAtom,
 } from '@/atoms/ProductsListAtom';
 import {
   ProductListType,
@@ -33,10 +36,10 @@ import {
   mainSaleRateAtom,
 } from '@/atoms/MainListAtom';
 
-export function useGetProductList(category?: string) {
+export function useGetProductList(category: string) {
+  const queryClient = useQueryClient();
   const setProductList = useSetRecoilState(productsListAtom);
   const setInitialProductList = useSetRecoilState(initialProductsListAtom);
-  const setCategory = useSetRecoilState(categoryAtom);
   const {
     data: productsList,
     fetchNextPage,
@@ -52,13 +55,12 @@ export function useGetProductList(category?: string) {
     refetchOnWindowFocus: false,
     retry: false,
     initialPageParam: undefined,
+    enabled: !!category,
   });
 
   useEffect(() => {
     if (productsList && category) {
       if (!productsList) return;
-      setCategory(category);
-
       const allProductList = productsList.pages.flatMap((p) => p.products);
 
       // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
@@ -74,7 +76,7 @@ export function useGetProductList(category?: string) {
       // 카테고리에 해당하는 상품 정렬
       const filteredProductList = updatedProductsList.filter((product) => {
         if (category === 'all') {
-          return true;
+          return updatedProductsList;
         }
         return product.category === category;
       });
@@ -82,13 +84,7 @@ export function useGetProductList(category?: string) {
       setProductList(filteredProductList);
       setInitialProductList(filteredProductList);
     }
-  }, [
-    category,
-    productsList,
-    setInitialProductList,
-    setProductList,
-    setCategory,
-  ]);
+  }, [category, productsList, setInitialProductList, setProductList]);
 
   return {
     isLoading,

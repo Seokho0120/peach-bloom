@@ -1,5 +1,4 @@
 import SearchList from '@/components/SearchList';
-import { useGetProductList } from '@/hooks/useProducts';
 
 type Props = {
   params: {

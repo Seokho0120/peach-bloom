@@ -15,13 +15,11 @@ import {
   arrayRemove,
   arrayUnion,
   onSnapshot,
-  deleteDoc,
   DocumentSnapshot,
   limit,
   QueryConstraint,
   startAfter,
   orderBy,
-  Query,
 } from 'firebase/firestore';
 import {
   ProductListType,
@@ -39,7 +37,7 @@ import {
 
 export const db = getFirestore(app);
 
-// 기존꺼
+// 모든 데이터 필터 x
 export async function getAllProductsList(): Promise<ProductListType[]> {
   const snapshot = await getDocs(collection(db, 'products'));
 
@@ -48,6 +46,7 @@ export async function getAllProductsList(): Promise<ProductListType[]> {
     : snapshot.docs.map((doc) => doc.data() as ProductListType);
 }
 
+// 모든 데이터 필터 o
 export async function getProductsList(
   category?: string,
   pageParam?: DocumentData | unknown
@@ -55,19 +54,21 @@ export async function getProductsList(
   products: ProductListType[];
   lastDoc: DocumentSnapshot | undefined;
 }> {
+  const baseQuery = collection(db, 'products');
+  const categoryConstraint =
+    category !== 'all' && category ? where('category', '==', category) : null;
+  const pageConstraint = pageParam ? startAfter(pageParam) : null;
+
   const queries: QueryConstraint[] = [
-    where('category', '==', category),
+    categoryConstraint,
     orderBy('saleRank'),
     limit(8),
-  ];
+    pageConstraint,
+  ].filter(Boolean) as QueryConstraint[]; // 배열의 null값들 제거
 
-  if (pageParam) {
-    queries.push(startAfter(pageParam));
-  }
-
-  const productQuery = query(collection(db, 'products'), ...queries);
+  const productQuery = query(baseQuery, ...queries);
   const snapshot = await getDocs(productQuery);
-  const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+  const lastDoc = snapshot.docs[snapshot.docs.length - 1]; // 마지막 문서
 
   return {
     products: snapshot.docs.map((doc) => doc.data() as ProductListType),
@@ -75,10 +76,10 @@ export async function getProductsList(
   };
 }
 
-export function listenProductsChange(callback: () => void) {
-  const productCollectionRef = collection(db, 'products');
-  return onSnapshot(productCollectionRef, callback);
-}
+// export function listenProductsChange(callback: () => void) {
+//   const productCollectionRef = collection(db, 'products');
+//   return onSnapshot(productCollectionRef, callback);
+// }
 
 export async function getProductDetail(
   productId: number
