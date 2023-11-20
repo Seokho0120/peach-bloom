@@ -10,6 +10,8 @@ type Props = {
 };
 
 export default function Signin({ providers, callbackUrl }: Props) {
+  console.log('providers', providers);
+  console.log('callbackUrl', callbackUrl);
   return (
     <div className='flex flex-col justify-center items-center'>
       <Image
