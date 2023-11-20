@@ -20,7 +20,7 @@ export default function BrandList({ category }: Props) {
   const filterByBrand = useFilterByBrand();
 
   return (
-    <section className='mb-6'>
+    <article className='mb-6'>
       <h2 className='font-bold text-4xl text-slate-600'>
         <Image
           src={Symbol}
@@ -50,6 +50,6 @@ export default function BrandList({ category }: Props) {
           </li>
         ))}
       </ul>
-    </section>
+    </article>
   );
 }

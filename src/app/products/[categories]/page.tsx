@@ -9,9 +9,9 @@ type Props = {
 
 export default function ProductsListPage({ params: { categories } }: Props) {
   return (
-    <div className='mx-52'>
+    <section className='mx-52'>
       <BrandList category={categories} />
       <ProductsList category={categories} />
-    </div>
+    </section>
   );
 }

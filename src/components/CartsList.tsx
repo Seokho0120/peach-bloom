@@ -13,6 +13,7 @@ import PriceCard from './PriceCard';
 import PlusIcon from './ui/PlusIcon';
 import EqualIcon from './ui/EqualIcon';
 import { useGetCartItems } from '@/hooks/useProducts';
+import GridSpinner from './ui/GridSpinner';
 
 export default function CartsList() {
   const SHIPPING = 3000;
@@ -24,16 +25,18 @@ export default function CartsList() {
   const totalQuantity = useRecoilValue(TotalQuantitySelector);
   const hasCartItem = cartItem && cartItem.length > 0;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error loading data.</div>;
-  }
-
   return (
     <article className='min-h-screen'>
+      {isLoading && (
+        <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
+          <GridSpinner />
+        </div>
+      )}
+      {isError && (
+        <p className='w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold'>
+          Error loading data.
+        </p>
+      )}
       <h2 className='font-bold text-4xl text-slate-600 mb-6'>
         장바구니
         <div className='border-b border-navypoint mt-4' />

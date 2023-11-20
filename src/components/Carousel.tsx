@@ -18,6 +18,7 @@ import { useGetMainList } from '@/hooks/useProducts';
 import ProductCard from './ProductCard';
 import Symbol from '../../public/images/symbol.png';
 import NormalBtn from './NormalBtn';
+import GridSpinner from './ui/GridSpinner';
 
 export default function Carousel() {
   const { isError, isLoading } = useGetMainList();
@@ -33,16 +34,18 @@ export default function Carousel() {
     }
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error loading data.</div>;
-  }
-
   return (
     <section className='flex flex-col gap-20'>
+      {isLoading && (
+        <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
+          <GridSpinner />
+        </div>
+      )}
+      {isError && (
+        <p className='w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold'>
+          Error loading data.
+        </p>
+      )}
       <div>
         <div className='flex flex-col items-center justify-center mb-4'>
           <h2 className='text-3xl font-bold text-pinkpoint'>BEST</h2>

@@ -24,6 +24,7 @@ import {
   updateLikerList,
 } from '@/app/api/firesotre';
 import { DocumentReference } from 'firebase/firestore';
+import GridSpinner from './ui/GridSpinner';
 
 type Props = {
   productId: number;
@@ -182,16 +183,18 @@ export default function ProductDetail({ productId }: Props) {
     };
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error loading data.</div>;
-  }
-
   return (
     <ul className='flex flex-col'>
+      {isLoading && (
+        <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
+          <GridSpinner />
+        </div>
+      )}
+      {isError && (
+        <p className='w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold'>
+          Error loading data.
+        </p>
+      )}
       {arrProductDetail &&
         arrProductDetail.map(
           ({
