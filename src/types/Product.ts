@@ -22,7 +22,7 @@ export interface ProductDetailType {
   docId?: string;
 }
 
-export interface SelectedProductDetail extends ProductListType {
+export interface SelectedProductDetailType extends ProductListType {
   description: string;
   ingredients: string;
   howToUse: string;

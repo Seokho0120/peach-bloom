@@ -12,17 +12,20 @@ import {
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   productsListAtom,
   productDetailAtom,
   initialProductsListAtom,
+  categoryAtom,
 } from '@/atoms/ProductsListAtom';
 import {
   ProductListType,
   ProductDetailType,
   cartItemType,
+  SelectedProductDetailType,
 } from '../types/Product';
 import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
 import { searchItemAtom } from '@/atoms/SearchListAtom';
@@ -33,6 +36,7 @@ import {
 } from '@/atoms/MainListAtom';
 import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
 import { DocumentSnapshot } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
 
 interface ProductsResponse {
   products: ProductListType[];
@@ -42,7 +46,7 @@ interface ProductsResponse {
 export function useGetProductList(category?: string) {
   const setProductList = useSetRecoilState(productsListAtom);
   const setInitialProductList = useSetRecoilState(initialProductsListAtom);
-
+  const setCategory = useSetRecoilState(categoryAtom);
   const {
     data: productsList,
     fetchNextPage,
@@ -51,18 +55,20 @@ export function useGetProductList(category?: string) {
     isLoading,
     isError,
   } = useInfiniteQuery<ProductsResponse, Error>({
-    queryKey: ['products'],
+    queryKey: ['products', category],
     queryFn: (context) => getProductsList(category, context.pageParam),
     getNextPageParam: (lastPage) => lastPage?.lastDoc || null,
-    // staleTime: 300000,
+    staleTime: 300000,
     refetchOnWindowFocus: false,
     retry: false,
     initialPageParam: undefined,
   });
 
   useEffect(() => {
-    if (productsList) {
+    if (productsList && category) {
       if (!productsList) return;
+      setCategory(category);
+
       const allProductList = productsList.pages.flatMap((p) => p.products);
 
       // 랭킹순 정렬
@@ -92,7 +98,13 @@ export function useGetProductList(category?: string) {
       setProductList(filteredProductList);
       setInitialProductList(filteredProductList);
     }
-  }, [category, productsList, setInitialProductList, setProductList]);
+  }, [
+    category,
+    productsList,
+    setInitialProductList,
+    setProductList,
+    setCategory,
+  ]);
 
   return {
     isLoading,
@@ -162,12 +174,14 @@ export function useGetProductList(category?: string) {
 // }
 
 export function useGetProductDetail(productId: number) {
-  const { productsList, getProductsList } = useGetProductList();
-  const isLoggedIn = useRecoilValue(LoginStatusAtom);
   const searchProductList = useRecoilValue(searchItemAtom);
   const mainRankingList = useRecoilValue(mainRankingAtom);
   const mainSaleRateList = useRecoilValue(mainSaleRateAtom);
   const mainIsNewList = useRecoilValue(mainIsNewAtom);
+  const productsList = useRecoilValue(productsListAtom);
+  const [localProductDetail, setLocalProductDetail] =
+    useState<SelectedProductDetailType>();
+  const router = useRouter();
 
   const {
     data: productDetail,
@@ -199,11 +213,33 @@ export function useGetProductDetail(productId: number) {
     : null;
 
   useEffect(() => {
-    getProductsList();
-  }, [getProductsList, isLoggedIn]);
+    if (selectedProductDetail) {
+      localStorage.setItem(
+        `productDetail_${productId}`,
+        JSON.stringify(selectedProductDetail)
+      );
+    }
+  }, [productId, selectedProductDetail]);
+
+  useEffect(() => {
+    const savedProductDetail = localStorage.getItem(
+      `productDetail_${productId}`
+    );
+    if (savedProductDetail) {
+      setLocalProductDetail(JSON.parse(savedProductDetail));
+    }
+  }, [productId]);
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem(`productDetail_${productId}`);
+    };
+  }, [productId]);
 
   return {
-    productDetail: selectedProductDetail,
+    productDetail: localProductDetail
+      ? localProductDetail
+      : selectedProductDetail,
     isLoading,
     isError,
   };

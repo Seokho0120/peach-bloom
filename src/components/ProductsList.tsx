@@ -17,6 +17,7 @@ export default function ProductsList({ category }: Props) {
 
   // const { isLoading, isError } = useGetProductList(category);
   const productsList = useRecoilValue(productsListAtom);
+  // console.log('productsList', productsList);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -55,6 +56,16 @@ export default function ProductsList({ category }: Props) {
             <ProductCard product={product} />
           </li>
         ))}
+      <button
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || isFetchingNextPage}
+      >
+        {isFetchingNextPage
+          ? 'Loading more...'
+          : hasNextPage
+          ? 'Load More'
+          : 'Nothing more to load'}
+      </button>
     </ul>
   );
 }

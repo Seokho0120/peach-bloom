@@ -38,6 +38,7 @@ export default function ProductDetail({ productId }: Props) {
 
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);
+
   const arrProductDetail: arrProductDetailType[] = productDetail
     ? [{ ...productDetail }]
     : [];

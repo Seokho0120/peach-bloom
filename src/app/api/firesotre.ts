@@ -48,6 +48,7 @@ export async function getProductsList(
 }> {
   const queries: QueryConstraint[] = [
     where('category', '==', category),
+    orderBy('saleRank'),
     limit(8),
   ];
 

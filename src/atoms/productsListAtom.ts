@@ -27,3 +27,8 @@ export const discountedPriceAtom = atom<number>({
   key: 'discountedPriceAtom',
   default: 0,
 });
+
+export const categoryAtom = atom<string>({
+  key: 'categoryAtom',
+  default: '',
+});
