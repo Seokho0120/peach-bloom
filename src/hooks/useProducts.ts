@@ -1,13 +1,12 @@
 import {
+  keepPreviousData,
   useInfiniteQuery,
   useQuery,
-  useQueryClient,
 } from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
   getLikeCountDocId,
-  // listenProductsChange,
   subscribeToCartItems,
   getAllProductsList,
   // fetchProductDetail,
@@ -15,7 +14,7 @@ import {
 } from '../app/api/firesotre';
 import { useEffect, useMemo, useState } from 'react';
 
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   productsListAtom,
   productDetailAtom,
@@ -37,9 +36,9 @@ import {
 } from '@/atoms/MainListAtom';
 
 export function useGetProductList(category: string) {
-  const queryClient = useQueryClient();
   const setProductList = useSetRecoilState(productsListAtom);
   const setInitialProductList = useSetRecoilState(initialProductsListAtom);
+
   const {
     data: productsList,
     fetchNextPage,
@@ -47,6 +46,7 @@ export function useGetProductList(category: string) {
     isFetchingNextPage,
     isLoading,
     isError,
+    isFetching,
   } = useInfiniteQuery<ProductsResponse, Error>({
     queryKey: ['products', category],
     queryFn: (context) => getProductsList(category, context.pageParam),
@@ -91,6 +91,7 @@ export function useGetProductList(category: string) {
     isError,
     productsList,
     fetchNextPage,
+    isFetching,
     hasNextPage,
     isFetchingNextPage,
     getProductsList,
@@ -114,6 +115,7 @@ export function useGetProductDetail(productId: number) {
     queryKey: ['productDetail', productId],
     queryFn: () => getProductDetail(productId),
     refetchInterval: 1000,
+    placeholderData: keepPreviousData,
   });
 
   const selectedProductDetail = useMemo(() => {

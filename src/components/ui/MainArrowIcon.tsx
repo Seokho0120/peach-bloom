@@ -1,5 +1,5 @@
 import { FiArrowUp } from 'react-icons/fi';
 
 export default function MainArrowIcon() {
-  return <FiArrowUp className='w-7 h-7 ' strokeWidt={3} />;
+  return <FiArrowUp className='w-7 h-7' />;
 }
