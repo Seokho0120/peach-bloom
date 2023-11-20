@@ -32,7 +32,7 @@ export default function ScrollToTopBtn() {
       {showToTop && (
         <button
           onClick={toTop}
-          className='fixed flex items-center justify-center right-[4rem] bottom-[5rem] w-[3rem] h-[3rem] bg-navypoint text-white hover:brightness-125 rounded-full'
+          className='fixed flex items-center justify-center right-[4rem] bottom-[5rem] w-[3rem] h-[3rem] bg-pinkpoint text-white hover:brightness-110 rounded-full'
         >
           <MainArrowIcon />
         </button>
