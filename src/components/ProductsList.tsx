@@ -13,11 +13,7 @@ export default function ProductsList({ category }: Props) {
   const { fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
     useGetProductList(category);
 
-  // const test = data?.pages.flatMap((page) => page.products);
-
-  // const { isLoading, isError } = useGetProductList(category);
   const productsList = useRecoilValue(productsListAtom);
-  // console.log('productsList', productsList);
 
   if (isLoading) {
     return <div>Loading...</div>;

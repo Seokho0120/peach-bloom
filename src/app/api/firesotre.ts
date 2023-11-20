@@ -39,6 +39,15 @@ import {
 
 export const db = getFirestore(app);
 
+// 기존꺼
+export async function getAllProductsList(): Promise<ProductListType[]> {
+  const snapshot = await getDocs(collection(db, 'products'));
+
+  return snapshot.empty
+    ? []
+    : snapshot.docs.map((doc) => doc.data() as ProductListType);
+}
+
 export async function getProductsList(
   category?: string,
   pageParam?: DocumentData | unknown
@@ -66,19 +75,10 @@ export async function getProductsList(
   };
 }
 
-// 기존꺼
-// export async function getProductsList(): Promise<ProductListType[]> {
-//   const snapshot = await getDocs(collection(db, 'products'));
-
-//   return snapshot.empty
-//     ? []
-//     : snapshot.docs.map((doc) => doc.data() as ProductListType);
-// }
-
-// export function listenProductsChange(callback: () => void) {
-//   const productCollectionRef = collection(db, 'products');
-//   return onSnapshot(productCollectionRef, callback);
-// }
+export function listenProductsChange(callback: () => void) {
+  const productCollectionRef = collection(db, 'products');
+  return onSnapshot(productCollectionRef, callback);
+}
 
 export async function getProductDetail(
   productId: number

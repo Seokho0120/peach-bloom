@@ -1,14 +1,11 @@
-import {
-  useInfiniteQuery,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   getProductsList,
   getProductDetail,
   getLikeCountDocId,
   // listenProductsChange,
   subscribeToCartItems,
+  getAllProductsList,
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
@@ -224,7 +221,7 @@ export function useGetSearchList(keyword: string) {
     isError,
   } = useQuery<ProductListType[]>({
     queryKey: ['searchList', keyword],
-    queryFn: getProductsList,
+    queryFn: getAllProductsList,
   });
 
   useEffect(() => {
@@ -255,7 +252,7 @@ export function useGetMainList() {
     isError,
   } = useQuery<ProductListType[]>({
     queryKey: ['productsList'],
-    queryFn: getProductsList,
+    queryFn: getAllProductsList,
   });
 
   useEffect(() => {
