@@ -12,7 +12,7 @@ import {
   // fetchProductDetail,
   // fetchProducts,
 } from '../app/api/firesotre';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -26,6 +26,7 @@ import {
   ProductDetailType,
   cartItemType,
   SelectedProductDetailType,
+  ProductsResponse,
 } from '../types/Product';
 import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
 import { searchItemAtom } from '@/atoms/SearchListAtom';
@@ -34,14 +35,6 @@ import {
   mainRankingAtom,
   mainSaleRateAtom,
 } from '@/atoms/MainListAtom';
-import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
-import { DocumentSnapshot } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
-
-interface ProductsResponse {
-  products: ProductListType[];
-  lastDoc: DocumentSnapshot | undefined;
-}
 
 export function useGetProductList(category?: string) {
   const setProductList = useSetRecoilState(productsListAtom);
@@ -71,14 +64,8 @@ export function useGetProductList(category?: string) {
 
       const allProductList = productsList.pages.flatMap((p) => p.products);
 
-      // 랭킹순 정렬
-      const saleRankSortedList = [...allProductList].sort(
-        (a: ProductListType, b: ProductListType) =>
-          (a.saleRank || 0) - (b.saleRank || 0)
-      );
-
       // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
-      const updatedProductsList = saleRankSortedList.map((product) => {
+      const updatedProductsList = allProductList.map((product) => {
         const { price, saleRate, isSale } = product;
         const discountedPrice = isSale
           ? price - (price * (saleRate || 0)) / 100
@@ -117,62 +104,6 @@ export function useGetProductList(category?: string) {
   };
 }
 
-// 기존꺼
-// export function useGetProductList(category?: string) {
-//   const queryClient = useQueryClient();
-//   const setProductList = useSetRecoilState(productsListAtom);
-//   const setInitialProductList = useSetRecoilState(initialProductsListAtom);
-
-//   const {
-//     data: productsList,
-//     isLoading,
-//     isError,
-//   } = useQuery<ProductListType[]>({
-//     queryKey: ['productsList', category],
-//     queryFn: getProductsList,
-//   });
-
-//   useEffect(() => {
-//     const unsubscribe = listenProductsChange(() => {
-//       queryClient.invalidateQueries({ queryKey: ['productsList', category] });
-//     });
-//     return unsubscribe;
-//   }, [category, queryClient]);
-
-//   useEffect(() => {
-//     if (productsList) {
-//       // 랭킹순 정렬
-//       const saleRankSortedList = [...productsList].sort(
-//         (a: ProductListType, b: ProductListType) =>
-//           (a.saleRank || 0) - (b.saleRank || 0)
-//       );
-
-//       // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
-//       const updatedProductsList = saleRankSortedList.map((product) => {
-//         const { price, saleRate, isSale } = product;
-//         const discountedPrice = isSale
-//           ? price - (price * (saleRate || 0)) / 100
-//           : price;
-
-//         return { ...product, discountedPrice };
-//       });
-
-//       // 카테고리에 해당하는 상품 정렬
-//       const filteredProductList = updatedProductsList.filter((product) => {
-//         if (category === 'all') {
-//           return true;
-//         }
-//         return product.category === category;
-//       });
-
-//       setProductList(filteredProductList);
-//       setInitialProductList(filteredProductList);
-//     }
-//   }, [category, productsList, setProductList, setInitialProductList]);
-
-//   return { isLoading, isError, productsList, getProductsList };
-// }
-
 export function useGetProductDetail(productId: number) {
   const searchProductList = useRecoilValue(searchItemAtom);
   const mainRankingList = useRecoilValue(mainRankingAtom);
@@ -181,7 +112,6 @@ export function useGetProductDetail(productId: number) {
   const productsList = useRecoilValue(productsListAtom);
   const [localProductDetail, setLocalProductDetail] =
     useState<SelectedProductDetailType>();
-  const router = useRouter();
 
   const {
     data: productDetail,
@@ -193,48 +123,53 @@ export function useGetProductDetail(productId: number) {
     refetchInterval: 1000,
   });
 
-  const productLists = [
-    productsList,
-    searchProductList,
+  const selectedProductDetail = useMemo(() => {
+    const listCollection = [
+      productsList,
+      searchProductList,
+      mainRankingList,
+      mainSaleRateList,
+      mainIsNewList,
+    ];
+
+    const findProductById = (list: ProductListType[]) =>
+      list.find((product) => product.productId === productId);
+
+    const filteredProductDetail = listCollection
+      .map(findProductById)
+      .find((product) => product && productDetail);
+
+    return filteredProductDetail
+      ? { ...filteredProductDetail, ...productDetail }
+      : null;
+  }, [
+    mainIsNewList,
     mainRankingList,
     mainSaleRateList,
-    mainIsNewList,
-  ];
-
-  const findProductById = (list: ProductListType[] | undefined) =>
-    list && list.find((product) => product.productId === productId);
-
-  const filteredProductDetail = productLists
-    .map(findProductById)
-    .find((product) => product && productDetail);
-
-  const selectedProductDetail = filteredProductDetail
-    ? { ...filteredProductDetail, ...productDetail }
-    : null;
-
-  useEffect(() => {
-    if (selectedProductDetail) {
-      localStorage.setItem(
-        `productDetail_${productId}`,
-        JSON.stringify(selectedProductDetail)
-      );
-    }
-  }, [productId, selectedProductDetail]);
+    productDetail,
+    productId,
+    productsList,
+    searchProductList,
+  ]);
 
   useEffect(() => {
     const savedProductDetail = localStorage.getItem(
       `productDetail_${productId}`
     );
+
     if (savedProductDetail) {
       setLocalProductDetail(JSON.parse(savedProductDetail));
+    } else if (selectedProductDetail) {
+      localStorage.setItem(
+        `productDetail_${productId}`,
+        JSON.stringify(selectedProductDetail)
+      );
     }
-  }, [productId]);
 
-  useEffect(() => {
     return () => {
       localStorage.removeItem(`productDetail_${productId}`);
     };
-  }, [productId]);
+  }, [productId, selectedProductDetail]);
 
   return {
     productDetail: localProductDetail

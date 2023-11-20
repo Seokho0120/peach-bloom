@@ -1,3 +1,10 @@
+import { DocumentSnapshot } from 'firebase/firestore';
+
+export interface ProductsResponse {
+  products: ProductListType[];
+  lastDoc: DocumentSnapshot | undefined;
+}
+
 export interface ProductListType {
   brandTitle: string;
   category: string;
