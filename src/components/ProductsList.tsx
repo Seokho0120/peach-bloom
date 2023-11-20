@@ -41,11 +41,7 @@ export default function ProductsList({ category }: Props) {
           disabled={!hasNextPage}
           className='flex justify-center p-1 rounded-lg font-semibold bg-navypoint hover:bg-pinkpoint text-white w-1/3'
         >
-          {isFetchingNextPage
-            ? '로딩 중...'
-            : hasNextPage
-            ? '더 보기'
-            : 'Nothing more to load'}
+          {isFetchingNextPage ? '로딩 중...' : hasNextPage && '더 보기'}
         </button>
       )}
     </div>
