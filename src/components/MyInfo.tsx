@@ -45,10 +45,9 @@ export default function MyInfo() {
               alt='user profile'
               src={
                 imageError
-                  ? '../../public/images/initial-profile.jpg'
+                  ? 'images/initial-profile.jpg'
                   : user?.image ?? undefined
               }
-              // src={user?.image ?? undefined}
               onError={handleError}
             />
             <p className='text-xl font-semibold'>{user?.name}</p>

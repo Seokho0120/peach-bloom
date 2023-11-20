@@ -76,11 +76,6 @@ export async function getProductsList(
   };
 }
 
-// export function listenProductsChange(callback: () => void) {
-//   const productCollectionRef = collection(db, 'products');
-//   return onSnapshot(productCollectionRef, callback);
-// }
-
 export async function getProductDetail(
   productId: number
 ): Promise<ProductDetailType> {
