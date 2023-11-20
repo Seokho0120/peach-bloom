@@ -9,21 +9,17 @@ import {
   getLikeCountDocId,
   subscribeToCartItems,
   getAllProductsList,
-  // fetchProductDetail,
-  // fetchProducts,
 } from '../app/api/firesotre';
 import { useEffect, useMemo, useState } from 'react';
 
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   productsListAtom,
-  productDetailAtom,
   initialProductsListAtom,
 } from '@/atoms/ProductsListAtom';
 import {
   ProductListType,
   ProductDetailType,
-  cartItemType,
   SelectedProductDetailType,
   ProductsResponse,
 } from '../types/Product';
@@ -281,31 +277,3 @@ export function useGetMainList() {
 
   return { isLoading, isError };
 }
-
-// // 더미데이터 리스트 불러오기
-// export function useProductsList(category: string) {
-//   const { data, isError, isLoading } = useQuery<ProductListType[]>({
-//     queryKey: ['productsList'],
-//     queryFn: fetchProducts,
-//   });
-
-//   const filteredProductsList = data?.filter(
-//     (product) => product.category === category
-//   );
-
-//   return { productsList: filteredProductsList, isError, isLoading };
-// }
-
-// // 더미데이터 디테일 불러오기
-// export function useProductDetail(productId: number) {
-//   const { data, isError, isLoading } = useQuery<ProductDetailType[]>({
-//     queryKey: ['productsDetail'],
-//     queryFn: fetchProductDetail,
-//   });
-
-//   const filteredProductDetail = data?.filter(
-//     (product) => product.productId === productId
-//   );
-
-//   return { productDetail: filteredProductDetail, isError, isLoading };
-// }

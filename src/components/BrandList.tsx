@@ -1,11 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { productsListAtom } from '@/atoms/ProductsListAtom';
 import useFilterByBrand from '@/hooks/useFilterByBrand';
 import { useRecoilValue } from 'recoil';
 import Filter from './Filter';
 import Symbol from '../../public/images/symbol.png';
+import { productsListAtom } from '@/atoms/ProductsListAtom';
 
 type Props = {
   category: string;
