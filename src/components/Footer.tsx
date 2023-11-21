@@ -2,14 +2,20 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    // <footer className='mx-auto mt-auto w-full flex flex-col justify-center items-center py-6 text-sm'>
     <footer className='mx-auto flex h-fit min-w-[360px] flex-col items-center justify-center gap-y-5 bg-slate-700 py-12 text-slate-400 mt-36 px-32'>
       <section className='flex pl-2 items-center gap-10 border-b border-slate-400 w-full font-semibold text-lg p-4'>
         <p className='cursor-pointer'>
-          <Link href='https://github.com/Seokho0120/peach-bloom'>GitHub</Link>
+          <Link
+            href='https://github.com/Seokho0120/peach-bloom'
+            target='_blank'
+          >
+            GitHub
+          </Link>
         </p>
         <p className='cursor-pointer'>
-          <Link href='https://river-dev.vercel.app/'>Blog</Link>
+          <Link href='https://river-dev.vercel.app/' target='_blank'>
+            Blog
+          </Link>
         </p>
       </section>
 
@@ -22,22 +28,25 @@ export default function Footer() {
         <p>
           홈페이지:{' '}
           <Link
-            href='/'
-            className='underline transition-all hover:text-zinc-800'
+            href='https://peach-bloom.vercel.app/'
+            className='underline transition-all hover:text-slate-200'
+            target='_blank'
           >
-            완성되면 쓰기
+            peach-bloom.co.kr
           </Link>
           {' / '}
           <Link
             href='/'
-            className='underline transition-all hover:text-zinc-800'
+            className='underline transition-all hover:text-slate-200'
+            target='_blank'
           >
             이용 약관
           </Link>
           {' / '}
           <Link
             href='/'
-            className='underline transition-all hover:text-zinc-800'
+            className='underline transition-all hover:text-slate-200'
+            target='_blank'
           >
             개인정보 처리 방침
           </Link>
