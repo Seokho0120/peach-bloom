@@ -2,12 +2,13 @@
 
 import { cartItemType } from '@/types/Product';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
 import { removeFromCart, updateCartItem } from '@/app/api/firesotre';
 import { useUserSession } from '@/hooks/useUserSession';
 import CancelIcon from './ui/CancelIcon';
+import CartQuantityControl from './CartQuantityControl';
 
 type Props = {
   product: cartItemType;
@@ -20,32 +21,36 @@ export default function CartItem({ product }: Props) {
   const userId = user!.id;
 
   const [quantityCount, setQuantityCount] = useState<number>(quantity);
+  const [inCart, setInCart] = useState(true);
+  console.log('inCart', inCart);
   const discountedPrice = useDisCountedPrice({
     price: price,
     priceCount: quantityCount,
+    inCart,
   });
 
   const handleMinus = () => {
     setQuantityCount((prev: number) => {
-      const newQuantityCount = prev > 1 ? prev - 1 : 1;
-      updateCartItem({
-        userId,
-        product: { ...product, quantity: newQuantityCount },
-      });
-      return newQuantityCount;
+      return prev > 1 ? prev - 1 : 1;
     });
   };
 
   const handlePlus = () => {
     setQuantityCount((prev: number) => {
-      const newQuantityCount = prev + 1;
-      updateCartItem({
-        userId,
-        product: { ...product, quantity: newQuantityCount },
-      });
-      return newQuantityCount;
+      return prev + 1;
     });
   };
+
+  useEffect(() => {
+    updateCartItem({
+      userId,
+      product: {
+        ...product,
+        quantity: quantityCount,
+        price: discountedPrice!,
+      },
+    });
+  }, [quantityCount, discountedPrice, userId, product]);
 
   const handleRemove = () => {
     removeFromCart({ userId, productId });

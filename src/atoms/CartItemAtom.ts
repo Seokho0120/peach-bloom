@@ -27,12 +27,23 @@ export const TotalPriceSelector = selector({
   key: 'TotalPriceSelector',
   get: ({ get }) => {
     const CartItem = get(CartItemUpdateAtom);
-    return CartItem.reduce(
-      (prev, current) => prev + current.price * current.quantity,
-      0
-    );
+    return CartItem.reduce((prev, current) => {
+      const singlePrice = Math.floor(current.price / current.quantity);
+      return prev + singlePrice * current.quantity;
+    }, 0);
   },
 });
+
+// export const TotalPriceSelector = selector({
+//   key: 'TotalPriceSelector',
+//   get: ({ get }) => {
+//     const CartItem = get(CartItemUpdateAtom);
+//     return CartItem.reduce(
+//       (prev, current) => prev + current.price * current.quantity,
+//       0
+//     );
+//   },
+// });
 
 export const TotalQuantitySelector = selector({
   key: 'TotalQuantitySelector',

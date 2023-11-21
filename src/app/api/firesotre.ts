@@ -250,6 +250,7 @@ export async function getLikedProducst(userId: number) {
 }
 
 export async function addToCart(cartItem: addToCartType[]) {
+  console.log('cartItem???', cartItem);
   await Promise.all(
     cartItem.map(async (item) => {
       const {
@@ -271,9 +272,18 @@ export async function addToCart(cartItem: addToCartType[]) {
       };
 
       if (docSnap.exists()) {
-        await updateDoc(userCartRef, {
-          items: arrayUnion(newCartItem),
-        });
+        const existingCartItemList = docSnap.data().items;
+        const existingCartItemIndex = existingCartItemList.findIndex(
+          (i: any) => i.productId === productId
+        );
+
+        if (existingCartItemIndex !== -1) {
+          existingCartItemList[existingCartItemIndex] = newCartItem;
+        } else {
+          existingCartItemList.push(newCartItem);
+        }
+
+        await updateDoc(userCartRef, { items: existingCartItemList });
       } else {
         await setDoc(userCartRef, { items: [newCartItem] });
       }
@@ -326,14 +336,14 @@ export async function updateCartItem({ userId, product }: cartUpdateType) {
 
   const items = userCartSanp.data().items;
 
-  const updatedItems = items.map((item: cartItemType) => {
+  const updatedItems = await items.map((item: cartItemType) => {
     if (item.productId === product.productId) {
-      return { ...item, quantity: product.quantity };
+      return { ...item, quantity: product.quantity, price: product.price };
     } else {
       return item;
     }
   });
-
+  console.log('updatedItems', updatedItems);
   await updateDoc(userCartRef, {
     items: updatedItems,
   });

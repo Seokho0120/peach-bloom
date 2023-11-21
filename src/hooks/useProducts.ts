@@ -23,7 +23,7 @@ import {
   SelectedProductDetailType,
   ProductsResponse,
 } from '../types/Product';
-import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
+import { CartItemAtom, CartItemUpdateAtom } from '@/atoms/CartItemAtom';
 import { searchItemAtom } from '@/atoms/SearchListAtom';
 import {
   mainIsNewAtom,

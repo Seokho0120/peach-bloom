@@ -53,7 +53,7 @@ export default function ProductDetail({ productId }: Props) {
   const [like, setLike] = useState<number>(0);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [likerList, setLikerList] = useState<string[]>([]);
-  const [cartContent, setCartContent] = useState<addToCartType>();
+  const [newProductDetail, setNewProductDetail] = useState<addToCartType>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [likesDocRef, setLikesDocRef] = useState<
     DocumentReference | undefined
@@ -133,7 +133,8 @@ export default function ProductDetail({ productId }: Props) {
           imageUrl: productDetail.imageUrl,
         },
       };
-      setCartContent(newCartContent);
+
+      setNewProductDetail(newCartContent);
     }
   }, [quantity, discountedPrice, productDetail?.productId]);
 
@@ -146,12 +147,12 @@ export default function ProductDetail({ productId }: Props) {
       router.push('/auth/signIn');
     }
 
-    if (cartContent) {
+    if (newProductDetail) {
       if (isAlreadyInCart) {
         addToCart(cartItem);
       } else {
-        const newCartItem = [...cartItem, cartContent];
-        setCartItem(newCartItem);
+        const newCartItem = [...cartItem, newProductDetail];
+        setCartItem((prev) => [...prev, newProductDetail]);
         addToCart(newCartItem);
       }
     }
@@ -163,12 +164,12 @@ export default function ProductDetail({ productId }: Props) {
       router.push('/auth/signIn');
     }
 
-    if (cartContent) {
+    if (newProductDetail) {
       if (isAlreadyInCart) {
         await addToCart(cartItem);
       } else {
-        const newCartItem = [...cartItem, cartContent];
-        setCartItem(newCartItem);
+        const newCartItem = [...cartItem, newProductDetail];
+        setCartItem((prev) => [...prev, newProductDetail]);
         await addToCart(newCartItem);
       }
       router.push('/carts');

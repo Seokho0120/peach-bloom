@@ -30,7 +30,6 @@ export type addToCartType = {
     productTitle: string;
     brandTitle: string;
     price: number | undefined;
-    // price: number;
     imageUrl: string;
   };
 };
