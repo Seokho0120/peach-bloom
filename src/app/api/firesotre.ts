@@ -250,7 +250,6 @@ export async function getLikedProducst(userId: number) {
 }
 
 export async function addToCart(cartItem: addToCartType[]) {
-  console.log('cartItem???', cartItem);
   await Promise.all(
     cartItem.map(async (item) => {
       const {
@@ -343,7 +342,7 @@ export async function updateCartItem({ userId, product }: cartUpdateType) {
       return item;
     }
   });
-  console.log('updatedItems', updatedItems);
+
   await updateDoc(userCartRef, {
     items: updatedItems,
   });
