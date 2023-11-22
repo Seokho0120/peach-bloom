@@ -30,8 +30,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
-  console.log('productLists', productLists);
-  console.log('test', test);
-
   return { ...categoryPages, ...productPages };
 }
