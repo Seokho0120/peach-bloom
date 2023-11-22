@@ -72,9 +72,9 @@ export default function Carousel() {
                       <Image
                         src={Symbol}
                         alt='Symbol'
-                        width={30}
-                        height={30}
+                        style={{ width: '5%', height: 'auto' }}
                         className='mb-1'
+                        priority
                       />
                       {idx === 0 && (
                         <p className='text-2xl text-pinkpoint font-bold mt-2'>
@@ -101,6 +101,7 @@ export default function Carousel() {
                       width={450}
                       height={450}
                       className='relative rounded-full'
+                      priority
                     />
                   </div>
                 </SwiperSlide>
@@ -117,9 +118,9 @@ export default function Carousel() {
           <Image
             src={Symbol}
             alt='Symbol'
-            width={45}
-            height={45}
+            style={{ width: '5%', height: 'auto' }}
             className='my-8'
+            priority
           />
         </div>
         <Swiper
@@ -151,9 +152,9 @@ export default function Carousel() {
           <Image
             src={Symbol}
             alt='Symbol'
-            width={45}
-            height={45}
+            style={{ width: '5%', height: 'auto' }}
             className='my-8'
+            priority
           />
         </div>
         <Swiper
