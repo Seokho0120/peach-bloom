@@ -7,8 +7,7 @@ import { Provider } from '@/context/provider';
 import AuthSession from '@/context/AuthSession';
 
 export const metadata: Metadata = {
-  // metadataBase: new URL('http://localhost:3000/'),
-  metadataBase: new URL('https://river-dev.vercel.app/'),
+  metadataBase: new URL('https://peach-bloom.vercel.app/'),
   title: {
     default: 'Peach Bloom',
     template: 'Peach Bloom | %s',
@@ -20,7 +19,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Peach Bloom',
     description: '화장품을 판매하는 뷰티 종합 쇼핑몰 입니다.',
-    // url: 'http://localhost:3000/',
     url: 'https://peach-bloom.vercel.app/',
     locale: 'ko_KR',
     type: 'website',
