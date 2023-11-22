@@ -43,6 +43,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
+      <meta
+        name='google-site-verification'
+        content='DrXuqvDuhqEVVfKJMO_1BwzoHwMQ7jktZxGV1XOB56c'
+      />
+
       <body className='w-full'>
         <AuthSession>
           <Provider>
