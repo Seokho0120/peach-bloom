@@ -55,7 +55,7 @@ export default function NewProduct() {
   };
 
   return (
-    <section className='w-full text-center'>
+    <article className='w-full text-center'>
       <h2 className='text-3xl font-bold my-4 text-navypoint'>
         새로운 제품 등록
       </h2>
@@ -222,6 +222,6 @@ export default function NewProduct() {
           상세 내용 등록하러 가기
         </button>
       </form>
-    </section>
+    </article>
   );
 }

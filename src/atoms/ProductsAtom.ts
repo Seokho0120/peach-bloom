@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { ProductListType, ProductDetailType } from '../types/Product';
+import { ProductListType } from '../types/Product';
 
 // 초기값
 export const initialProductsListAtom = atom<ProductListType[]>({
@@ -10,16 +10,6 @@ export const initialProductsListAtom = atom<ProductListType[]>({
 export const productsListAtom = atom<ProductListType[]>({
   key: 'productsListAtom',
   default: [],
-});
-
-export const productDetailAtom = atom<ProductDetailType>({
-  key: 'productDetailAtom',
-  default: {
-    description: '',
-    howToUse: '',
-    ingredients: '',
-    productId: 0,
-  },
 });
 
 export const discountedPriceAtom = atom<number>({

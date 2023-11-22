@@ -210,19 +210,19 @@ export function useGetSearchList(keyword: string) {
   const setSearchList = useSetRecoilState(searchItemAtom);
 
   const {
-    data: searchList,
+    data: productsList,
     isLoading,
     isError,
   } = useQuery<ProductListType[]>({
-    queryKey: ['searchList', keyword],
+    queryKey: ['productsList', keyword],
     queryFn: getAllProductsList,
   });
 
   useEffect(() => {
-    if (searchList && keyword) {
+    if (productsList && keyword) {
       const lowerCaseKeyword = keyword.toLowerCase();
 
-      const searchProductList = searchList.filter(
+      const searchProductList = productsList.filter(
         (product) =>
           product.brandTitle.toLowerCase().includes(lowerCaseKeyword) ||
           product.productTitle.toLowerCase().includes(lowerCaseKeyword)
@@ -230,7 +230,7 @@ export function useGetSearchList(keyword: string) {
 
       setSearchList(searchProductList);
     }
-  }, [keyword, searchList, setSearchList]);
+  }, [keyword, productsList, setSearchList]);
 
   return { isLoading, isError };
 }

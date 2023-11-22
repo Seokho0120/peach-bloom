@@ -7,8 +7,35 @@ import { Provider } from '@/context/provider';
 import AuthSession from '@/context/AuthSession';
 
 export const metadata: Metadata = {
-  title: 'Peach Bloom',
-  description: 'Peach Bloom 뷰티 쇼핑몰입니다.',
+  metadataBase: new URL('http://localhost:3000/'),
+  // metadataBase: new URL('https://river-dev.vercel.app/'),
+  title: {
+    default: 'Peach Bloom',
+    template: 'Peach Bloom | %s',
+  },
+  description: '화장품을 판매하는 뷰티 종합 쇼핑몰 입니다.',
+  icons: {
+    icon: '/favicon.ico',
+  },
+  openGraph: {
+    title: 'Peach Bloom',
+    description: '화장품을 판매하는 뷰티 종합 쇼핑몰 입니다.',
+    url: 'http://localhost:3000/',
+    // url: 'https://peach-bloom.vercel.app/',
+    locale: 'ko_KR',
+    type: 'website',
+    siteName: 'Peach Bloom',
+  },
+  // robots: {
+  //   index: true,
+  //   follow: true,
+  //   googleBot: {
+  //     index: true,
+  //     follow: true,
+  //     'max-image-preview': 'standard',
+  //     'max-snippet': -1,
+  //   },
+  // },
 };
 
 export default function RootLayout({
