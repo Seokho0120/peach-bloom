@@ -58,17 +58,14 @@ export default function Carousel() {
           pagination={{ clickable: true }}
           spaceBetween={80}
           slidesPerView={1}
-          loop={true}
+          loop={mainRankingList.length >= 1}
           rewind={true}
           navigation={true}
           keyboard={true}
         >
           <article>
             {mainRankingList.map(
-              (
-                { productId, brandTitle, productTitle, imageUrl, saleRank },
-                idx
-              ) => (
+              ({ productId, brandTitle, productTitle, imageUrl }, idx) => (
                 <SwiperSlide key={productId}>
                   <div className='relative flex justify-center'>
                     <div className='flex flex-col absolute z-10 top-10 2xl:left-72 left-16'>
@@ -132,7 +129,7 @@ export default function Carousel() {
           pagination={{ clickable: true }}
           spaceBetween={45}
           slidesPerView={3}
-          loop={true}
+          loop={mainSaleRateList.length >= 3}
           rewind={true}
           navigation={true}
           keyboard={true}
@@ -166,7 +163,7 @@ export default function Carousel() {
           pagination={{ clickable: true }}
           spaceBetween={20}
           slidesPerView={3}
-          loop={true}
+          loop={mainSaleRateList.length >= 3}
           rewind={true}
           navigation={true}
           keyboard={true}
