@@ -1,11 +1,13 @@
+import dynamic from 'next/dynamic';
 import type { Metadata } from 'next';
-import './globals.css';
-import Footer from '@/components/Footer';
-import Navbar from '@/components/Navbar';
 import { pretendardFont } from '@/utils/fontUtil';
 import { Provider } from '@/context/provider';
 import AuthSession from '@/context/AuthSession';
-import VercelAnalytics from '@/components/VercelAnalytics';
+const Navbar = dynamic(() => import('@/components/Navbar'));
+const Footer = dynamic(() => import('@/components/Footer'));
+const VercelAnalytics = dynamic(() => import('@/components/VercelAnalytics'));
+
+import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://peach-bloom.vercel.app/'),
