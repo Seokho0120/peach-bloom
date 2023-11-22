@@ -3,6 +3,21 @@ import { getProductsList } from '@/app/api/firesotre';
 import BrandList from '@/components/BrandList';
 import ProductsList from '@/components/ProductsList';
 
+type Props = {
+  params: {
+    categories: string;
+  };
+};
+
+export default function ProductsListPage({ params: { categories } }: Props) {
+  return (
+    <section className='mx-52'>
+      <BrandList category={categories} />
+      <ProductsList category={categories} />
+    </section>
+  );
+}
+
 export async function generateMetadata({
   params: { categories },
 }: Props): Promise<Metadata> {
@@ -22,19 +37,4 @@ export async function generateMetadata({
         },
       }
     : {};
-}
-
-type Props = {
-  params: {
-    categories: string;
-  };
-};
-
-export default function ProductsListPage({ params: { categories } }: Props) {
-  return (
-    <section className='mx-52'>
-      <BrandList category={categories} />
-      <ProductsList category={categories} />
-    </section>
-  );
 }

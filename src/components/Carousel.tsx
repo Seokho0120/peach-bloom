@@ -101,7 +101,7 @@ export default function Carousel() {
                       width={450}
                       height={450}
                       className='relative rounded-full'
-                      priority
+                      priority={idx < 2}
                     />
                   </div>
                 </SwiperSlide>
@@ -136,9 +136,9 @@ export default function Carousel() {
           keyboard={true}
         >
           <article>
-            {mainSaleRateList.map((product) => (
+            {mainSaleRateList.map((product, idx) => (
               <SwiperSlide key={product.productId}>
-                <ProductCard product={product} />
+                <ProductCard product={product} priority={idx < 2} />
               </SwiperSlide>
             ))}
           </article>
@@ -170,9 +170,9 @@ export default function Carousel() {
           keyboard={true}
         >
           <article>
-            {mainIsNewList.map((product) => (
+            {mainIsNewList.map((product, idx) => (
               <SwiperSlide key={product.productId}>
-                <ProductCard product={product} />
+                <ProductCard product={product} priority={idx < 2} />
               </SwiperSlide>
             ))}
           </article>

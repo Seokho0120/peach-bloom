@@ -7,9 +7,10 @@ import HeartIcon from './ui/HeartIcon';
 
 type Props = {
   product: ProductListType;
+  priority?: boolean;
 };
 
-export default function ProductCard({ product }: Props) {
+export default function ProductCard({ product, priority = false }: Props) {
   const {
     imageUrl,
     productId,
@@ -26,7 +27,13 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <Link href={`/detail/${productId}`} className='relative'>
-      <Image src={imageUrl} alt='productImage' width={500} height={500} />
+      <Image
+        src={imageUrl}
+        alt='productImage'
+        width={500}
+        height={500}
+        priority={priority}
+      />
       <div className='flex'>
         {isSale && (
           <div className='bg-pinkpoint text-white w-8 h-8 flex items-center justify-center font-bold absolute top-0'>
