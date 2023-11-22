@@ -5,6 +5,7 @@ import Navbar from '@/components/Navbar';
 import { pretendardFont } from '@/utils/fontUtil';
 import { Provider } from '@/context/provider';
 import AuthSession from '@/context/AuthSession';
+import VercelAnalytics from '@/components/VercelAnalytics';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://peach-bloom.vercel.app/'),
@@ -57,6 +58,7 @@ export default function RootLayout({
             <Footer />
           </Provider>
         </AuthSession>
+        <VercelAnalytics />
       </body>
     </html>
   );
