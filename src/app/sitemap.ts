@@ -21,8 +21,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     CATEGORIES.map((category) => getProductsList(category))
   );
 
-  const test = productLists.flat();
-
   const productPages = productLists.flat().flatMap((productList) =>
     productList.products.map((product) => ({
       url: `https://peach-bloom.vercel.app/products/${product.productId}`,
@@ -30,5 +28,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
-  return { ...categoryPages, ...productPages };
+  return [...categoryPages, ...productPages];
 }
