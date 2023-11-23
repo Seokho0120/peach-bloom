@@ -2,6 +2,7 @@ import {
   keepPreviousData,
   useInfiniteQuery,
   useQuery,
+  useQueryClient,
 } from '@tanstack/react-query';
 import {
   getProductsList,
@@ -9,6 +10,8 @@ import {
   getLikeCountDocId,
   subscribeToCartItems,
   getAllProductsList,
+  fetchCartItems,
+  subscribeToCartItemss,
 } from '../app/api/firesotre';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -109,7 +112,7 @@ export function useGetProductDetail(productId: number) {
   } = useQuery<ProductDetailType>({
     queryKey: ['productDetail', productId],
     queryFn: () => getProductDetail(productId),
-    staleTime: 1000 * 60,
+    // staleTime: 1000 * 60,
     placeholderData: keepPreviousData,
     refetchInterval: 600000,
   });
@@ -181,6 +184,8 @@ export function useGetLikeCountDocId(productId: number) {
 }
 
 export function useGetCartItems(userId: number) {
+  const queryClient = useQueryClient();
+
   const setCartList = useSetRecoilState(CartItemUpdateAtom);
 
   const {
@@ -190,12 +195,20 @@ export function useGetCartItems(userId: number) {
     data: cartItems,
   } = useQuery({
     queryKey: ['cartItems', userId],
-    queryFn: () => subscribeToCartItems(userId),
-    staleTime: 1000 * 60,
-    // refetchInterval: 6000,
+    queryFn: () => fetchCartItems(userId),
+    // queryFn: () => subscribeToCartItems(userId),
   });
 
   useEffect(() => {
+    const unsubscribe = subscribeToCartItemss(userId, () => {
+      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] });
+    });
+
+    return unsubscribe;
+  }, [userId, queryClient]);
+
+  useEffect(() => {
+    console.log('cartItems 로직', cartItems);
     if (cartItems) {
       setCartList(cartItems);
     }

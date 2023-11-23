@@ -25,6 +25,8 @@ export default function CartsList() {
   const totalQuantity = useRecoilValue(TotalQuantitySelector);
   const hasCartItem = cartItem && cartItem.length > 0;
 
+  console.log('cartItem 리스트', cartItem);
+
   return (
     <article className='min-h-screen'>
       {isLoading && (

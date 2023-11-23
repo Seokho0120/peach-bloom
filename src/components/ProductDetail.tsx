@@ -152,7 +152,8 @@ export default function ProductDetail({ productId }: Props) {
         addToCart(cartItem);
       } else {
         const newCartItem = [...cartItem, newProductDetail];
-        setCartItem((prev) => [...prev, newProductDetail]);
+        setCartItem(newCartItem);
+        // setCartItem((prev) => [...prev, newProductDetail]);
         addToCart(newCartItem);
       }
     }
@@ -169,7 +170,8 @@ export default function ProductDetail({ productId }: Props) {
         await addToCart(cartItem);
       } else {
         const newCartItem = [...cartItem, newProductDetail];
-        setCartItem((prev) => [...prev, newProductDetail]);
+        setCartItem(newCartItem);
+        // setCartItem((prev) => [...prev, newProductDetail]);
         await addToCart(newCartItem);
       }
       router.push('/carts');

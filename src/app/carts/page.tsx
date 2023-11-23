@@ -1,5 +1,10 @@
-import CartsList from '@/components/CartsList';
+// import CartsList from '@/components/CartsList';
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
+
+const CartsList = dynamic(() => import('@/components/CartsList'), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
   title: 'CARTS',

@@ -312,6 +312,8 @@ export function subscribeToCartItems(userId: number): Promise<cartItemType[]> {
       (docSnap) => {
         if (docSnap.exists()) {
           const items = docSnap.data().items || {};
+          console.log('items', items);
+          console.log('Object.values(items)', Object.values(items));
           resolve(Object.values(items));
         } else {
           resolve([]);
@@ -324,6 +326,39 @@ export function subscribeToCartItems(userId: number): Promise<cartItemType[]> {
 
     return unsubscribe;
   });
+}
+
+export function fetchCartItems(userId: number): Promise<cartItemType[]> {
+  const userCartRef = doc(db, 'carts', userId.toString());
+
+  return new Promise((resolve, reject) => {
+    getDoc(userCartRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          const items = docSnap.data().items || {};
+          resolve(Object.values(items));
+        } else {
+          resolve([]);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+}
+
+export function subscribeToCartItemss(userId: number, callback: () => void) {
+  const userCartRef = doc(db, 'carts', userId.toString());
+
+  return onSnapshot(
+    userCartRef,
+    (docSnap) => {
+      callback();
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
 }
 
 // 카트 아이템 수량 업데이트
