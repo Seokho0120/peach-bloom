@@ -79,7 +79,7 @@ export default function CarouselSwiper({
                   alt={productTitle}
                   fill
                   className='relative object-cover rounded-full'
-                  priority={priorityIndices.includes(idx)}
+                  loading={priorityIndices.includes(idx) ? 'eager' : 'lazy'}
                   sizes='(min-width: 1440px) 450px, 100vw'
                 />
               </div>
