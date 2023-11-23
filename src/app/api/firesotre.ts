@@ -301,6 +301,7 @@ export async function getCartItems(userId: number): Promise<cartItemType[]> {
     return [];
   }
 }
+
 // 카트 아이템 실시간 업데이트
 export function subscribeToCartItems(userId: number): Promise<cartItemType[]> {
   const userCartRef = doc(db, 'carts', userId.toString());

@@ -56,7 +56,6 @@ export function useGetProductList(category: string) {
 
   useEffect(() => {
     if (productsList && category) {
-      if (!productsList) return;
       const allProductList = productsList.pages.flatMap((p) => p.products);
 
       // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
@@ -110,8 +109,9 @@ export function useGetProductDetail(productId: number) {
   } = useQuery<ProductDetailType>({
     queryKey: ['productDetail', productId],
     queryFn: () => getProductDetail(productId),
-    refetchInterval: 1000,
+    staleTime: 1000 * 60,
     placeholderData: keepPreviousData,
+    refetchInterval: 600000,
   });
 
   const selectedProductDetail = useMemo(() => {
@@ -191,7 +191,8 @@ export function useGetCartItems(userId: number) {
   } = useQuery({
     queryKey: ['cartItems', userId],
     queryFn: () => subscribeToCartItems(userId),
-    refetchInterval: 100,
+    staleTime: 1000 * 60,
+    // refetchInterval: 6000,
   });
 
   useEffect(() => {
