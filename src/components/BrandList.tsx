@@ -25,10 +25,10 @@ export default function BrandList({ category }: Props) {
         <Image
           src={Symbol}
           alt='Symbol'
-          width={40}
-          height={40}
-          className='mb-4'
+          className='mb-4 w-[4%] h-auto'
+          placeholder='blur'
         />
+
         {category.toUpperCase()}
         <div className='border-b border-navypoint mt-4' />
       </h2>

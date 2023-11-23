@@ -27,13 +27,16 @@ export default function ProductCard({ product, priority = false }: Props) {
 
   return (
     <Link href={`/detail/${productId}`} className='relative'>
-      <Image
-        src={imageUrl}
-        alt='productImage'
-        width={500}
-        height={500}
-        priority={priority}
-      />
+      <div className='relative w-full pb-[100%]'>
+        <Image
+          src={imageUrl}
+          alt='productImage'
+          priority={priority}
+          fill
+          className='object-cover'
+          sizes='(min-width: 1440px) 275px, (min-width: 1024px) 20vw, (min-width: 580px) 50vw, 100vw'
+        />
+      </div>
       <div className='flex'>
         {isSale && (
           <div className='bg-pinkpoint text-white w-8 h-8 flex items-center justify-center font-bold absolute top-0'>

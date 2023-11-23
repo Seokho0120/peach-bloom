@@ -49,10 +49,11 @@ export default function CarouselSwiper({
                 <Image
                   src={Symbol}
                   alt='Symbol'
-                  style={{ width: '5%', height: 'auto' }}
-                  className='mb-1'
+                  className='mb-1 w-[5%] h-auto'
                   priority
+                  placeholder='blur'
                 />
+
                 {idx === 0 && (
                   <p className='text-2xl text-pinkpoint font-bold mt-2'>
                     랭킹 1위
@@ -72,14 +73,16 @@ export default function CarouselSwiper({
                 </div>
               </div>
 
-              <Image
-                src={imageUrl}
-                alt={productTitle}
-                width={450}
-                height={450}
-                className='relative rounded-full'
-                priority={priorityIndices.includes(idx)}
-              />
+              <div className='relative w-[450px] h-[450px]'>
+                <Image
+                  src={imageUrl}
+                  alt={productTitle}
+                  fill
+                  className='relative object-cover rounded-full'
+                  priority={priorityIndices.includes(idx)}
+                  sizes='(min-width: 1440px) 450px, 100vw'
+                />
+              </div>
             </div>
           </SwiperSlide>
         )
@@ -105,9 +108,9 @@ export default function CarouselSwiper({
           <Image
             src={Symbol}
             alt='Symbol'
-            style={{ width: '6%', height: 'auto' }}
-            className='my-8'
+            className='my-8 w-[5%] h-auto'
             priority
+            placeholder='blur'
           />
         )}
       </div>

@@ -15,10 +15,10 @@ export default function Signin({ providers, callbackUrl }: Props) {
       <Image
         src={Symbol}
         alt='Symbol'
-        width={60}
-        height={60}
-        className='my-8'
+        className='mb-8 w-[6%] h-auto'
+        placeholder='blur'
       />
+
       <h2 className='w-full flex flex-col items-center font-bold text-4xl text-slate-600 mb-4'>
         LOGIN
         <div className='w-1/6 border-b border-navypoint mt-4 mb-4' />
