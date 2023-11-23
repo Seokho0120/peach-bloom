@@ -113,7 +113,7 @@ export default function CarouselSwiper({
       </div>
 
       <Swiper
-        className={`${type} === 'BEST' ? main-pagination : no-pagination`}
+        className={type === 'BEST' ? 'main-pagination' : 'no-pagination'}
         modules={[Navigation, Pagination, Autoplay, Keyboard]}
         autoplay={{ delay: 4000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
