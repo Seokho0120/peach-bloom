@@ -149,6 +149,7 @@ export default function ProductDetail({ productId }: Props) {
   const handleAddToCart = () => {
     if (!user) {
       router.push('/auth/signIn');
+      return;
     }
 
     if (newProductDetail) {
@@ -166,6 +167,7 @@ export default function ProductDetail({ productId }: Props) {
   const handleBuy = async () => {
     if (!user) {
       router.push('/auth/signIn');
+      return;
     }
 
     if (newProductDetail) {
