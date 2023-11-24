@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: false,
-  openAnalyzer: false,
+  enabled: true,
+  openAnalyzer: true,
 });
 const nextConfig = {
   experimental: {
@@ -39,5 +39,5 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
-// module.exports = withBundleAnalyzer({ nextConfig });
+// module.exports = nextConfig;
+module.exports = withBundleAnalyzer({ nextConfig });

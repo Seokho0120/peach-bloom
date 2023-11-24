@@ -1,9 +1,7 @@
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
-const CartsList = dynamic(() => import('@/components/CartsList'), {
-  ssr: false,
-});
+const CartsList = dynamic(() => import('@/components/CartsList'));
 
 export const metadata: Metadata = {
   title: 'CARTS',
