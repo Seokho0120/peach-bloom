@@ -2,15 +2,12 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
 import { useUserSession } from '@/hooks/useUserSession';
-import ProductInfo from './ProductInfo';
-import { DetailBtn } from './DetailBtn';
-import QuantityControl from './QuantityControl';
-import Modal from './Modal';
 import { CartItemAtom } from '@/atoms/CartItemAtom';
 import { arrProductDetailType } from '@/types/Product';
 import { addToCartType } from '@/types/FirestoreType';
@@ -25,6 +22,13 @@ import {
 } from '@/app/api/firesotre';
 import { DocumentReference } from 'firebase/firestore';
 import GridSpinner from './ui/GridSpinner';
+
+const ProductInfo = dynamic(() => import('./ProductInfo'));
+const QuantityControl = dynamic(() => import('./QuantityControl'));
+const DetailBtn = dynamic(() =>
+  import('./DetailBtn').then((mod) => mod.DetailBtn)
+);
+const Modal = dynamic(() => import('./Modal'));
 
 type Props = {
   productId: number;
@@ -153,7 +157,6 @@ export default function ProductDetail({ productId }: Props) {
       } else {
         const newCartItem = [...cartItem, newProductDetail];
         setCartItem(newCartItem);
-        // setCartItem((prev) => [...prev, newProductDetail]);
         addToCart(newCartItem);
       }
     }
@@ -171,7 +174,6 @@ export default function ProductDetail({ productId }: Props) {
       } else {
         const newCartItem = [...cartItem, newProductDetail];
         setCartItem(newCartItem);
-        // setCartItem((prev) => [...prev, newProductDetail]);
         await addToCart(newCartItem);
       }
       router.push('/carts');

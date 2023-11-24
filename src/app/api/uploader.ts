@@ -1,4 +1,3 @@
-import { dataTagSymbol } from '@tanstack/react-query';
 import axios from 'axios';
 
 export async function uploadImage(file: File) {
@@ -17,7 +16,13 @@ export async function uploadImage(file: File) {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
-    return response.data.url;
+    const url = response.data.url;
+    const transformedUrl = url.replace(
+      '/upload/',
+      '/upload/w_500,ar_1:1,f_auto/'
+    );
+
+    return transformedUrl;
   } catch (error) {
     console.error('이미지 업로드 에러 발생 🚨', error);
     throw error;

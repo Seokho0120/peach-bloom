@@ -1,13 +1,14 @@
 /** @type {import('next').NextConfig} */
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: true,
-  openAnalyzer: true,
+  enabled: false,
+  openAnalyzer: false,
 });
 const nextConfig = {
   experimental: {
     scrollRestoration: true,
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
     imageSizes: [100, 200, 300, 400, 500],
     deviceSizes: [580, 1024, 1284, 1400, 1600, 1800],
     remotePatterns: [
@@ -39,5 +40,5 @@ const nextConfig = {
   },
 };
 
-// module.exports = nextConfig;
-module.exports = withBundleAnalyzer({ nextConfig });
+module.exports = nextConfig;
+// module.exports = withBundleAnalyzer({ nextConfig });
