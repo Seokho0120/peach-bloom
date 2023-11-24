@@ -24,7 +24,6 @@ export default function ProductCard({ product, priority = false }: Props) {
   } = product;
   const discountedPrice = useDisCountedPrice({ price, saleRate, isSale });
   const formatPrice = useFormatPrice;
-
   return (
     <Link href={`/detail/${productId}`} className='relative'>
       <div className='relative w-full pb-[100%]'>

@@ -38,12 +38,12 @@ import {
 export const db = getFirestore(app);
 
 // 모든 데이터 필터 x
-export async function getAllProductsList(): Promise<ProductListType[]> {
-  const snapshot = await getDocs(collection(db, 'products'));
-
-  return snapshot.empty
-    ? []
-    : snapshot.docs.map((doc) => doc.data() as ProductListType);
+export function getAllProductsList(): Promise<ProductListType[]> {
+  return getDocs(collection(db, 'products')).then((snapshot) =>
+    snapshot.empty
+      ? []
+      : snapshot.docs.map((doc) => doc.data() as ProductListType)
+  );
 }
 
 // 모든 데이터 필터 o

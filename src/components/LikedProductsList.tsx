@@ -2,7 +2,7 @@
 
 import { getLikedProducst } from '@/app/api/firesotre';
 import { ProductListType } from '@/types/Product';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ProductCard from './ProductCard';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { productsListAtom } from '@/atoms/ProductsAtom';
