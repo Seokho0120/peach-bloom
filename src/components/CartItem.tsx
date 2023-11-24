@@ -7,7 +7,12 @@ import useFormatPrice from '@/hooks/useFormatPrice';
 import { removeFromCart, updateCartItem } from '@/app/api/firesotre';
 import { cartItemType } from '@/types/Product';
 import { useUserSession } from '@/hooks/useUserSession';
-import CancelIcon from './ui/CancelIcon';
+// import CancelIcon from './ui/CancelIcon';
+
+import dynamic from 'next/dynamic';
+const CancelIcon = dynamic(() => import('./ui/CancelIcon'), {
+  ssr: false,
+});
 
 type Props = {
   product: cartItemType;

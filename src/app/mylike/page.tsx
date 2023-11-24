@@ -1,7 +1,16 @@
-import { getServerUser } from '@/hooks/useUserSession';
-import LikedProductsList from '@/components/LikedProductsList';
 import { redirect } from 'next/navigation';
 import { Metadata } from 'next';
+import { getServerUser } from '@/hooks/useUserSession';
+// import LikedProductsList from '@/components/LikedProductsList';
+
+import dynamic from 'next/dynamic';
+import GridSpinner from '@/components/ui/GridSpinner';
+const LikedProductsList = dynamic(
+  () => import('@/components/LikedProductsList'),
+  {
+    loading: () => <GridSpinner />,
+  }
+);
 
 export const metadata: Metadata = {
   title: 'MY LIKE',

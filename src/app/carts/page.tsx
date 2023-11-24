@@ -1,7 +1,10 @@
+import GridSpinner from '@/components/ui/GridSpinner';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 
-const CartsList = dynamic(() => import('@/components/CartsList'));
+const CartsList = dynamic(() => import('@/components/CartsList'), {
+  loading: () => <GridSpinner />,
+});
 
 export const metadata: Metadata = {
   title: 'CARTS',

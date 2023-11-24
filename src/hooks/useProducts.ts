@@ -11,6 +11,7 @@ import {
   subscribeToCartItems,
   getAllProductsList,
   fetchCartItems,
+  getLikedProducts,
 } from '../app/api/firesotre';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -171,6 +172,38 @@ export function useGetProductDetail(productId: number) {
     isLoading,
     isError,
   };
+}
+
+export function useLikedProducts(userId: number) {
+  const {
+    isLoading,
+    isError,
+    data: likedProducts,
+  } = useQuery({
+    queryKey: ['likedProducts', userId],
+    queryFn: () => getLikedProducts(userId),
+    staleTime: 1000,
+  });
+
+  const setProductList = useSetRecoilState(productsListAtom);
+
+  useEffect(() => {
+    if (likedProducts) {
+      setProductList(likedProducts as ProductListType[]);
+    }
+  }, [likedProducts, setProductList]);
+
+  // useEffect(() => {
+  //   const fetchLikedProducts = async () => {
+  //     if (likedProducts) {
+  //       setProductList(likedProducts as ProductListType[]);
+  //     }
+  //   };
+
+  //   fetchLikedProducts();
+  // }, [likedProducts, setProductList]);
+
+  return { isLoading, isError };
 }
 
 export function useGetLikeCountDocId(productId: number) {

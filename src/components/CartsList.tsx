@@ -7,13 +7,30 @@ import {
   TotalQuantitySelector,
 } from '@/atoms/CartItemAtom';
 import { useUserSession } from '@/hooks/useUserSession';
-import CartItem from './CartItem';
-import NormalBtn from './NormalBtn';
-import PriceCard from './PriceCard';
-import PlusIcon from './ui/PlusIcon';
-import EqualIcon from './ui/EqualIcon';
+// import CartItem from './CartItem';
+// import NormalBtn from './NormalBtn';
+// import PriceCard from './PriceCard';
+// import PlusIcon from './ui/PlusIcon';
+// import EqualIcon from './ui/EqualIcon';
 import { useGetCartItems } from '@/hooks/useProducts';
 import GridSpinner from './ui/GridSpinner';
+
+import dynamic from 'next/dynamic';
+const CartItem = dynamic(() => import('./CartItem'), {
+  ssr: false,
+});
+const NormalBtn = dynamic(() => import('./NormalBtn'), {
+  ssr: false,
+});
+const PriceCard = dynamic(() => import('./PriceCard'), {
+  ssr: false,
+});
+const PlusIcon = dynamic(() => import('./ui/PlusIcon'), {
+  ssr: false,
+});
+const EqualIcon = dynamic(() => import('./ui/EqualIcon'), {
+  ssr: false,
+});
 
 export default function CartsList() {
   const SHIPPING = 3000;

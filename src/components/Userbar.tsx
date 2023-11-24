@@ -3,23 +3,30 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
-// import CartIcon from './ui/CartIcon';
-// import SearchIcon from './ui/SearchIcon';
-// import UserIcon from './ui/UserIcon';
-// import HeartOutIcon from './ui/HeartOutIcon';
-// import AuthButton from './AuthBtn';
-// import UploadIcon from './ui/UploadIcon';
-// import SearchBar from './SearchBar';
 import { useGetCartItems } from '@/hooks/useProducts';
-
 import dynamic from 'next/dynamic';
-const CartIcon = dynamic(() => import('./ui/CartIcon'));
-const SearchIcon = dynamic(() => import('./ui/SearchIcon'));
-const UserIcon = dynamic(() => import('./ui/UserIcon'));
-const HeartOutIcon = dynamic(() => import('./ui/HeartOutIcon'));
-const UploadIcon = dynamic(() => import('./ui/UploadIcon'));
-const AuthButton = dynamic(() => import('./AuthBtn'));
-const SearchBar = dynamic(() => import('./SearchBar'));
+
+const CartIcon = dynamic(() => import('./ui/CartIcon'), {
+  ssr: false,
+});
+const SearchIcon = dynamic(() => import('./ui/SearchIcon'), {
+  ssr: false,
+});
+const UserIcon = dynamic(() => import('./ui/UserIcon'), {
+  ssr: false,
+});
+const HeartOutIcon = dynamic(() => import('./ui/HeartOutIcon'), {
+  ssr: false,
+});
+const UploadIcon = dynamic(() => import('./ui/UploadIcon'), {
+  ssr: false,
+});
+const AuthButton = dynamic(() => import('./AuthBtn'), {
+  ssr: false,
+});
+const SearchBar = dynamic(() => import('./SearchBar'), {
+  ssr: false,
+});
 
 const SIDE_MENU = [
   {
