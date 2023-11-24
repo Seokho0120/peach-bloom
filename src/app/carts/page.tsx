@@ -1,4 +1,3 @@
-// import CartsList from '@/components/CartsList';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 

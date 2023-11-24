@@ -14,6 +14,7 @@ import PlusIcon from './ui/PlusIcon';
 import EqualIcon from './ui/EqualIcon';
 import { useGetCartItems } from '@/hooks/useProducts';
 import GridSpinner from './ui/GridSpinner';
+import dynamic from 'next/dynamic';
 
 export default function CartsList() {
   const SHIPPING = 3000;
