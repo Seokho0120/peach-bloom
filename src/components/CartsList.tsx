@@ -14,7 +14,6 @@ import PlusIcon from './ui/PlusIcon';
 import EqualIcon from './ui/EqualIcon';
 import { useGetCartItems } from '@/hooks/useProducts';
 import GridSpinner from './ui/GridSpinner';
-import dynamic from 'next/dynamic';
 
 export default function CartsList() {
   const SHIPPING = 3000;
@@ -25,8 +24,6 @@ export default function CartsList() {
   const totalPrice = useRecoilValue(TotalPriceSelector);
   const totalQuantity = useRecoilValue(TotalQuantitySelector);
   const hasCartItem = cartItem && cartItem.length > 0;
-
-  console.log('cartItem 리스트', cartItem);
 
   return (
     <article className='min-h-screen'>

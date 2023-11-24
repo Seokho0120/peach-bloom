@@ -302,31 +302,31 @@ export async function getCartItems(userId: number): Promise<cartItemType[]> {
   }
 }
 
-// 카트 아이템 실시간 업데이트
-export function subscribeToCartItems(userId: number): Promise<cartItemType[]> {
-  const userCartRef = doc(db, 'carts', userId.toString());
+// // 카트 아이템 실시간 업데이트
+// export function subscribeToCartItems(userId: number): Promise<cartItemType[]> {
+//   const userCartRef = doc(db, 'carts', userId.toString());
 
-  return new Promise((resolve, reject) => {
-    const unsubscribe = onSnapshot(
-      userCartRef,
-      (docSnap) => {
-        if (docSnap.exists()) {
-          const items = docSnap.data().items || {};
-          console.log('items', items);
-          console.log('Object.values(items)', Object.values(items));
-          resolve(Object.values(items));
-        } else {
-          resolve([]);
-        }
-      },
-      (error) => {
-        reject(error);
-      }
-    );
+//   return new Promise((resolve, reject) => {
+//     const unsubscribe = onSnapshot(
+//       userCartRef,
+//       (docSnap) => {
+//         if (docSnap.exists()) {
+//           const items = docSnap.data().items || {};
+//           console.log('items', items);
+//           console.log('Object.values(items)', Object.values(items));
+//           resolve(Object.values(items));
+//         } else {
+//           resolve([]);
+//         }
+//       },
+//       (error) => {
+//         reject(error);
+//       }
+//     );
 
-    return unsubscribe;
-  });
-}
+//     return unsubscribe;
+//   });
+// }
 
 export function fetchCartItems(userId: number): Promise<cartItemType[]> {
   const userCartRef = doc(db, 'carts', userId.toString());
@@ -347,12 +347,12 @@ export function fetchCartItems(userId: number): Promise<cartItemType[]> {
   });
 }
 
-export function subscribeToCartItemss(userId: number, callback: () => void) {
+export function subscribeToCartItems(userId: number, callback: () => void) {
   const userCartRef = doc(db, 'carts', userId.toString());
 
   return onSnapshot(
     userCartRef,
-    (docSnap) => {
+    () => {
       callback();
     },
     (error) => {

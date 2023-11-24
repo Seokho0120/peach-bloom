@@ -11,7 +11,6 @@ import {
   subscribeToCartItems,
   getAllProductsList,
   fetchCartItems,
-  subscribeToCartItemss,
 } from '../app/api/firesotre';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -112,7 +111,7 @@ export function useGetProductDetail(productId: number) {
   } = useQuery<ProductDetailType>({
     queryKey: ['productDetail', productId],
     queryFn: () => getProductDetail(productId),
-    // staleTime: 1000 * 60,
+    staleTime: 300000,
     placeholderData: keepPreviousData,
     refetchInterval: 600000,
   });
@@ -196,19 +195,18 @@ export function useGetCartItems(userId: number) {
   } = useQuery({
     queryKey: ['cartItems', userId],
     queryFn: () => fetchCartItems(userId),
-    // queryFn: () => subscribeToCartItems(userId),
+    staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {
-    const unsubscribe = subscribeToCartItemss(userId, () => {
-      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] });
+    const unsubscribe = subscribeToCartItems(userId, () => {
+      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] }); // 특정 쿼 무효화
     });
 
     return unsubscribe;
   }, [userId, queryClient]);
 
   useEffect(() => {
-    console.log('cartItems 로직', cartItems);
     if (cartItems) {
       setCartList(cartItems);
     }
