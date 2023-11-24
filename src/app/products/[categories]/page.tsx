@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
 import { getProductsList } from '@/app/api/firesotre';
-import BrandList from '@/components/BrandList';
-import ProductsList from '@/components/ProductsList';
+import dynamic from 'next/dynamic';
+const BrandList = dynamic(() => import('@/components/BrandList'));
+const ProductsList = dynamic(() => import('@/components/ProductsList'));
 
 type Props = {
   params: {

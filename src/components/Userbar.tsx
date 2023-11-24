@@ -3,14 +3,23 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import CartIcon from './ui/CartIcon';
-import SearchIcon from './ui/SearchIcon';
-import UserIcon from './ui/UserIcon';
-import HeartOutIcon from './ui/HeartOutIcon';
-import AuthButton from './AuthBtn';
-import UploadIcon from './ui/UploadIcon';
-import SearchBar from './SearchBar';
+// import CartIcon from './ui/CartIcon';
+// import SearchIcon from './ui/SearchIcon';
+// import UserIcon from './ui/UserIcon';
+// import HeartOutIcon from './ui/HeartOutIcon';
+// import AuthButton from './AuthBtn';
+// import UploadIcon from './ui/UploadIcon';
+// import SearchBar from './SearchBar';
 import { useGetCartItems } from '@/hooks/useProducts';
+
+import dynamic from 'next/dynamic';
+const CartIcon = dynamic(() => import('./ui/CartIcon'));
+const SearchIcon = dynamic(() => import('./ui/SearchIcon'));
+const UserIcon = dynamic(() => import('./ui/UserIcon'));
+const HeartOutIcon = dynamic(() => import('./ui/HeartOutIcon'));
+const UploadIcon = dynamic(() => import('./ui/UploadIcon'));
+const AuthButton = dynamic(() => import('./AuthBtn'));
+const SearchBar = dynamic(() => import('./SearchBar'));
 
 const SIDE_MENU = [
   {

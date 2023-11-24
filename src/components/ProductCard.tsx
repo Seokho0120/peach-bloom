@@ -3,7 +3,10 @@ import Link from 'next/link';
 import { ProductListType } from '../types/Product';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
-import HeartIcon from './ui/HeartIcon';
+// import HeartIcon from './ui/HeartIcon';
+
+import dynamic from 'next/dynamic';
+const HeartIcon = dynamic(() => import('./ui/HeartIcon'));
 
 type Props = {
   product: ProductListType;

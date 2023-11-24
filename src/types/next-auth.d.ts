@@ -8,8 +8,4 @@ declare module 'next-auth' {
       username: string;
     } & DefaultSession['user'];
   }
-
-  // interface NextAuthOptions {
-  //   app: Partial<PagesOptions> | undefined;
-  // }
 }

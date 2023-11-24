@@ -3,9 +3,12 @@
 import { useRecoilValue } from 'recoil';
 import { productsListAtom } from '@/atoms/ProductsAtom';
 import { useGetProductList } from '@/hooks/useProducts';
-import ProductCard from './ProductCard';
-import ScrollToTopBtn from './ScrollToTopBtn';
+// import ProductCard from './ProductCard';
+// import ScrollToTopBtn from './ScrollToTopBtn';
 import GridSpinner from './ui/GridSpinner';
+import dynamic from 'next/dynamic';
+const ProductCard = dynamic(() => import('./ProductCard'));
+const ScrollToTopBtn = dynamic(() => import('./ScrollToTopBtn'));
 
 type Props = {
   category: string;
