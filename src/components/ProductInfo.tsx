@@ -10,6 +10,7 @@ type Props = {
   description?: string;
   howToUse?: string;
   ingredients?: string;
+  disabled?: boolean;
 };
 
 export default function ProductInfo(props: Props) {
@@ -21,6 +22,7 @@ export default function ProductInfo(props: Props) {
     description,
     howToUse,
     ingredients,
+    disabled,
   } = props;
 
   return (
@@ -29,7 +31,10 @@ export default function ProductInfo(props: Props) {
         <p className='text-navypoint text-2xl'>{brandTitle}</p>
         <button
           onClick={handleLike}
-          className='text-slate-200 flex items-center gap-1 cursor-pointer'
+          className={`text-slate-200 flex items-center gap-1 cursor-pointer ${
+            disabled && 'opacity-80'
+          }`}
+          disabled={disabled}
         >
           <HeartIcon type='detail' isLiked={isLiked} />
         </button>

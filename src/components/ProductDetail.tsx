@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useRecoilState } from 'recoil';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
@@ -38,6 +38,9 @@ export const revalidate = 60;
 export default function ProductDetail({ productId }: Props) {
   const router = useRouter();
   const NumProductId = Number(productId);
+  const [isPending, startTransition] = useTransition();
+  const [isFetching, setIsFetching] = useState(false);
+  const isUpdating = isPending || isFetching;
 
   const user = useUserSession();
   const userId = user?.id;
@@ -95,7 +98,7 @@ export default function ProductDetail({ productId }: Props) {
       router.push('/auth/signIn');
       return;
     }
-
+    setIsFetching(true);
     await checkAndCreateLikeDoc(likesDocRef);
 
     const newCount = isLiked && like > 0 ? like - 1 : like + 1;
@@ -108,6 +111,10 @@ export default function ProductDetail({ productId }: Props) {
       likesDocRef,
       userId: userId,
       isLiked,
+    });
+    setIsFetching(false);
+    startTransition(() => {
+      router.refresh();
     });
   };
 
@@ -226,7 +233,14 @@ export default function ProductDetail({ productId }: Props) {
               </div>
 
               <div className='flex-grow flex flex-col gap-5'>
+                {isUpdating && (
+                  <div className='absolute z-20 inset-0 flex justify-center items-center'>
+                    <GridSpinner />
+                  </div>
+                )}
+
                 <ProductInfo
+                  disabled={isUpdating}
                   brandTitle={brandTitle}
                   handleLike={handleLike}
                   isLiked={isLiked}
