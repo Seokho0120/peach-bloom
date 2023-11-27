@@ -32,6 +32,7 @@ import {
   addToCartType,
   cartUpdateType,
   monitoringLikesDataType,
+  removeCartType,
   updateLikerListProps,
 } from '@/types/FirestoreType';
 
@@ -223,7 +224,6 @@ export const monitoringLikesData = (props: monitoringLikesDataType) => {
   const unsubscribe = onSnapshot(likesDocRef, (doc) => {
     const likesData = doc.data();
     const likerList = likesData?.likerList || [];
-
     setLikerList(likerList);
     setIsLiked(likerList.includes(userId));
   });
@@ -232,22 +232,37 @@ export const monitoringLikesData = (props: monitoringLikesDataType) => {
 };
 
 // MY LIKE 데이터 가져오기
-export async function getLikedProducts(userId: number) {
+export const getLikedProducts = async (userId: number) => {
   const likesCollection = collection(db, 'likes');
+  const productsCollection = collection(db, 'products');
+
   const likesSnapshot = await getDocs(likesCollection);
   const likedDocIds = likesSnapshot.docs
     .filter((doc) => doc.data().likerList.includes(userId))
     .map((doc) => doc.id);
   const likedDocIdsAsNumbers = likedDocIds.map(Number);
 
-  const productsCollection = collection(db, 'products');
   const productsSnapshot = await getDocs(productsCollection);
   const likedProducts = productsSnapshot.docs
     .filter((doc) => likedDocIdsAsNumbers.includes(doc.data().productId))
     .map((doc) => doc.data());
 
   return likedProducts;
-}
+};
+
+export const subscribeToLikes = (userId: number, callback: () => void) => {
+  const likesCollection = collection(db, 'likes');
+
+  return onSnapshot(
+    likesCollection,
+    () => {
+      callback();
+    },
+    (error) => {
+      console.error(error);
+    }
+  );
+};
 
 export async function addToCart(cartItem: addToCartType[]) {
   await Promise.all(
@@ -357,11 +372,6 @@ export async function updateCartItem({ userId, product }: cartUpdateType) {
     items: updatedItems,
   });
 }
-
-type removeCartType = {
-  userId: number;
-  productId: number;
-};
 
 export async function removeFromCart({ userId, productId }: removeCartType) {
   const userCartRef = doc(db, 'carts', userId.toString());

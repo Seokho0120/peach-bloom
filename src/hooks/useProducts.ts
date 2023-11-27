@@ -12,6 +12,7 @@ import {
   getAllProductsList,
   fetchCartItems,
   getLikedProducts,
+  subscribeToLikes,
 } from '../app/api/firesotre';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -175,33 +176,36 @@ export function useGetProductDetail(productId: number) {
 }
 
 export function useLikedProducts(userId: number) {
+  const queryClient = useQueryClient();
+  const setProductList = useSetRecoilState(productsListAtom);
+
   const {
     isLoading,
     isError,
     data: likedProducts,
+    error,
   } = useQuery({
     queryKey: ['likedProducts', userId],
     queryFn: () => getLikedProducts(userId),
-    staleTime: 1000,
+    staleTime: 1000 * 60 * 5,
   });
 
-  const setProductList = useSetRecoilState(productsListAtom);
+  useEffect(() => {
+    const unsubscribe = subscribeToLikes(userId, () => {
+      queryClient.invalidateQueries({ queryKey: ['likedProducts', userId] });
+    });
+
+    return unsubscribe;
+  }, [userId, queryClient]);
 
   useEffect(() => {
     if (likedProducts) {
       setProductList(likedProducts as ProductListType[]);
     }
-  }, [likedProducts, setProductList]);
-
-  // useEffect(() => {
-  //   const fetchLikedProducts = async () => {
-  //     if (likedProducts) {
-  //       setProductList(likedProducts as ProductListType[]);
-  //     }
-  //   };
-
-  //   fetchLikedProducts();
-  // }, [likedProducts, setProductList]);
+    if (error) {
+      setProductList([]);
+    }
+  }, [likedProducts, error, setProductList]);
 
   return { isLoading, isError };
 }
@@ -217,7 +221,6 @@ export function useGetLikeCountDocId(productId: number) {
 
 export function useGetCartItems(userId: number) {
   const queryClient = useQueryClient();
-
   const setCartList = useSetRecoilState(CartItemUpdateAtom);
 
   const {
@@ -233,7 +236,7 @@ export function useGetCartItems(userId: number) {
 
   useEffect(() => {
     const unsubscribe = subscribeToCartItems(userId, () => {
-      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] }); // 특정 쿼 무효화
+      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] }); // 특정 쿼리 무효화
     });
 
     return unsubscribe;

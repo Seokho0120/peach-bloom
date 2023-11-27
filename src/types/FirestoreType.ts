@@ -45,3 +45,8 @@ export type cartUpdateType = {
     brandTitle: string;
   };
 };
+
+export type removeCartType = {
+  userId: number;
+  productId: number;
+};

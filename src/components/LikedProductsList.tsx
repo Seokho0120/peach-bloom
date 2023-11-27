@@ -1,13 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { getLikedProducts } from '@/app/api/firesotre';
-import { ProductListType } from '@/types/Product';
-import { productsListAtom } from '@/atoms/ProductsAtom';
-// import ProductCard from './ProductCard';
-
 import dynamic from 'next/dynamic';
+import { useRecoilValue } from 'recoil';
+import { productsListAtom } from '@/atoms/ProductsAtom';
 import { useLikedProducts } from '@/hooks/useProducts';
 import GridSpinner from './ui/GridSpinner';
 const ProductCard = dynamic(() => import('./ProductCard'));
@@ -19,6 +14,7 @@ type Props = {
 export default function LikedProductsList({ userId }: Props) {
   const { isLoading, isError } = useLikedProducts(userId);
   const productsList = useRecoilValue(productsListAtom);
+  console.log('좋아요 productsList', productsList);
 
   return (
     <section>
