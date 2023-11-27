@@ -33,6 +33,8 @@ type Props = {
   productId: number;
 };
 
+export const revalidate = 60;
+
 export default function ProductDetail({ productId }: Props) {
   const router = useRouter();
   const NumProductId = Number(productId);

@@ -4,6 +4,8 @@ import { db } from '@/app/api/firesotre';
 import ProductDetail from '@/components/ProductDetail';
 import { ProductDetailType, ProductListType } from '@/types/Product';
 
+export const revalidate = 60;
+
 type Props = {
   params: {
     productId: number;
@@ -16,6 +18,17 @@ export default function ProductDetailPage({ params: { productId } }: Props) {
       <ProductDetail productId={productId} />
     </section>
   );
+}
+
+export async function generateStaticParams() {
+  const snapshot = await getDocs(collection(db, 'productDetail'));
+  const productDetails = snapshot.docs.map(
+    (doc) => doc.data() as ProductDetailType
+  );
+
+  return productDetails.map((product) => ({
+    params: { productId: product.productId },
+  }));
 }
 
 export async function generateMetadata({
