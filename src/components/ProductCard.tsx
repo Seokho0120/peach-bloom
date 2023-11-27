@@ -1,11 +1,9 @@
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ProductListType } from '../types/Product';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
-// import HeartIcon from './ui/HeartIcon';
-
-import dynamic from 'next/dynamic';
+import { ProductListType } from '../types/Product';
 const HeartIcon = dynamic(() => import('./ui/HeartIcon'));
 
 type Props = {

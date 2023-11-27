@@ -1,9 +1,9 @@
 'use client';
 
 import { useRecoilValue } from 'recoil';
-import ProductCard from './ProductCard';
 import { searchItemAtom } from '@/atoms/SearchListAtom';
 import { useGetSearchList } from '@/hooks/useProducts';
+import ProductCard from './ProductCard';
 import GridSpinner from './ui/GridSpinner';
 
 type Props = {
@@ -31,14 +31,21 @@ export default function SearchList({ keyword }: Props) {
         {decodeKeyword} 에 대한 검색 결과입니다.
         <div className='border-b border-navypoint mt-4' />
       </h2>
-      <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 min-h-screen'>
-        {searchProductList &&
-          searchProductList.map((product) => (
+
+      {searchProductList.length > 0 ? (
+        <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 min-h-screen'>
+          {searchProductList.map((product) => (
             <li key={product.productId}>
               <ProductCard product={product} />
             </li>
           ))}
-      </ul>
+        </ul>
+      ) : (
+        <div className='flex items-center text-lg'>
+          <p className='font-bold'>{decodeKeyword} </p>
+          <p> 에 대한 검색 결과가 없습니다.</p>
+        </div>
+      )}
     </article>
   );
 }
