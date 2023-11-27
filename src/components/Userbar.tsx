@@ -58,7 +58,7 @@ export default function Userbar() {
   return (
     <nav>
       <div className='flex flex-col'>
-        <ul className='flex justify-center items-center gap-5 lg:gap-6 text-navypoint'>
+        <ul className='flex justify-center items-center gap-5 lg:gap-6 text-navypoint self-end sm:self-auto'>
           {SIDE_MENU.map(({ title, href, text }) => (
             <li key={href}>
               <Link

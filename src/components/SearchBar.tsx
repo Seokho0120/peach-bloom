@@ -24,8 +24,8 @@ export default function SearchBar() {
         name='search'
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
-        className='rounded-3xl w-64 text-xs p-2 box-border'
-        placeholder='검색어 입력 후 엔터를 눌러주세요.'
+        className='rounded-3xl w-48 sm:w-64 text-xs p-2 box-border'
+        placeholder={`검색어 입력 후 엔터를 눌러주세요.`}
       />
     </form>
   );
