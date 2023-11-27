@@ -22,7 +22,6 @@ import {
 } from '@/app/api/firesotre';
 import { DocumentReference } from 'firebase/firestore';
 import GridSpinner from './ui/GridSpinner';
-
 const ProductInfo = dynamic(() => import('./ProductInfo'));
 const QuantityControl = dynamic(() => import('./QuantityControl'));
 const DetailBtn = dynamic(() =>

@@ -1,11 +1,9 @@
 'use client';
 
-import { useUserSession } from '@/hooks/useUserSession';
-import { signOut } from 'next-auth/react';
 import { redirect } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { useState } from 'react';
-
-import defaultImage from '../../public/images/initial-profile.jpg';
+import { useUserSession } from '@/hooks/useUserSession';
 
 export default function MyInfo() {
   const [imageError, setImageError] = useState(false);

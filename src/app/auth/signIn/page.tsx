@@ -2,7 +2,8 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { getProviders } from 'next-auth/react';
 import { authOptions } from '@/lib/auth';
-import Signin from '@/components/Signin';
+import dynamic from 'next/dynamic';
+const Signin = dynamic(() => import('@/components/Signin'));
 
 type Props = {
   searchParams: {

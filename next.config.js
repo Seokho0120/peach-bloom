@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: false,
-  openAnalyzer: false,
-});
+
 const nextConfig = {
+  reactStrictMode: true,
   experimental: {
     scrollRestoration: true,
   },
@@ -41,4 +39,9 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
+// const withBundleAnalyzer = require('@next/bundle-analyzer')({
+//   enabled: false,
+//   openAnalyzer: false,
+// });
 // module.exports = withBundleAnalyzer({ nextConfig });
