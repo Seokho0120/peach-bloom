@@ -18,7 +18,7 @@ export default function Carousel() {
   const mainIsNewList = useRecoilValue(mainIsNewAtom);
 
   return (
-    <section className='flex flex-col gap-20'>
+    <section className='flex flex-col gap-8 md:gap-12 lg:gap-20'>
       {isLoading && (
         <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
           <GridSpinner />

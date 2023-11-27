@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ProductListType } from '@/types/Product';
 import { Navigation, Pagination, Keyboard, Autoplay } from 'swiper/modules';
@@ -11,7 +12,6 @@ import 'swiper/css/pagination';
 import ProductCard from './ProductCard';
 import NormalBtn from './NormalBtn';
 import Symbol from '../../public/images/symbol.png';
-import { useCallback, useMemo } from 'react';
 
 type Props = {
   title: string;
@@ -55,12 +55,12 @@ export default function CarouselSwiper({
                 />
 
                 {idx === 0 && (
-                  <p className='text-2xl text-pinkpoint font-bold mt-2'>
+                  <p className='text-xl lg:text-2xl text-pinkpoint font-bold mt-2'>
                     랭킹 1위
                   </p>
                 )}
                 <p className='mt-2'>{brandTitle}</p>
-                <p className='text-xl font-bold text-navytext w-36'>
+                <p className='text-lg lg:text-xl font-bold text-navytext w-36'>
                   {productTitle}
                 </p>
 
@@ -72,8 +72,7 @@ export default function CarouselSwiper({
                   />
                 </div>
               </div>
-
-              <div className='relative w-[450px] h-[450px]'>
+              <div className='relative w-[300px] h-[300px] md:w-[350px] md:h-[350px] lg:w-[450px] lg:h-[450px]'>
                 <Image
                   src={imageUrl}
                   alt={productTitle}
@@ -103,7 +102,9 @@ export default function CarouselSwiper({
   return (
     <div>
       <div className='flex flex-col items-center justify-center mb-4'>
-        <h2 className='text-3xl font-bold text-pinkpoint'>{title}</h2>
+        <h2 className='text-2xl lg:text-3xl font-bold text-pinkpoint'>
+          {title}
+        </h2>
         <p className='text-navytext font-bold'>{subtitle}</p>
         {type !== 'BEST' && (
           <Image
@@ -119,7 +120,7 @@ export default function CarouselSwiper({
       <Swiper
         className={type === 'BEST' ? 'main-pagination' : 'no-pagination'}
         modules={[Navigation, Pagination, Autoplay, Keyboard]}
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        // autoplay={{ delay: 4000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
         spaceBetween={type === 'BEST' ? 80 : 20}
         slidesPerView={type === 'BEST' ? 1 : 3}
