@@ -1,13 +1,11 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRecoilValue } from 'recoil';
 import useFilterByBrand from '@/hooks/useFilterByBrand';
 import { productsListAtom } from '@/atoms/ProductsAtom';
 import Symbol from '../../public/images/symbol.png';
-// import Filter from './Filter';
-
-import dynamic from 'next/dynamic';
 const Filter = dynamic(() => import('./Filter'));
 
 type Props = {

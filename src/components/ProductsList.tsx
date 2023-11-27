@@ -1,12 +1,10 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useRecoilValue } from 'recoil';
 import { productsListAtom } from '@/atoms/ProductsAtom';
 import { useGetProductList } from '@/hooks/useProducts';
-// import ProductCard from './ProductCard';
-// import ScrollToTopBtn from './ScrollToTopBtn';
 import GridSpinner from './ui/GridSpinner';
-import dynamic from 'next/dynamic';
 const ProductCard = dynamic(() => import('./ProductCard'));
 const ScrollToTopBtn = dynamic(() => import('./ScrollToTopBtn'));
 
@@ -31,7 +29,7 @@ export default function ProductsList({ category }: Props) {
           Error loading data.
         </p>
       )}
-      <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
+      <ul className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
         {productsList &&
           productsList.map((product) => (
             <li key={product.productId}>
