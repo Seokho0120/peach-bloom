@@ -44,12 +44,12 @@ export default function CarouselSwiper({
       return productList.map(
         ({ productId, brandTitle, productTitle, imageUrl }, idx) => (
           <SwiperSlide key={productId}>
-            <div className='relative flex justify-center'>
+            <div className='relative flex justify-center sm:z-0'>
               <div className='flex flex-col absolute z-10 top-10 2xl:left-72 left-16'>
                 <Image
                   src={Symbol}
                   alt='Symbol'
-                  className='mb-1 w-[5%] h-auto'
+                  className={`mb-1 w-[8%] sm:w-[5%] h-auto`}
                   priority
                   placeholder='blur'
                 />
@@ -77,7 +77,7 @@ export default function CarouselSwiper({
                   src={imageUrl}
                   alt={productTitle}
                   fill
-                  className='relative object-cover rounded-full'
+                  className='relative object-cover rounded-full z-0'
                   priority
                   // priority={priorityIndices.includes(idx)}
                   sizes='(min-width: 1440px) 450px, 100vw'
@@ -99,6 +99,20 @@ export default function CarouselSwiper({
     }
   }, [handleProductClick, priorityIndices, productList, type]);
 
+  const swiperOptions = {
+    slidesPerView: 1,
+    breakpoints: {
+      640: {
+        slidesPerView: type === 'BEST' ? 1 : 2,
+        spaceBetween: 20,
+      },
+      768: {
+        slidesPerView: type === 'BEST' ? 1 : 3,
+        spaceBetween: 40,
+      },
+    },
+  };
+
   return (
     <div>
       <div className='flex flex-col items-center justify-center mb-4'>
@@ -110,7 +124,7 @@ export default function CarouselSwiper({
           <Image
             src={Symbol}
             alt='Symbol'
-            className='my-8 w-[5%] h-auto'
+            className={`my-8 w-[8%] sm:w-[5%] h-auto`}
             priority
             placeholder='blur'
           />
@@ -120,16 +134,15 @@ export default function CarouselSwiper({
       <Swiper
         className={type === 'BEST' ? 'main-pagination' : 'no-pagination'}
         modules={[Navigation, Pagination, Autoplay, Keyboard]}
-        // autoplay={{ delay: 4000, disableOnInteraction: false }}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
-        spaceBetween={type === 'BEST' ? 80 : 20}
-        slidesPerView={type === 'BEST' ? 1 : 3}
         loop={
           type === 'BEST' ? productList.length >= 1 : productList.length >= 3
         }
         rewind={true}
         navigation={true}
         keyboard={true}
+        {...swiperOptions}
       >
         <article>{swiperSlides}</article>
       </Swiper>

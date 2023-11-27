@@ -1,10 +1,10 @@
 'use client';
 
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useGetCartItems } from '@/hooks/useProducts';
-import dynamic from 'next/dynamic';
 
 const CartIcon = dynamic(() => import('./ui/CartIcon'), {
   ssr: false,
@@ -58,7 +58,7 @@ export default function Userbar() {
   return (
     <nav>
       <div className='flex flex-col'>
-        <ul className='flex justify-center items-center gap-6 text-navypoint'>
+        <ul className='flex justify-center items-center gap-5 lg:gap-6 text-navypoint'>
           {SIDE_MENU.map(({ title, href, text }) => (
             <li key={href}>
               <Link
@@ -71,7 +71,7 @@ export default function Userbar() {
                     {cartItem.length}
                   </p>
                 )}
-                <p className='text-xs'>{text}</p>
+                <span className='hidden sm:inline text-xs'>{text}</span>
               </Link>
             </li>
           ))}
@@ -80,7 +80,7 @@ export default function Userbar() {
           {session?.user.isAdmin && (
             <Link href={'/upload'} className='flex items-center gap-1'>
               <UploadIcon />
-              <p className='text-xs'>UPLOAD</p>
+              <p className='hidden sm:inline text-xs'>UPLOAD</p>
             </Link>
           )}
         </ul>

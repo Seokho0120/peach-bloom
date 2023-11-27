@@ -1,7 +1,7 @@
 import { Session as NextAuthSession } from 'next-auth';
-import LoginIcon from './ui/LoginIcon';
 import { useSetRecoilState } from 'recoil';
 import { LoginStatusAtom } from '@/atoms/LoginStatusAtom';
+import LoginIcon from './ui/LoginIcon';
 
 interface AuthButtonProps {
   session: NextAuthSession | null;
@@ -30,7 +30,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   return (
     <button onClick={handleClick} className='flex items-center gap-1'>
       <LoginIcon />
-      <p className='text-xs'>{buttonText}</p>
+      <p className='hidden sm:inline text-xs'>{buttonText}</p>
     </button>
   );
 };

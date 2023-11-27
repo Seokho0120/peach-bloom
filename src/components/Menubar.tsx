@@ -1,8 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import MenuIcon from './ui/MenuIcon';
-import Link from 'next/link';
 
 const PRODUCTS_MENU = [
   {
@@ -47,13 +47,13 @@ export default function Menubar() {
       <li className='my-6 text-navypoint hover:text-pinkpoint'>
         <MenuIcon onClick={toggleMenu} />
       </li>
-      <li className='absolute flex flex-col cursor-pointer gap-6'>
+      <li className='absolute flex flex-col cursor-pointer gap-6 z-50 shadow-lg md:shadow-none p-2 md:p-0 bg-white md:bg-transparent rounded-lg'>
         {isOpen &&
           PRODUCTS_MENU.map(({ title, href }, idx) => (
             <Link
               href={href}
               key={idx}
-              className='font-semibold text-navypoint hover:text-pinkpoint'
+              className='text-sm md:text-base font-semibold text-navypoint hover:text-pinkpoint'
             >
               {title}
             </Link>
