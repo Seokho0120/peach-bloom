@@ -15,7 +15,7 @@ export default function Signin({ providers, callbackUrl }: Props) {
       <Image
         src={Symbol}
         alt='Symbol'
-        className='mb-8 w-[6%] h-auto'
+        className={`my-8 w-[8%] sm:w-[5%] h-auto`}
         placeholder='blur'
       />
 

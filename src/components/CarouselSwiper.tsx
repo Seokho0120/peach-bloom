@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { ProductListType } from '@/types/Product';
 import { Navigation, Pagination, Keyboard, Autoplay } from 'swiper/modules';
@@ -45,11 +45,11 @@ export default function CarouselSwiper({
         ({ productId, brandTitle, productTitle, imageUrl }, idx) => (
           <SwiperSlide key={productId}>
             <div className='relative flex justify-center sm:z-0'>
-              <div className='flex flex-col absolute z-10 top-10 2xl:left-72 left-16'>
+              <div className='flex flex-col absolute z-10 top-0 md:top-10 left-11 sm:left-16 md:left-28 2xl:left-72 '>
                 <Image
                   src={Symbol}
                   alt='Symbol'
-                  className={`mb-1 w-[8%] sm:w-[5%] h-auto`}
+                  className={`invisible sm:visible mb-1 w-[8%] sm:w-[5%] h-auto`}
                   priority
                   placeholder='blur'
                 />
@@ -64,7 +64,7 @@ export default function CarouselSwiper({
                   {productTitle}
                 </p>
 
-                <div className='mt-4'>
+                <div className='mt-1 md:mt-2 lg:mt-4'>
                   <NormalBtn
                     text='상품 확인하기'
                     size='small'
@@ -79,7 +79,6 @@ export default function CarouselSwiper({
                   fill
                   className='relative object-cover rounded-full z-0'
                   priority
-                  // priority={priorityIndices.includes(idx)}
                   sizes='(min-width: 1440px) 450px, 100vw'
                 />
               </div>
@@ -124,7 +123,7 @@ export default function CarouselSwiper({
           <Image
             src={Symbol}
             alt='Symbol'
-            className={`my-8 w-[8%] sm:w-[5%] h-auto`}
+            className={`my-1 md:my-3 lg:my-8 w-[8%] sm:w-[5%] h-auto`}
             priority
             placeholder='blur'
           />
@@ -134,7 +133,7 @@ export default function CarouselSwiper({
       <Swiper
         className={type === 'BEST' ? 'main-pagination' : 'no-pagination'}
         modules={[Navigation, Pagination, Autoplay, Keyboard]}
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        // autoplay={{ delay: 4000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
         loop={
           type === 'BEST' ? productList.length >= 1 : productList.length >= 3

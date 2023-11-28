@@ -16,7 +16,7 @@ export default function NormalBtn({
   const sizeClasses = (() => {
     switch (size) {
       case 'small':
-        return 'py-1 px-2 text-sm font-semibold rounded-md';
+        return 'py-1 px-1 text-sm font-semibold rounded-md text-xs lg:text-base';
       case 'large':
         return 'text-2xl py-3 px-6 w-full text-xl <font-bo></font-bo> rounded-lg';
       default: // 'medium'
@@ -27,7 +27,7 @@ export default function NormalBtn({
   return (
     <button
       disabled={disabled}
-      className={`bg-navypoint text-white hover:bg-pinkpoint text-sm font-semibold ${sizeClasses}`}
+      className={`bg-navypoint text-white hover:bg-pinkpoint text-sm font-semibold ${sizeClasses} `}
       onClick={onClick}
       aria-label={text}
     >

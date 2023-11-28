@@ -22,7 +22,7 @@ export default async function SignInPage({
   const providers = (await getProviders()) ?? {};
 
   return (
-    <section className='mx-52'>
+    <section className='mx-6 md:mx-36 lg:mx-52'>
       <Signin providers={providers} callbackUrl={callbackUrl ?? '/'} />
     </section>
   );
