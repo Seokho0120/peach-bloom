@@ -58,6 +58,7 @@ export default function Menubar() {
               href={href}
               key={idx}
               className='text-sm md:text-base font-semibold text-navypoint hover:text-pinkpoint'
+              aria-label={title}
             >
               {title}
             </Link>

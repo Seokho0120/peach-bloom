@@ -30,6 +30,7 @@ export default function Signin({ providers, callbackUrl }: Props) {
             key={id}
             onClick={() => signIn(id, { callbackUrl })}
             className='flex gap-2 py-6 px-20 border hover:shadow text-xl font-semibold rounded-full'
+            aria-label='Login Button'
           >
             <p>{name}</p>
             <p>로그인</p>

@@ -28,6 +28,7 @@ export default function MyInfo() {
         <button
           onClick={handleSignOut}
           className='text-navypoint hover:text-pinkpoint'
+          aria-label='Logout Button'
         >
           로그아웃
         </button>

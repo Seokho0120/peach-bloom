@@ -30,7 +30,11 @@ export default function Filter() {
 
   return (
     <section className='relative'>
-      <button onClick={toggleDropdown} className='flex hover:text-navypoint'>
+      <button
+        onClick={toggleDropdown}
+        className='flex hover:text-navypoint'
+        aria-label='Toggle Button'
+      >
         {selectedFilter}
         <ArrowIcon isOpen={isOpen} />
       </button>

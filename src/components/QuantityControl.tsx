@@ -19,6 +19,7 @@ export default function QuantityControl(props: Props) {
               setQuantity((prev: number) => (prev > 1 ? prev - 1 : 1))
             }
             className='border-r flex items-center justify-center px-3 lg:px-4 hover:text-pinkpoint'
+            aria-label='- Button'
           >
             -
           </button>
@@ -26,6 +27,7 @@ export default function QuantityControl(props: Props) {
           <button
             onClick={() => setQuantity((prev: number) => prev + 1)}
             className='border-l flex items-center justify-center px-3 lg:px-4 hover:text-pinkpoint'
+            aria-label='+ Button'
           >
             +
           </button>

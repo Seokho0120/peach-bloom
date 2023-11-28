@@ -30,6 +30,7 @@ export default function Modal({
           <button
             className='absolute top-3 right-3'
             onClick={() => setIsModalOpen(false)}
+            aria-label='Cancel Button'
           >
             <CancelIcon />
           </button>
@@ -37,6 +38,7 @@ export default function Modal({
           <button
             className='px-4 py-2 mt-10 rounded bg-navypoint hover:bg-pinkpoint text-white'
             onClick={goToCart}
+            aria-label='Modal Button'
           >
             {modalText}
           </button>

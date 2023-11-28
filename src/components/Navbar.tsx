@@ -12,7 +12,7 @@ export default function Navbar() {
     <>
       <nav className='flex justify-between relative pt-6 pl-6 pr-6 md:pt-12 md:pl-12 md:pr-12'>
         <div className='flex flex-col'>
-          <Link href='/'>
+          <Link href='/' aria-label='Home'>
             <Image
               src={Logo}
               alt='Logo'

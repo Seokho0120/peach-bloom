@@ -35,6 +35,7 @@ export default function ProductInfo(props: Props) {
             disabled && 'opacity-80'
           }`}
           disabled={disabled}
+          aria-label='Like Button'
         >
           <HeartIcon type='detail' isLiked={isLiked} />
         </button>

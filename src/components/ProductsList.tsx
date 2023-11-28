@@ -44,6 +44,7 @@ export default function ProductsList({ category }: Props) {
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage}
           className='flex justify-center p-1 rounded-lg font-semibold bg-navypoint hover:bg-pinkpoint text-white w-1/3'
+          aria-label='NextPage Button'
         >
           {isFetchingNextPage ? '로딩 중...' : hasNextPage && '더 보기'}
         </button>

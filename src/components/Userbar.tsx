@@ -62,6 +62,7 @@ export default function Userbar() {
           {SIDE_MENU.map(({ title, href, text }) => (
             <li key={href}>
               <Link
+                aria-label='SIDE_MENU'
                 href={session ? href : '/auth/signIn'}
                 className='flex items-center gap-1 relative'
               >
@@ -78,7 +79,11 @@ export default function Userbar() {
 
           <AuthButton session={session} onSignOut={signOut} onSignIn={signIn} />
           {session?.user.isAdmin && (
-            <Link href={'/upload'} className='flex items-center gap-1'>
+            <Link
+              href={'/upload'}
+              className='flex items-center gap-1'
+              aria-label='upload'
+            >
               <UploadIcon />
               <p className='hidden sm:inline text-xs'>UPLOAD</p>
             </Link>
@@ -97,6 +102,7 @@ export default function Userbar() {
           <button
             onClick={handleSearchBar}
             className='text-navypoint hover:text-pinkpoint'
+            aria-label='Search Button'
           >
             <SearchIcon />
           </button>

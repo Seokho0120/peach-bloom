@@ -218,7 +218,10 @@ export default function NewProduct() {
           />
         </div>
 
-        <button className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white'>
+        <button
+          className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white'
+          aria-label='New detail'
+        >
           상세 내용 등록하러 가기
         </button>
       </form>

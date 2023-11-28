@@ -26,7 +26,11 @@ export default function ProductCard({ product, priority = false }: Props) {
   const discountedPrice = useDisCountedPrice({ price, saleRate, isSale });
   const formatPrice = useFormatPrice;
   return (
-    <Link href={`/detail/${productId}`} className='relative'>
+    <Link
+      href={`/detail/${productId}`}
+      className='relative'
+      aria-label='Product Card'
+    >
       <div className='relative w-full pb-[100%]'>
         <Image
           src={imageUrl}

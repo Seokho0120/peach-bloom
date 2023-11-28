@@ -28,7 +28,11 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   const buttonText = session ? 'LOGOUT' : 'LOGIN';
 
   return (
-    <button onClick={handleClick} className='flex items-center gap-1'>
+    <button
+      onClick={handleClick}
+      className='flex items-center gap-1'
+      aria-label={buttonText}
+    >
       <LoginIcon />
       <p className='hidden sm:inline text-xs'>{buttonText}</p>
     </button>

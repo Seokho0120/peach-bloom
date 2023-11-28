@@ -87,7 +87,10 @@ export default function NewProductDetail({ productId }: Props) {
             className='w-10/12'
           />
         </div>
-        <button className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white'>
+        <button
+          className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white'
+          aria-label='New product upload'
+        >
           제품 상세 내용 등록하기
         </button>
       </form>

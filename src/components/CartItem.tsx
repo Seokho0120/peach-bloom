@@ -78,6 +78,7 @@ export default function CartItem({ product }: Props) {
           <button
             onClick={handleMinus}
             className='border-r flex items-center justify-center px-3 lg:px-4 hover:text-pinkpoint'
+            aria-label='Minus Button'
           >
             -
           </button>
@@ -85,6 +86,7 @@ export default function CartItem({ product }: Props) {
           <button
             onClick={handlePlus}
             className='border-l flex items-center justify-center px-3 lg:px-4 hover:text-pinkpoint'
+            aria-label='Plus Button'
           >
             +
           </button>
@@ -97,6 +99,7 @@ export default function CartItem({ product }: Props) {
       <button
         onClick={handleRemove}
         className='absolute top-0 left-0 cursor-pointer bg-white hover:bg-navypoint text-gray-800 hover:text-white flex items-center justify-center'
+        aria-label='Remove Button'
       >
         <CancelIcon />
       </button>

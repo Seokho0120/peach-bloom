@@ -8,12 +8,17 @@ export default function Footer() {
           <Link
             href='https://github.com/Seokho0120/peach-bloom'
             target='_blank'
+            aria-label='GitHub'
           >
             GitHub
           </Link>
         </p>
         <p className='cursor-pointer'>
-          <Link href='https://river-dev.vercel.app/' target='_blank'>
+          <Link
+            href='https://river-dev.vercel.app/'
+            target='_blank'
+            aria-label='Blog'
+          >
             Blog
           </Link>
         </p>
@@ -31,6 +36,7 @@ export default function Footer() {
             href='https://peach-bloom.vercel.app/'
             className='underline transition-all hover:text-slate-200'
             target='_blank'
+            aria-label='홈페이지'
           >
             peach-bloom.co.kr
           </Link>
@@ -39,6 +45,7 @@ export default function Footer() {
             href='/'
             className='underline transition-all hover:text-slate-200'
             target='_blank'
+            aria-label='이용 약관'
           >
             이용 약관
           </Link>
@@ -47,6 +54,7 @@ export default function Footer() {
             href='/'
             className='underline transition-all hover:text-slate-200'
             target='_blank'
+            aria-label='개인정보 처리 방침'
           >
             개인정보 처리 방침
           </Link>

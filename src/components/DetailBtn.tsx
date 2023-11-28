@@ -15,6 +15,7 @@ export const DetailBtn: React.FC<ButtonProps> = ({ text, onClick }) => {
     <button
       onClick={onClick}
       className={`text-lg font-bold p-3 cursor-pointer rounded-lg w-1/2 ${textStyle}`}
+      aria-label='Detail Button'
     >
       {text}
     </button>

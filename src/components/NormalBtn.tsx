@@ -29,6 +29,7 @@ export default function NormalBtn({
       disabled={disabled}
       className={`bg-navypoint text-white hover:bg-pinkpoint text-sm font-semibold ${sizeClasses}`}
       onClick={onClick}
+      aria-label={text}
     >
       {text}
     </button>
