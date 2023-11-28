@@ -22,18 +22,18 @@ export default function BrandList({ category }: Props) {
 
   return (
     <article className='mb-6'>
-      <h2 className='font-bold text-4xl text-slate-600'>
+      <h2 className='font-bold text-2xl lg:text-4xl text-slate-600'>
         <Image
           src={Symbol}
           alt='Symbol'
-          className='mb-4 w-[4%] h-auto'
+          className={`my-8 w-[8%] sm:w-[5%] h-auto`}
           placeholder='blur'
         />
 
         {category.toUpperCase()}
         <div className='border-b border-navypoint mt-4' />
       </h2>
-      <ul className='flex flex-wrap p-10 bg-gray-100 gap-4 text-sm font-semibold text-slate-800'>
+      <ul className='flex flex-wrap p-4 md:p-6 lg:p-10 bg-gray-100 gap-4 text-sm font-semibold text-slate-800'>
         <Filter />
         <p
           onClick={() => filterByBrand('전체')}

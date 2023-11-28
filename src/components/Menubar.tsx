@@ -44,10 +44,14 @@ export default function Menubar() {
 
   return (
     <ul className='relative'>
-      <li className='my-6 text-navypoint hover:text-pinkpoint'>
+      <li className='mt-6 mb-4 lg:my-6 text-navypoint hover:text-pinkpoint'>
         <MenuIcon onClick={toggleMenu} />
       </li>
-      <li className='absolute flex flex-col cursor-pointer gap-6 z-50 shadow-lg md:shadow-none p-2 md:p-0 bg-white md:bg-transparent rounded-lg'>
+      <li
+        className={`absolute flex flex-col cursor-pointer gap-6 z-50 shadow-lg md:shadow-none ${
+          isOpen && 'p-2'
+        } md:p-0 bg-white rounded-lg`}
+      >
         {isOpen &&
           PRODUCTS_MENU.map(({ title, href }, idx) => (
             <Link
