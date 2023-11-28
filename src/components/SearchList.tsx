@@ -27,12 +27,13 @@ export default function SearchList({ keyword }: Props) {
           Error loading data.
         </p>
       )}
-      <h2 className='font-bold text-2xl md:text-3xl lg:text-4xl text-slate-600 mb-6'>
-        {decodeKeyword} 에 대한 검색 결과입니다.
+      <h2 className='font-bold text-2xl md:text-3xl lg:text-4xl mb-6'>
+        <span className='text-pinkpoint'>{decodeKeyword}</span>
+        <span className='text-navytext'>에 대한 검색 결과입니다.</span>
         <div className='border-b border-navypoint mt-4' />
       </h2>
       {searchProductList.length > 0 ? (
-        <ul className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 min-h-screen'>
+        <ul className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
           {searchProductList.map((product) => (
             <li key={product.productId}>
               <ProductCard product={product} />
