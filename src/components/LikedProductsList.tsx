@@ -14,7 +14,6 @@ type Props = {
 export default function LikedProductsList({ userId }: Props) {
   const { isLoading, isError } = useLikedProducts(userId);
   const productsList = useRecoilValue(productsListAtom);
-  console.log('좋아요 productsList', productsList);
 
   return (
     <section>
@@ -29,7 +28,7 @@ export default function LikedProductsList({ userId }: Props) {
         </p>
       )}
 
-      <h2 className='font-bold text-4xl text-slate-600 mb-6'>
+      <h2 className='font-bold text-2xl md:text-3xl lg:text-4xl text-slate-600 mb-6'>
         MY LIKE
         <div className='border-b border-navypoint mt-4' />
       </h2>
@@ -38,7 +37,7 @@ export default function LikedProductsList({ userId }: Props) {
         <p>좋아하는 상품이 없습니다. 지금 쇼핑하세요 💄</p>
       )}
 
-      <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5'>
+      <ul className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
         {productsList &&
           productsList.map((product) => (
             <li key={product.productId}>
