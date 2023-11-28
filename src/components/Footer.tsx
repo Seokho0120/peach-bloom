@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className='mx-auto flex h-fit min-w-[360px] flex-col items-center justify-center gap-y-5 bg-slate-700 py-12 text-slate-400 mt-36 px-32'>
+    <footer className='mx-auto flex h-fit min-w-[360px] flex-col items-center justify-center gap-y-5 bg-slate-700 py-12 text-slate-400 mt-36 px-6 md:px-24 lg:px-32'>
       <section className='flex pl-2 items-center gap-10 border-b border-slate-400 w-full font-semibold text-lg p-4'>
         <p className='cursor-pointer'>
           <Link
