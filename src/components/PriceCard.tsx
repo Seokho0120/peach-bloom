@@ -7,9 +7,9 @@ type Props = {
 
 export default function PriceCard({ price, text }: Props) {
   return (
-    <div className='bg-slate-50 p-8 mx-2 rounded-2xl text-center text-lg md:text-xl'>
-      <p>{text}</p>
-      <p className='font-bold text-brand text-xl md:text-2xl'>{price}원</p>
+    <div className='bg-slate-50 p-4 lg:p-8 rounded-2xl text-center text-lg md:text-xl'>
+      <p className='text-sm lg:text-base'>{text}</p>
+      <p className='font-bold text-brand text-lg md:text-2xl'>{price}원</p>
     </div>
   );
 }

@@ -48,7 +48,7 @@ export default function CartsList() {
           Error loading data.
         </p>
       )}
-      <h2 className='font-bold text-4xl text-slate-600 mb-6'>
+      <h2 className='font-bold text-2xl lg:text-4xl text-slate-600 mb-6'>
         장바구니
         <div className='border-b border-navypoint mt-4' />
       </h2>
@@ -57,8 +57,8 @@ export default function CartsList() {
       {hasCartItem && (
         <>
           <div className='flex items-center gap-1 mr-16 mb-4'>
-            <p className='text-xl font-bold'>총 상품 개수: </p>
-            <p className='text-xl font-semibold'>{totalQuantity}개</p>
+            <p className='text-base lg:text-xl font-semibold'>총 상품 개수: </p>
+            <p className='text-base lg:text-xl font-bold'>{totalQuantity}개</p>
           </div>
           <div className='border-b mb-4' />
           <ul className='flex flex-col gap-4 mb-8'>
@@ -67,7 +67,7 @@ export default function CartsList() {
                 <CartItem product={product} key={product.productId} />
               ))}
           </ul>
-          <div className='flex justify-between items-center px-2 md:px-8 lg:px-16 mb-10'>
+          <div className='flex justify-between items-center px-0 md:px-8 lg:px-16 mb-10'>
             <PriceCard text='총 주문금액' price={totalPrice} />
             <PlusIcon />
             <PriceCard text='총 배송비' price={SHIPPING} />
