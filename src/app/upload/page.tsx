@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function UploadPage() {
   return (
-    <section className='mx-52'>
+    <section className='mx-6 md:mx-36 lg:mx-52'>
       <NewProduct />
     </section>
   );
