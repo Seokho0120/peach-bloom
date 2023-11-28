@@ -199,7 +199,7 @@ export default function ProductDetail({ productId }: Props) {
   }, []);
 
   return (
-    <ul className='flex flex-col'>
+    <article className='flex flex-col w-full'>
       {isLoading && (
         <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
           <GridSpinner />
@@ -221,8 +221,11 @@ export default function ProductDetail({ productId }: Props) {
             ingredients,
             howToUse,
           }) => (
-            <li key={productId} className='flex justify-between gap-16'>
-              <div className='flex-shrink-0 relative w-[500px] h-[500px]'>
+            <div
+              key={productId}
+              className='flex flex-col md:flex-row justify-between gap-4 lg:gap-16'
+            >
+              <div className='flex-shrink-0 relative w-[452px] h-[452px] md:w-[350px] md:h-[350px] lg:w-[500px] lg:h-[500px]'>
                 <Image
                   src={imageUrl}
                   alt={productTitle}
@@ -231,8 +234,7 @@ export default function ProductDetail({ productId }: Props) {
                   className='absolute'
                 />
               </div>
-
-              <div className='flex-grow flex flex-col gap-5'>
+              <div className='flex-grow flex flex-col gap-2 lg:gap-5'>
                 {isUpdating && (
                   <div className='absolute z-20 inset-0 flex justify-center items-center'>
                     <GridSpinner />
@@ -256,7 +258,7 @@ export default function ProductDetail({ productId }: Props) {
                   discountedPrice={discountedPrice}
                 />
 
-                <div className='flex gap-4'>
+                <div className='flex gap-4 mt-3 lg:mt-0'>
                   <DetailBtn text='장바구니 담기' onClick={handleAddToCart} />
                   <DetailBtn text='바로 구매하기' onClick={handleBuy} />
                   <Modal
@@ -269,9 +271,9 @@ export default function ProductDetail({ productId }: Props) {
                   />
                 </div>
               </div>
-            </li>
+            </div>
           )
         )}
-    </ul>
+    </article>
   );
 }
