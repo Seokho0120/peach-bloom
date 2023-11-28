@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function MyPage() {
   return (
-    <section className='mx-52 flex justify-center'>
+    <section className='mx-6 md:mx-36 lg:mx-52 flex justify-center'>
       <MyInfo />
     </section>
   );
