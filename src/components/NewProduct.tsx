@@ -82,6 +82,7 @@ export default function NewProduct() {
             width={400}
             height={400}
             alt='local file'
+            priority
           />
         )}
         <div className='flex items-center gap-8'>

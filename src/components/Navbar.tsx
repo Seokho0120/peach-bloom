@@ -18,6 +18,7 @@ export default function Navbar() {
               alt='Logo'
               className='w-24 md:w-32'
               placeholder='blur'
+              priority
             />
           </Link>
           <div>

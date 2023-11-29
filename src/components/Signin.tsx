@@ -17,6 +17,7 @@ export default function Signin({ providers, callbackUrl }: Props) {
         alt='Symbol'
         className={`my-8 w-[8%] sm:w-[5%] h-auto`}
         placeholder='blur'
+        priority
       />
 
       <h2 className='w-full flex flex-col items-center font-bold text-4xl text-slate-600 mb-4'>

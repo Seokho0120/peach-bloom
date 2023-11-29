@@ -232,6 +232,7 @@ export default function ProductDetail({ productId }: Props) {
                   fill
                   sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                   className='absolute'
+                  priority
                 />
               </div>
               <div className='flex-grow flex flex-col gap-2 lg:gap-5'>
