@@ -51,7 +51,7 @@ export function useGetProductList(category: string) {
     queryKey: ['products', category],
     queryFn: (context) => getProductsList(category, context.pageParam),
     getNextPageParam: (lastPage) => lastPage?.lastDoc || null,
-    staleTime: 300000,
+    staleTime: 1000 * 60 * 5, // 5분
     refetchOnWindowFocus: false,
     retry: false,
     initialPageParam: undefined,
