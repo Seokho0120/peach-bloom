@@ -1,10 +1,14 @@
 import { Metadata } from 'next';
-import CartsList from '@/components/CartsList';
+import dynamic from 'next/dynamic';
 
 export const metadata: Metadata = {
   title: 'CARTS',
   description: '장바구니에 담은 상품을 확인할 수 있습니다.',
 };
+
+const CartsList = dynamic(() => import('@/components/CartsList'), {
+  ssr: false,
+});
 
 export default function CartsPage() {
   return (

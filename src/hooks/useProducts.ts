@@ -226,7 +226,6 @@ export function useGetCartItems(userId: number) {
   const {
     isLoading,
     isError,
-    error,
     data: cartItems,
   } = useQuery({
     queryKey: ['cartItems', userId],
@@ -235,21 +234,16 @@ export function useGetCartItems(userId: number) {
   });
 
   useEffect(() => {
-    const unsubscribe = subscribeToCartItems(userId, () => {
-      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] }); // 특정 쿼리 무효화
-    });
-
-    return unsubscribe;
-  }, [userId, queryClient]);
+    cartItems && setCartList(cartItems);
+  }, [cartItems, setCartList]);
 
   useEffect(() => {
-    if (cartItems) {
-      setCartList(cartItems);
-    }
-    if (error) {
-      setCartList([]);
-    }
-  }, [cartItems, error, setCartList]);
+    const unsubscribe = subscribeToCartItems(userId, () => {
+      queryClient.invalidateQueries({ queryKey: ['cartItems', userId] });
+    });
+
+    return () => unsubscribe();
+  }, [userId, queryClient]);
 
   return { isLoading, isError, data: cartItems };
 }

@@ -4,7 +4,8 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { useGetCartItems } from '@/hooks/useProducts';
+import { useRecoilValue } from 'recoil';
+import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
 
 const CartIcon = dynamic(() => import('./ui/CartIcon'), {
   ssr: false,
@@ -48,7 +49,7 @@ const SIDE_MENU = [
 
 export default function Userbar() {
   const { data: session } = useSession();
-  const { data: cartItem } = useGetCartItems(session?.user.id || 0);
+  const cartItem = useRecoilValue(CartItemUpdateAtom);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const handleSearchBar = () => {
     setIsOpen(!isOpen);
