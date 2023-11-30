@@ -7,7 +7,7 @@ import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import useFormatPrice from '@/hooks/useFormatPrice';
 import { removeFromCart, updateCartItem } from '@/app/api/firesotre';
 import { cartItemType } from '@/types/Product';
-import { useUserSession } from '@/hooks/useUserSession';
+import { useSession } from 'next-auth/react';
 const CancelIcon = dynamic(() => import('./ui/CancelIcon'), {
   ssr: false,
 });
@@ -19,8 +19,8 @@ type Props = {
 export default function CartItem({ product }: Props) {
   const { imageUrl, price, productId, productTitle, quantity, brandTitle } =
     product;
-  const user = useUserSession();
-  const userId = user!.id;
+  const { data: session } = useSession();
+  const userId = session?.user.id || 0;
 
   const [quantityCount, setQuantityCount] = useState<number>(quantity);
 

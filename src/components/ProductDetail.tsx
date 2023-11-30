@@ -7,7 +7,6 @@ import { useEffect, useState, useTransition } from 'react';
 import { useRecoilState } from 'recoil';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
-import { useUserSession } from '@/hooks/useUserSession';
 import { CartItemAtom } from '@/atoms/CartItemAtom';
 import { arrProductDetailType } from '@/types/Product';
 import { addToCartType } from '@/types/FirestoreType';
@@ -22,6 +21,7 @@ import {
 } from '@/app/api/firesotre';
 import { DocumentReference } from 'firebase/firestore';
 import GridSpinner from './ui/GridSpinner';
+import { useSession } from 'next-auth/react';
 const ProductInfo = dynamic(() => import('./ProductInfo'));
 const QuantityControl = dynamic(() => import('./QuantityControl'));
 const DetailBtn = dynamic(() =>
@@ -42,8 +42,9 @@ export default function ProductDetail({ productId }: Props) {
   const [isFetching, setIsFetching] = useState(false);
   const isUpdating = isPending || isFetching;
 
-  const user = useUserSession();
-  const userId = user?.id;
+  const { data: session } = useSession();
+  const user = session?.user;
+  const userId = session?.user.id;
 
   const { productDetail, isError, isLoading } =
     useGetProductDetail(NumProductId);

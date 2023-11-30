@@ -1,13 +1,13 @@
 'use client';
 
 import { redirect } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { useUserSession } from '@/hooks/useUserSession';
 
 export default function MyInfo() {
   const [imageError, setImageError] = useState(false);
-  const user = useUserSession();
+  const { data: session } = useSession();
+  const user = session?.user;
 
   if (!user) {
     redirect('/');

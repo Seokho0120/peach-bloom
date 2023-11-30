@@ -1,13 +1,13 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useSession } from 'next-auth/react';
 import { useRecoilValue } from 'recoil';
 import {
   CartItemUpdateAtom,
   TotalPriceSelector,
   TotalQuantitySelector,
 } from '@/atoms/CartItemAtom';
-import { useUserSession } from '@/hooks/useUserSession';
 import { useGetCartItems } from '@/hooks/useProducts';
 import GridSpinner from './ui/GridSpinner';
 const CartItem = dynamic(() => import('./CartItem'), {
@@ -28,8 +28,8 @@ const EqualIcon = dynamic(() => import('./ui/EqualIcon'), {
 
 export default function CartsList() {
   const SHIPPING = 3000;
-  const user = useUserSession(); // 개선해야됨 - 번들사이즈
-  const userId = user?.id;
+  const { data: session } = useSession();
+  const userId = session?.user.id;
   const { isLoading, isError } = useGetCartItems(userId || 0);
   const cartItem = useRecoilValue(CartItemUpdateAtom);
   const totalPrice = useRecoilValue(TotalPriceSelector);
