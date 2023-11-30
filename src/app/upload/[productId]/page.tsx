@@ -1,4 +1,5 @@
-import NewProductDetail from '@/components/NewProductDetail';
+import dynamic from 'next/dynamic';
+const NewProductDetail = dynamic(() => import('@/components/NewProductDetail'));
 
 type Props = {
   params: {

@@ -1,9 +1,9 @@
 'use client';
 
-import { addNewDeatil } from '@/app/api/firesotre';
-import { ProductDetailType } from '@/types/Product';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { addNewDeatil } from '@/app/api/firesotre';
+import { ProductDetailType } from '@/types/Product';
 
 type Props = {
   productId: string;

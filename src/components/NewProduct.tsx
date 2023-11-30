@@ -1,11 +1,11 @@
 'use client';
 
-import { addNewProduct, getProductById } from '@/app/api/firesotre';
-import { uploadImage } from '@/app/api/uploader';
-import { ProductListType } from '@/types/Product';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { addNewProduct, getProductById } from '@/app/api/firesotre';
+import { uploadImage } from '@/app/api/uploader';
+import { ProductListType } from '@/types/Product';
 
 export default function NewProduct() {
   const router = useRouter();
@@ -24,6 +24,7 @@ export default function NewProduct() {
     saleRank: 0,
     saleRate: 0,
   });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files, checked, type } = e.target;
 
