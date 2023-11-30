@@ -20,7 +20,7 @@ export default function ProductsList({ category }: Props) {
   return (
     <article className='flex flex-col items-center gap-20'>
       {isLoading && (
-        <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
+        <div className='absolute inset-0 z-50 text-center pt-[30%] bg-slate-500/20'>
           <GridSpinner />
         </div>
       )}

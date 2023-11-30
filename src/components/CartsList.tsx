@@ -28,7 +28,7 @@ const EqualIcon = dynamic(() => import('./ui/EqualIcon'), {
 
 export default function CartsList() {
   const SHIPPING = 3000;
-  const user = useUserSession();
+  const user = useUserSession(); // 개선해야됨 - 번들사이즈
   const userId = user?.id;
   const { isLoading, isError } = useGetCartItems(userId || 0);
   const cartItem = useRecoilValue(CartItemUpdateAtom);

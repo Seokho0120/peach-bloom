@@ -48,9 +48,8 @@ export default function Menubar() {
         <MenuIcon onClick={toggleMenu} />
       </li>
       <li
-        className={`absolute flex flex-col cursor-pointer gap-6 z-50 shadow-lg md:shadow-none ${
-          isOpen && 'p-2'
-        } md:p-0 bg-white rounded-lg`}
+        className={`absolute flex flex-col cursor-pointer gap-6 z-50 shadow-lg md:shadow-none 
+        ${isOpen && 'p-2 '} md:p-0 bg-white md:bg-inherit rounded-lg`}
       >
         {isOpen &&
           PRODUCTS_MENU.map(({ title, href }, idx) => (
