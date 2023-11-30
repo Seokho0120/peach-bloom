@@ -48,6 +48,7 @@ export default function MyInfo() {
                   : user?.image ?? undefined
               }
               onError={handleError}
+              referrerPolicy='no-referrer'
             />
             <p className='text-xl font-semibold'>{user?.name}</p>
           </div>
