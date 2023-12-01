@@ -29,7 +29,11 @@ export default function ProductCard({ product, priority = false }: Props) {
     <Link
       href={`/detail/${productId}`}
       className='relative'
-      aria-label='Product Card'
+      aria-label={`
+      ${isSale ? 'S' : null} ${
+        isNew ? 'N' : null
+      } ${brandTitle} ${productTitle} 
+      `}
     >
       <div className='relative w-full pb-[100%]'>
         <Image

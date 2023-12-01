@@ -48,7 +48,7 @@ export default function Userbar() {
           {SIDE_MENU.map(({ title, href, text }) => (
             <li key={href}>
               <Link
-                aria-label='SIDE_MENU'
+                aria-label={text}
                 href={session ? href : '/auth/signIn'}
                 className='flex items-center gap-1 relative'
               >
