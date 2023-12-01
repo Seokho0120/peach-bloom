@@ -6,28 +6,13 @@ import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRecoilValue } from 'recoil';
 import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
-
-const CartIcon = dynamic(() => import('./ui/CartIcon'), {
-  ssr: false,
-});
-const SearchIcon = dynamic(() => import('./ui/SearchIcon'), {
-  ssr: false,
-});
-const UserIcon = dynamic(() => import('./ui/UserIcon'), {
-  ssr: false,
-});
-const HeartOutIcon = dynamic(() => import('./ui/HeartOutIcon'), {
-  ssr: false,
-});
-const UploadIcon = dynamic(() => import('./ui/UploadIcon'), {
-  ssr: false,
-});
-const AuthButton = dynamic(() => import('./AuthBtn'), {
-  ssr: false,
-});
-const SearchBar = dynamic(() => import('./SearchBar'), {
-  ssr: false,
-});
+const CartIcon = dynamic(() => import('./ui/CartIcon'));
+const SearchIcon = dynamic(() => import('./ui/SearchIcon'));
+const UserIcon = dynamic(() => import('./ui/UserIcon'));
+const HeartOutIcon = dynamic(() => import('./ui/HeartOutIcon'));
+const UploadIcon = dynamic(() => import('./ui/UploadIcon'));
+const AuthButton = dynamic(() => import('./AuthBtn'));
+const SearchBar = dynamic(() => import('./SearchBar'));
 
 const SIDE_MENU = [
   {
@@ -51,11 +36,11 @@ export default function Userbar() {
   const { data: session } = useSession();
   const cartItem = useRecoilValue(CartItemUpdateAtom);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const handleSearchBar = () => {
     setIsOpen(!isOpen);
   };
 
-  if (!cartItem) return;
   return (
     <nav>
       <div className='flex flex-col'>

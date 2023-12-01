@@ -3,7 +3,10 @@ import { getServerSession } from 'next-auth';
 import { getProviders } from 'next-auth/react';
 import { authOptions } from '@/lib/auth';
 import dynamic from 'next/dynamic';
-const Signin = dynamic(() => import('@/components/Signin'));
+import GridSpinner from '@/components/ui/GridSpinner';
+const Signin = dynamic(() => import('@/components/Signin'), {
+  loading: () => <GridSpinner />,
+});
 
 type Props = {
   searchParams: {
