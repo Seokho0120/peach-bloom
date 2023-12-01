@@ -1,9 +1,5 @@
-import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
-import GridSpinner from '@/components/ui/GridSpinner';
-const MyInfo = dynamic(() => import('@/components/MyInfo'), {
-  loading: () => <GridSpinner />,
-});
+import MyInfo from '@/components/MyInfo';
 
 export const metadata: Metadata = {
   title: 'MY PAGE',
