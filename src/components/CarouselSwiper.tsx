@@ -133,7 +133,7 @@ export default function CarouselSwiper({
       <Swiper
         className={type === 'BEST' ? 'main-pagination' : 'no-pagination'}
         modules={[Navigation, Pagination, Autoplay, Keyboard]}
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
+        // autoplay={{ delay: 4000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
         loop={
           type === 'BEST' ? productList.length >= 1 : productList.length >= 3
