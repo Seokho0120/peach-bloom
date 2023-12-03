@@ -1,10 +1,11 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useRecoilValue } from 'recoil';
 import { searchItemAtom } from '@/atoms/SearchListAtom';
 import { useGetSearchList } from '@/hooks/useProducts';
-import ProductCard from './ProductCard';
 import GridSpinner from './ui/GridSpinner';
+const ProductCard = dynamic(() => import('./ProductCard'));
 
 type Props = {
   keyword: string;

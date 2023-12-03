@@ -1,4 +1,5 @@
-import SearchList from '@/components/SearchList';
+import dynamic from 'next/dynamic';
+const SearchList = dynamic(() => import('@/components/SearchList'));
 
 type Props = {
   params: {
