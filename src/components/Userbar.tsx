@@ -4,8 +4,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { useRecoilValue } from 'recoil';
-import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
+import { useGetCartItems } from '@/hooks/useProducts';
 const CartIcon = dynamic(() => import('./ui/CartIcon'), { ssr: false });
 const SearchIcon = dynamic(() => import('./ui/SearchIcon'), { ssr: false });
 const UserIcon = dynamic(() => import('./ui/UserIcon'), { ssr: false });
@@ -34,7 +33,7 @@ const SIDE_MENU = [
 
 export default function Userbar() {
   const { data: session } = useSession();
-  const cartItem = useRecoilValue(CartItemUpdateAtom);
+  const { data: cartItem } = useGetCartItems(session?.user.id || 0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleSearchBar = () => {
@@ -53,7 +52,7 @@ export default function Userbar() {
                 className='flex items-center gap-1 relative'
               >
                 <p>{title}</p>
-                {text === 'CARTS' && cartItem.length > 0 && (
+                {text === 'CARTS' && cartItem && cartItem.length > 0 && (
                   <p className='absolute top-[-7px] left-[-9px] w-5 h-5 flex items-center justify-center text-sm bg-pinkpoint text-white rounded-full'>
                     {cartItem.length}
                   </p>

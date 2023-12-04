@@ -9,11 +9,7 @@ interface AuthButtonProps {
   onSignIn: () => void;
 }
 
-const AuthButton: React.FC<AuthButtonProps> = ({
-  session,
-  onSignOut,
-  onSignIn,
-}) => {
+const AuthButton = ({ session, onSignOut, onSignIn }: AuthButtonProps) => {
   const setIsLoggedIn = useSetRecoilState(LoginStatusAtom);
 
   const handleClick = async () => {
