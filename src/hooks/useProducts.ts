@@ -115,7 +115,6 @@ export function useGetProductDetail(productId: number) {
     queryFn: () => getProductDetail(productId),
     staleTime: 300000,
     placeholderData: keepPreviousData,
-    refetchInterval: 600000,
   });
 
   const selectedProductDetail = useMemo(() => {
