@@ -46,15 +46,14 @@ export function useGetProductList(category: string) {
     isFetchingNextPage,
     isLoading,
     isError,
-    isFetching,
   } = useInfiniteQuery<ProductsResponse, Error>({
     queryKey: ['products', category],
     queryFn: (context) => getProductsList(category, context.pageParam),
     getNextPageParam: (lastPage) => lastPage?.lastDoc || null,
     staleTime: 1000 * 60 * 5, // 5분
+    initialPageParam: 0,
     refetchOnWindowFocus: false,
     retry: false,
-    initialPageParam: undefined,
     enabled: !!category,
   });
 
@@ -90,7 +89,6 @@ export function useGetProductList(category: string) {
     isError,
     productsList,
     fetchNextPage,
-    isFetching,
     hasNextPage,
     isFetchingNextPage,
     getProductsList,
