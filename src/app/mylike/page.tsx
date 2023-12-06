@@ -20,7 +20,7 @@ export default async function MyLikePage() {
   if (!user) {
     redirect('/auth/signin');
   }
-  console.log('??', typeof user.id);
+
   return (
     <section className='mx-6 md:mx-36 lg:mx-52'>
       <LikedProductsList userId={user.id} />
