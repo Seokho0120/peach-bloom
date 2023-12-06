@@ -23,7 +23,7 @@ export default async function MyLikePage() {
 
   return (
     <section className='mx-6 md:mx-36 lg:mx-52'>
-      <LikedProductsList userId={user.id} />
+      <LikedProductsList userId={user.id as number} />
     </section>
   );
 }
