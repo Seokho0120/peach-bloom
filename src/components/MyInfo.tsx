@@ -38,18 +38,20 @@ export default function MyInfo() {
         <h3 className='text-lg lg:text-2xl font-bold'>기본정보</h3>
         <div className='bg-white p-4 lg:p-8 flex flex-col'>
           <div className='flex items-center gap-4 lg:gap-10 mb-6'>
-            {/*eslint-disable-next-line @next/next/no-img-element*/}
-            <img
-              className='rounded-full w-[10%] md:w-[7%] lg:w-[5%] h-auto'
-              alt='user profile'
-              src={
-                imageError
-                  ? 'images/initial-profile.jpg'
-                  : user?.image ?? undefined
-              }
-              onError={handleError}
-              referrerPolicy='no-referrer'
-            />
+            <div className='rounded-full w-16 h-16 overflow-hidden'>
+              {/*eslint-disable-next-line @next/next/no-img-element*/}
+              <img
+                className='w-full h-full object-cover'
+                alt='user profile'
+                src={
+                  imageError
+                    ? 'images/initial-profile.jpg'
+                    : user?.image ?? undefined
+                }
+                onError={handleError}
+                referrerPolicy='no-referrer'
+              />
+            </div>
             <p className='text-xl font-semibold'>{user?.name}</p>
           </div>
 
