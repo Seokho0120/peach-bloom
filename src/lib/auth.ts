@@ -21,9 +21,10 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
+      console.log('user', user);
       if (user) {
         const isNaver = user.email?.includes('naver');
-        token.id = isNaver ? Number(user.id) : Number(user.id);
+        token.id = isNaver ? user.id : Number(user.id);
         token.name = user.name;
       }
       return token;
@@ -31,7 +32,7 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       const user = session?.user;
-
+      console.log('token', token);
       if (session.user) {
         session.user = {
           ...user,
@@ -40,6 +41,7 @@ export const authOptions: NextAuthOptions = {
           id: token.id as number,
         };
       }
+      console.log('session', session);
       return session;
     },
   },
