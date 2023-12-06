@@ -22,8 +22,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        const isNaver = user.email?.includes('naver');
-        token.id = isNaver ? user.id : Number(user.id);
+        token.id = Number(user.id);
         token.name = user.name;
       }
       return token;
