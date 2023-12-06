@@ -21,10 +21,13 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      console.log('user', user);
+      const isNaver = user.email?.includes('naver');
+      const userId = isNaver
+        ? Number(user.id.match(/\d+/g)?.join(''))
+        : user.id;
+
       if (user) {
-        const isNaver = user.email?.includes('naver');
-        token.id = isNaver ? user.id : Number(user.id);
+        token.id = userId;
         token.name = user.name;
       }
       return token;
@@ -32,8 +35,8 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       const user = session?.user;
-      console.log('token', token);
-      if (session.user) {
+
+      if (user) {
         session.user = {
           ...user,
           username: user.email?.split('@')[0] || user.name,
@@ -41,7 +44,6 @@ export const authOptions: NextAuthOptions = {
           id: token.id as number,
         };
       }
-      console.log('session', session);
       return session;
     },
   },
