@@ -1,4 +1,3 @@
-import { JwtType, SessionType } from '@/types/AuthUserType';
 import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import KakaoProvider from 'next-auth/providers/kakao';
@@ -21,31 +20,26 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, user }: JwtType) {
-      const isNaver = user?.email?.includes('naver');
-      console.log('user', user);
+    async jwt({ token, user }) {
       if (user) {
-        token.user = {
-          id: isNaver ? user.id : Number(user.id) || 0,
-          name: user.name || '',
-        };
+        const isNaver = user.email?.includes('naver');
+        token.id = isNaver ? user.id : Number(user.id);
+        token.name = user.name;
       }
-
       return token;
     },
 
-    async session({ session, token }: SessionType) {
+    async session({ session, token }) {
       const user = session?.user;
-      console.log('token', token);
-      if (user) {
+
+      if (session.user) {
         session.user = {
           ...user,
-          username: user.email ? user.email?.split('@')[0] || '' : user.name,
+          username: user.email?.split('@')[0] || user.name,
           isAdmin: token.sub === process.env.NEXT_PUBLIC_ADMIN_UID,
-          id: token.user?.id,
+          id: token.id as number,
         };
       }
-      console.log('session', session);
       return session;
     },
   },

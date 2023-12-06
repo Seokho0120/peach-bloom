@@ -1,11 +1,7 @@
-import NextAuth, { DefaultSession, PagesOptions } from 'next-auth';
+import { AuthUser } from './AuthUserType';
 
 declare module 'next-auth' {
   interface Session {
-    user: {
-      id: number;
-      isAdmin: boolean;
-      username: string;
-    } & DefaultSession['user'];
+    user: AuthUser;
   }
 }
