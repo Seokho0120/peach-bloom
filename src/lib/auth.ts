@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
       console.log('user', user);
       if (user) {
         token.user = {
-          id: isNaver ? Number(user.id) : Number(user.id) || 0,
+          id: isNaver ? user.id : Number(user.id) || 0,
           name: user.name || '',
         };
       }

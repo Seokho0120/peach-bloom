@@ -5,7 +5,7 @@ import { JWT } from 'next-auth/jwt';
 export interface JwtType {
   token: JWT & {
     user?: {
-      id: number;
+      id: number | string;
       name: string;
     };
   };
@@ -15,7 +15,7 @@ export interface JwtType {
 export interface SessionType {
   token: JWT & {
     user?: {
-      id: number;
+      id: number | string;
       name: string;
     };
   };
