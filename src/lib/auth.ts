@@ -21,17 +21,14 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    async jwt({ token, trigger, user, session }: JwtType) {
+    async jwt({ token, user }: JwtType) {
       const isNaver = user?.email?.includes('naver');
       console.log('user', user);
       if (user) {
         token.user = {
-          id: isNaver ? user.id : Number(user.id) || 0,
+          id: isNaver ? Number(user.id) : Number(user.id) || 0,
           name: user.name || '',
         };
-      }
-      if (token.user && trigger === 'update' && session.name) {
-        token.user.name = session.name;
       }
 
       return token;
