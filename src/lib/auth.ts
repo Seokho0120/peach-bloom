@@ -21,12 +21,12 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      const isNaver = user.email?.includes('naver');
-      const userId = isNaver
-        ? Number(user.id.match(/\d+/g)?.join(''))
-        : user.id;
-
       if (user) {
+        const isNaver = user.email?.includes('naver');
+        const userId = isNaver
+          ? Number(user.id.match(/\d+/g)?.join(''))
+          : user.id;
+
         token.id = userId;
         token.name = user.name;
       }
@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       const user = session?.user;
 
-      if (user) {
+      if (session.user) {
         session.user = {
           ...user,
           username: user.email?.split('@')[0] || user.name,
