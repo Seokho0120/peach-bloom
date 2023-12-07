@@ -4,7 +4,7 @@ import { db } from '@/app/api/firesotre';
 import ProductDetail from '@/components/ProductDetail';
 import { ProductDetailType, ProductListType } from '@/types/Product';
 
-export const revalidate = 60;
+export const revalidate = 60 * 60 * 6;
 
 type Props = {
   params: {

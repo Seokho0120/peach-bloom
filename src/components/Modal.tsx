@@ -24,8 +24,8 @@ export default function Modal({
 
   return ReactDOM.createPortal(
     <>
-      <div className='fixed inset-0 bg-gray-950 opacity-20 z-5'></div>
-      <div className='fixed inset-0 flex items-center justify-center z-5'>
+      <div className='fixed inset-0 bg-gray-950 opacity-20'></div>
+      <div className='fixed inset-0 flex items-center justify-center'>
         <div className='relative flex flex-col items-center bg-white w-96 p-10 rounded-lg'>
           <button
             className='absolute top-3 right-3'

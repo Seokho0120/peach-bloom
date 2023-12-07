@@ -33,7 +33,7 @@ type Props = {
   productId: number;
 };
 
-export const revalidate = 60;
+export const revalidate = 60 * 60 * 6;
 
 export default function ProductDetail({ productId }: Props) {
   const router = useRouter();
