@@ -26,6 +26,15 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'Peach Bloom',
   },
+  twitter: {
+    title: 'Peach Bloom',
+    description: '화장품을 판매하는 뷰티 종합 쇼핑몰 입니다.',
+    creator: '@River',
+    images: {
+      url: 'https://peach-bloom.vercel.app/',
+      alt: 'peach-bloom',
+    },
+  },
   robots: {
     index: true,
     follow: true,
