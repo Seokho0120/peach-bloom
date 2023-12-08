@@ -52,7 +52,7 @@ export default function NewProduct() {
 
     const data = await getProductById(firebaseProductId);
 
-    await router.push(`/upload/${data}`);
+    await router.push(`/upload/${data}`); //제품 디테일 업로드로 이동
   };
 
   return (
