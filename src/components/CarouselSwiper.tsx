@@ -51,7 +51,6 @@ export default function CarouselSwiper({
                   alt='Symbol'
                   className={`invisible sm:visible mb-1 w-[8%] sm:w-[5%] h-auto`}
                   priority
-                  // priority={priorityIndices.includes(idx)}
                   placeholder='blur'
                 />
 
@@ -79,7 +78,7 @@ export default function CarouselSwiper({
                   alt={productTitle}
                   fill
                   className='relative object-cover rounded-full z-0'
-                  priority
+                  priority={priorityIndices.includes(idx)}
                   sizes='(min-width: 1440px) 450px, 100vw'
                 />
               </div>
