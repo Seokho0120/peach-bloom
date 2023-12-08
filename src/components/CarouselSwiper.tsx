@@ -50,8 +50,8 @@ export default function CarouselSwiper({
                   src={Symbol}
                   alt='Symbol'
                   className={`invisible sm:visible mb-1 w-[8%] sm:w-[5%] h-auto`}
-                  // priority
-                  priority={priorityIndices.includes(idx)}
+                  priority
+                  // priority={priorityIndices.includes(idx)}
                   placeholder='blur'
                 />
 

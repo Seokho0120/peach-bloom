@@ -42,7 +42,7 @@ export default function Carousel() {
         title='On Sale'
         subtitle='할인 중인 상품만 모았어요!'
         productList={mainSaleRateList}
-        priorityIndices={[0, 1, 2]}
+        priorityIndices={[0]}
         type='On Sale'
       />
 
@@ -50,7 +50,7 @@ export default function Carousel() {
         title='New Arrival'
         subtitle='새로운 화장품을 만나보세요!'
         productList={mainIsNewList}
-        priorityIndices={[0, 1, 2]}
+        priorityIndices={[0]}
         type='New Arrival'
       />
     </section>
