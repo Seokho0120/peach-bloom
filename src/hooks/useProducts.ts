@@ -295,7 +295,7 @@ export function useGetMainList() {
           (a: ProductListType, b: ProductListType) =>
             (a.saleRank || 0) - (b.saleRank || 0)
         )
-        .slice(0, 7);
+        .slice(0, 5);
 
       setMainRankingList(saleRankSortedList);
 
@@ -304,12 +304,12 @@ export function useGetMainList() {
           (a: ProductListType, b: ProductListType) =>
             (b.saleRate || 0) - (a.saleRate || 0)
         )
-        .slice(0, 7);
+        .slice(0, 5);
       setMainSaleRateList(saleSaleRateSortedList);
 
       const saleIsNewSortedList = productsList
         .filter((product) => product.isNew)
-        .slice(0, 7);
+        .slice(0, 5);
       setMainIsNewList(saleIsNewSortedList);
     }
   }, [productsList, setMainIsNewList, setMainRankingList, setMainSaleRateList]);
