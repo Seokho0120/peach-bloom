@@ -332,3 +332,1164 @@ export default function SearchBar() {
 `Debounce`를 적용하여 **api 호출 및 서버 과부화 방지**할 수 있고 **사용자에게 더 좋은 UX를 제공**할 수 있게 되었습니다.
 
 ![debounce-after-sm](https://github.com/Seokho0120/peach-bloom/assets/93597794/bf5b2e2a-c304-4a28-a110-28e8a74b3520)
+
+## 무한 스크롤
+
+**무한 스크롤(Infinite Scroll)** 이란 사용자가 특정 페이지 하단에 도달했을 때, API가 호출되며 컨텐츠가 끊기지 않고 계속 로드되는 사용자 경험 방식입니다.
+페이지를 클릭해 다음 페이지 주소로 이동하는 **페이지네이션(Pagination)** 과 달리, 한 페이지에서 스크롤만으로 새로운 컨텐츠를 보여주게 되므로, 많은 양의 컨텐츠를 스크롤하여 볼 수 있는 장점이 있습니다.
+
+제품 카테고리 중 'ALL'을 클릭하면 모든 카테고리의 제품 목록이 표시됩니다. 제품의 수가 많아 한 번에 모두 로드하기에는 비효율적이기 때문에,
+무한 스크롤 기능을 도입했습니다. 또한, 이번 프로젝트에서 `React-query`에 익숙해지는 과정에서, `React-query`가 제공하는 `useInfiniteQuery`훅을
+활용하여 무한 스크롤을 구현했습니다.
+
+`useInfiniteQuery`훅은 다양한 **options** 과 **return** 값이 있지만, 제가 사용한 옵션만 소개해드리겠습니다.
+
+```tsx
+const {
+  data,
+  fetchNextPage,
+  hasNextPage,
+} = useInfiniteQuery(
+  queryKey,
+  queryFn: ({ pageParam }) => fetchPage(pageParam),
+  getNextPageParam: (lastPage) => lastPage.nextCursor,
+  staleTime: 100,
+  initialPageParam: 1,
+  retry: false,
+  refetchOnWindowFocus: false,
+  enabled: false,
+ )
+```
+
+- **data**
+
+  서버에 요청해서 받아온 데이터입니다.
+
+- **fetchNextPage**
+
+  다음 페이지를 요청할 때 사용되는 메서드입니다.
+
+- **hasNextPage**
+
+  다음 페이지가 있는지 판별하는 boolean 값입니다.
+
+- **getNextPageParam**
+
+  새 데이터를 받아올 때 마지막 페이지(lastPage)와 전체 페이지(allPages) 배열을 함께 받아옵니다. 더 불러올 데이터가 있는지 여부를 결정하는데 사용되고,
+  반환값이 다음 API 호출할때의 pageParam으로 들어갑니다. 흔히 마지막 페이지일 경우 undefined를 리턴하여 hasNextPage값을 false로 설정합니다.
+
+- **queryKey**
+
+  쿼리를 구별하여 캐시를 관리하기위한 이름, key입니다.
+
+- **queryFn**
+
+  쿼리가 데이터를 요청하는 데 사용할 함수, API입니다.
+
+- **refetchOnWindowFocus**
+
+  기본값은 true 입니다. 사용자가 브라우저 창에 다시 포커스를 맞추었을 때 자동으로 쿼리가 `refetch`가 되는데,
+  이는 불필요한 네트워크 요청을 발생시키기 때문에 false로 설정했습니다.
+
+- **initialPageParam**
+
+  이전 버전에서는 queryFn의 pageParam이 undefined값을 가져서 0 또는 초기 값을 정의했었는데, undefined는 직렬화되지 않아
+  `initialPageParam` 옵션이 필수값으로 추가되었습니다.
+
+### 적용하기
+
+`getProductsList` 함수를 호출해 8개씩 가져온 `productsList`를 필요에 맞게 가공합니다.<br/>
+할인 상품은 할인 가격을 계산하여 업데이트하고, 카테고리를 구분하여 'ALL'인 경우 모든 제품을 불러오며, 'ALL'이 아닌 특정 카테고리를 선택한 경우
+해당 카테고리의 데이터만 불러옵니다.
+
+```tsx title="useProducts.ts"
+export function useGetProductList(category: string) {
+  const setProductList = useSetRecoilState(productsListAtom);
+  const setInitialProductList = useSetRecoilState(initialProductsListAtom);
+
+  const {
+    data: productsList,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading,
+    isError,
+    isFetching,
+  } = useInfiniteQuery<ProductsResponse, Error>({
+    queryKey: ['products', category],
+    queryFn: (context) => getProductsList(category, context.pageParam),
+    getNextPageParam: (lastPage) => lastPage?.lastDoc || null,
+    staleTime: 1000 * 60 * 5, // 5분
+    refetchOnWindowFocus: false,
+    retry: false,
+    initialPageParam: undefined,
+    enabled: !!category,
+  });
+
+  useEffect(() => {
+    if (productsList && category) {
+      const allProductList = productsList.pages.flatMap((p) => p.products);
+
+      // 리스트에 할인된 가격 추가 -> 할인된 가격으로 필터링
+      const updatedProductsList = allProductList.map((product) => {
+        const { price, saleRate, isSale } = product;
+        const discountedPrice = isSale
+          ? price - (price * (saleRate || 0)) / 100
+          : price;
+
+        return { ...product, discountedPrice };
+      });
+
+      // 카테고리에 해당하는 상품 정렬
+      const filteredProductList = updatedProductsList.filter((product) => {
+        if (category === 'all') {
+          return updatedProductsList;
+        }
+        return product.category === category;
+      });
+
+      setProductList(filteredProductList);
+      setInitialProductList(filteredProductList);
+    }
+  }, [category, productsList, setInitialProductList, setProductList]);
+
+  return {
+    isLoading,
+    isError,
+    productsList,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    getProductsList,
+  };
+}
+```
+
+`getProductsList`는 Firestore 데이터베이스에서 상품 목록을 가져오는 함수 입니다.<br/>
+카테고리를 구분하고 특정 카테고리의 상품을 페이지 별로 조회하며, 한 페이지당 최대 8개의 제품이 포함됩니다.
+
+```tsx title="firestore.ts"
+export async function getProductsList(
+  category?: string,
+  pageParam?: DocumentData | unknown
+): Promise<{
+  products: ProductListType[];
+  lastDoc: DocumentSnapshot | undefined;
+}> {
+  const baseQuery = collection(db, 'products');
+  const categoryConstraint =
+    category !== 'all' && category ? where('category', '==', category) : null;
+  const pageConstraint = pageParam ? startAfter(pageParam) : null;
+
+  const queries: QueryConstraint[] = [
+    categoryConstraint,
+    orderBy('saleRank'),
+    limit(8),
+    pageConstraint,
+  ].filter(Boolean) as QueryConstraint[]; // 배열의 null값들 제거
+
+  const productQuery = query(baseQuery, ...queries);
+  const snapshot = await getDocs(productQuery);
+  const lastDoc = snapshot.docs[snapshot.docs.length - 1]; // 마지막 문서
+
+  return {
+    products: snapshot.docs.map((doc) => doc.data() as ProductListType),
+    lastDoc,
+  };
+}
+```
+
+화면에서 적용된 코드 입니다.<br/>
+**'더 보기'** 버튼을 클릭하면, `fetchNextPage` 함수가 호출되어 다음 페이지의 상품 목록을 불러옵니다.
+이 과정에서 `isFetchingNextPage`의 상태를 확인하여, 상품 데이터를 불러오는 동안 **'로딩 중...'** 텍스트를 보여줍니다.<br/>
+또한, `hasNextPage`를 통해 추가로 불러올 상품 데이터가 있는지 여부를 판단합니다.
+
+```tsx title="ProductList.tsx"
+export default function ProductsList({ category }: Props) {
+  const { fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
+    useGetProductList(category);
+  const productsList = useRecoilValue(productsListAtom);
+
+  return (
+    <article className='flex flex-col items-center gap-20'>
+      {isLoading && (
+        <div className='absolute inset-0 z-50 text-center pt-[30%] bg-slate-500/20'>
+          <GridSpinner />
+        </div>
+      )}
+      {isError && (
+        <p className='w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold'>
+          Error loading data.
+        </p>
+      )}
+      <ul className='w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
+        {productsList &&
+          productsList.map((product) => (
+            <li key={product.productId}>
+              <ProductCard product={product} />
+            </li>
+          ))}
+      </ul>
+      {!hasNextPage ? (
+        <ScrollToTopBtn />
+      ) : (
+        <button
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage}
+          className='flex justify-center p-1 rounded-lg font-semibold bg-navypoint hover:bg-pinkpoint text-white w-1/3'
+          aria-label='NextPage Button'
+        >
+          {isFetchingNextPage ? '로딩 중...' : hasNextPage && '더 보기'}
+        </button>
+      )}
+    </article>
+  );
+}
+```
+
+### 스크롤 복원(Scroll Restoration)
+
+무한 스크롤 기능은 UX를 향상시키는 데 중요한 역할을 하지만, 스크롤 복원 기능이 없다면 오히려 좋지 않은 UX를 초래할 수 있습니다.
+그렇기에 저는 **Next.js**가 제공하는 `scroll option`을 활용해 스크롤 복원 기능을 적용했습니다. 현재는 문제 없이 정상 작동하지만,
+`experimental` 즉, 실험적인 기능이기 때문에 언제든지 변경되거나 사라질 수 있기 때문에 수동으로 처리할 수 있게 추후 개발 예정입니다.
+
+```tsx title="next.config.js"
+const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    scrollRestoration: true,
+  },
+  ...
+}
+```
+
+### 결과
+
+무한 스크롤과 스크롤 복원 기능을 개발하여 보다 좋은 UX를 제공할 수 있게 되었습니다.<br/>
+프론트엔드 개발을 처음 시작했을 당시 무한 스크롤은 마치 퀘스트의 마지막 보스몹과 같이 어렵고 부담스러운 주제처럼 다가왔었습니다.<br/>
+하지만 이제는 생각보다(?) 쉡게 구현하면서 예전보다 성장했구나 라는 생각이 들었습니다.
+
+![infinitiscroll-sm](https://github.com/Seokho0120/peach-bloom/assets/93597794/e4924426-06a8-4b24-b144-8163e0fcd2fd)
+
+## NextAuth Module Augmentation
+
+평소 온라인 쇼핑을 자주하는데 매번 아이디와 비밀번호, 주소 등을 일일이 입력해야 하는 기존의 회원가입 방식을 정말 싫어하고 불편함을 느낍니다.
+소셜 로그인이라는 편리한 기술이 등장한 지금, 기존의 회원가입 방식을 고수하는 사이트는 유저에게 불편함을 준다고 생각합니다.
+
+따라서 저는 사용자 친화적인 서비스를 제공하기 위해 기존 로그인 방식 대신 소셜 로그인 방식을 도입했고, 일반적으로 가장 많이 사용되는
+네이버와 카카오, 구글 기반의 소셜 로그인을 개발했습니다.
+
+### NextAuth.js
+
+`NextAuth`는 `Next` 애플리케이션에서 사용자 인증을 손쉽게 구현할 수 있도록 도와주는 라이브러리로,
+Oauth 인증 방식의 다양한 인증공급자(Provider)를 지원하며, 자체 로그인 또한 구현할 수 있도록 도와줍니다.
+
+- 다양한 인증 공급자 지원
+
+  NextAuth는 다양한 인증 공급자(예: Google, Facebook, GitHub, Twitter 등)와 함께 사용할 수 있습니다.
+  이를 통해 사용자는 웹 애플리케이션에 다양한 방법으로 로그인하거나 가입할 수 있습니다.
+
+- 세션 관리
+
+  사용자 세션을 관리하고 보안적으로 유지합니다. 사용자 로그인 상태를 추적하고 세션을 관리하여 애플리케이션 내에서 사용자 인증을 유지합니다.
+
+- 간단한 설정
+
+  NextAuth를 설정하는 것은 상대적으로 간단하며, 대부분의 설정은 설정 파일을 통해 수행됩니다.
+  이를 통해 빠르게 인증 시스템을 설정할 수 있습니다.
+
+- TypeScript 지원
+
+  TypeScript를 사용하여 NextAuth를 구현할 수 있으며, 타입 안정성을 확보할 수 있습니다.
+
+- 확장성
+
+  확장 가능한 아키텍처를 제공하여 사용자 지정 로직 및 필요한 기능을 추가하거나 수정할 수 있습니다.
+
+### 적용하기
+
+각 Provider에 입력할 **Client Id**와 **Secret Key**는 구글, 카카오, 네이버 개발자 센터에서
+등록한 앱의 ID와 Secret을 넣으면 되고, `env` 파일을 생성해 환경변수로 관리하면 됩니다.
+
+```tsx title="auth.ts"
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_ID || '',
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_OAUTH_SECRET || '',
+    }),
+    KakaoProvider({
+      clientId: process.env.KAKAO_CLIENT_ID || '',
+      clientSecret: process.env.KAKAO_CLIENT_SECRET || '',
+    }),
+    NaverProvider({
+      clientId: process.env.NAVER_CLIENT_ID || '',
+      clientSecret: process.env.NAVER_CLIENT_SECRET || '',
+    }),
+  ],
+  ...
+}
+```
+
+### Type 커스텀하기
+
+사용자의 마이페이지에서 프로필 사진과 유저 이름, 닉네임, 계정 정보를 보여주고자 하였습니다. 하지만 `useSession` 메서드로
+`session` 값을 불러올때 **`user` 객체에 원하는 정보가 들어있지 않았고 기본 정보 외 데이터가 필요**했으며, 아래 코드는 각 로그인 시 user 정보 입니다.
+
+```tsx
+// 구글
+user {
+  id: '102694937968612745404',
+  name: 'Seokho Lee',
+  email: 'seokho0120@gmail.com',
+  image: 'https://lh3.googleusercontent.com/a/ACg8ocJa7VvOOo8OU5r9Os5qBArioaomoXbBv4dyyP32DOim=s96-c'
+}
+
+// 카카오
+user {
+  id: '3165573281',
+  name: 'SH',
+  email: 'seokho0120@naver.com',
+  image: 'http://k.kakaocdn.net/dn/9Os9B/btrUyCE9Hqh/9MmTkF7YIz8w5c9GT06VKk/img_640x640.jpg'
+}
+
+// 네이버
+user {
+  id: 'dZ0GPuYforBfuRD4F8Qo2gHcW_xCiETOzJ9Cogrg1Ds',
+  name: '이석호',
+  email: 'seokho0120@naver.com',
+  image: 'https://ssl.pstatic.net/static/pwe/address/img_profile.png'
+}
+```
+
+추가적으로 불러오고 싶은 데이터는 `username`과 `isAdmin` 입니다. `username`은 메일의 **@** 앞 부분만 가져와 닉네임으로 사용되며, `isAdmin`은 특정 계정에 관리자 권한을 부여하기 위해 필요합니다.
+
+[next-auth/typescript](https://next-auth.js.org/getting-started/typescript#module-augmentation)
+공식문서를 확인하면 `module augmentation` 모듈 확장이 가능합니다.<br/>
+`next-auth.d.ts`이라는 type 정의 파일을 만들어, 원하는 속성을 추가하면 기존 속성을 덮어씌우게 된다는 것을 알 수 있습니다.
+아래의 코드와 같이 필요한 속성 `username`과 `isAdmin`을 추가했습니다.
+
+```tsx title="next-auth.d.ts"
+import { AuthUser } from './AuthUserType';
+
+declare module 'next-auth' {
+  interface Session {
+    user: AuthUser;
+  }
+}
+
+export type AuthUser = {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  image?: string;
+  isAdmin: boolean;
+};
+```
+
+jwt 콜백은 JWT가 생성되거나, 업데이트 되었을 때 실행됩니다. 더불어 `userId`는 로그인이 필요한 곳에서 전부 사용되며,
+대표적으로 **좋아요 기능과 장바구니**가 있습니다. 하지만 이 과정에서 `userId` **타입 관련 이슈**가 발생했습니다.
+
+```tsx
+// 네이버 로그인 user
+user {
+  id: 'dZ0GPuYforBfuRD4F8Qo2gHcW_xCiETOzJ9Cogrg1Ds',
+  ...
+}
+```
+
+네이버로 로그인 시 **user의 id**는 항상 **텍스트와 숫자가 합쳐진 문자열**로 들어오는데, 구글과 카카오는 **항상 숫자로 이루어진 문자열**로 들어옵니다.
+userId가 필요한 로직에서 항상 **number 타입**으로 필요하기에, **네이버로 로그인 시 정규 표현식을 사용해 문자열에서 숫자만 추출**하여 `userId`로 설정해주었습니다.
+
+```tsx title="auth.ts"
+export const authOptions: NextAuthOptions = {
+  providers: [
+    ...
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        const isNaver = user.email?.includes('naver');
+        const userId = isNaver
+          ? Number(user.id.match(/\d+/g)?.join(''))
+          : user.id;
+
+        token.id = userId;
+        token.name = user.name;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      const user = session?.user;
+
+      if (session.user) {
+        session.user = {
+          ...user,
+          username: user.email?.split('@')[0] || user.name,
+          isAdmin: token.sub === process.env.NEXT_PUBLIC_ADMIN_UID,
+          id: token.id as number,
+        };
+      }
+      return session;
+    },
+  },
+  pages: {
+    signIn: '/auth/signIn',
+  },
+};
+```
+
+### 결과
+
+이렇게 NextAuth의 기본 `Session` 타입을 커스터마이징하여 구글, 카카오, 네이버 소셜 로그인을 개발했습니다.<br/>
+로그인은 NextAuth에서 제공하는 로그인 화면을 사용하지 않고, `/auth/signIn` 화면에서 로그인할 수 있도록 구현했습니다.
+
+<img width="1422" alt="LoginPage" src="https://github.com/Seokho0120/peach-bloom/assets/93597794/16bc92d3-823d-4179-8179-2258e4369c8a">
+
+## React Portal
+
+**모달(Modal)** 은 원하는 내용을 화면 상에 띄워 표현하는 방식으로, 프로젝트 혹은 실무에서 자주 사용됩니다.
+현업에서 모달을 만들 때 부모 컴포넌트의 CSS 영향을 받아 `z-index`와 같은 옵션을 조정하는 일이 불편했던 경험이 있습니다.
+
+이러한 이슈를 해결하기 위해 React 18의 `Portals`를 이용해 모달을 구현하게되었습니다.<br/>
+`Portals`은 부모 컴포넌트의 내부 DOM이 아닌 **미리 지정해준 DOM**에서 렌더링을 할 수 있습니다.
+또한, **이벤트 버블링이 DOM 내부에서 가능**합니다.
+이벤트 버블링은 중첩된 자식 요소에서 이벤트가 발생하면 부모로 이벤트가 전달되는 것을 말하는데,
+이때 부모 DOM 밖에서 아래의 예시와 같이 구현해도 DOM 트리 위치와 상관없이 protal은 React트리 내부에 존재하기 때문에, React의 가상돔에 따른 이벤트 버블링이 됩니다.
+
+```tsx {13}
+import React from 'react';
+
+const Modal = ({ open, onClose, children }) => {
+  if (!open) return null;
+  return ReactDOM.createPortal(
+    <>
+      <div style={overlayStyle} />
+      <div style={modalStyle}>
+        <button onClick={onClose}>모달 닫기</button>
+        {children}
+      </div>
+    </>,
+    document.getElementById('portal')
+  );
+};
+```
+
+**Portal의 장점**은 아래와 같이 정리할 수 있습니다.
+
+- `<div id='root'>가 아닌, <div id='global-modal'>`에서 마운트되므로 부모 컴포넌트의 CSS영향을 받지 않습니다.
+  따라서 `z-index`와 `overflow:hidden`과 같은 옵션으로 조정이 필요가 없습니다.
+
+- 이벤트 버블링이 DOM 트리 부모의 컴포넌트가 아닌, React 트리의 Protal의 부모 컴포넌트로 전달되기 때문에 버블링에 대한 걱정없이 사용 가능합니다.
+
+#### 적용하기
+
+`createPortal`메서드를 이용해 Modal 컴포넌트를 만들고,
+상위 HTML에 Modal 컴포넌트에서 적은 id 값을 가진 div 요소를 추가하면 됩니다.
+
+```tsx title="Modal.tsx"
+export default function Modal({
+  text,
+  modalText,
+  isModalOpen,
+  setIsModalOpen,
+  onClick,
+  goToCart,
+}: Props) {
+  if (!isModalOpen) return null;
+
+  return ReactDOM.createPortal(
+    <>
+      <div className='fixed inset-0 bg-gray-950 opacity-20'></div>
+      <div className='fixed inset-0 flex items-center justify-center'>
+        <div className='relative flex flex-col items-center bg-white w-96 p-10 rounded-lg'>
+          <button
+            className='absolute top-3 right-3'
+            onClick={() => setIsModalOpen(false)}
+            aria-label='Cancel Button'
+          >
+            <CancelIcon />
+          </button>
+          <p className='mt-4'>{text}</p>
+          <button
+            className='px-4 py-2 mt-10 rounded bg-navypoint hover:bg-pinkpoint text-white'
+            onClick={goToCart}
+            aria-label='Modal Button'
+          >
+            {modalText}
+          </button>
+        </div>
+      </div>
+    </>,
+    document.getElementById('global-modal') as HTMLElement
+  );
+}
+```
+
+Next.js의 루트 HTML 위치에 `<div id='global-modal'></div>`를 추가하여 모달이 마운트할 위치를 지정합니다.
+
+```tsx title="layout.tsx" {13}
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
+      <body className='w-full'>
+        <AuthSession>
+          <Provider>
+            <Navbar />
+            <main className='grow min-h-screen'>{children}</main>
+            <div id='global-modal'></div>
+            <Footer />
+          </Provider>
+        </AuthSession>
+        <VercelAnalytics />
+      </body>
+    </html>
+  );
+}
+```
+
+### 결과
+
+결과적으로 `Portal`을 활용하여 **Modal**을 보다 **더 유연하게 개발하고 불필요한 렌더링을 최소화**할 수 있었습니다.
+
+![modal-sm](https://github.com/Seokho0120/peach-bloom/assets/93597794/d9ad901d-0b08-458e-b783-06fc4f8b621c)
+
+## ISR
+
+제품 상세 페이지는 자주 업데이트하지 않아도 되기 때문에, 빠른 로딩 시간과 SEO 최적화를 위해 정적 페이지로 구현했습니다.
+또한, 오픈 그래프와 트위터 카드에 제품 사진과 정보를 포함하기 위한 목적도 있습니다.
+
+`generateStaticParams` 함수를 통해 Firestore의 `productDetail` 컬렉션에서
+productId에 해당하는 데이터를 정적으로 생성했습니다.
+
+```tsx title="detail/[productId]"
+export async function generateStaticParams() {
+  const snapshot = await getDocs(collection(db, 'productDetail'));
+  const productDetails = snapshot.docs.map(
+    (doc) => doc.data() as ProductDetailType
+  );
+
+  return productDetails.map((product) => ({
+    params: { productId: product.productId },
+  }));
+}
+```
+
+### SSG, ISR
+
+`SSG`와 `ISR`은 `CSR`과 다르게, **빌드 시점에 페이지를 미리 생성하여 정적인 HTML 파일을 제공**합니다.
+이미 생성된 HTML을 가져오기 때문에 **SEO최적화에 유리**하고, **페이지 로딩 시간(TTV)**이 빠르며, **보안성**이 뛰어나고 **CDN에 캐싱**되는 장점이 있습니다.
+
+하지만, `SSG`로 구현된 제품 상세페이지는 다시 빌드를 하지 않는 이상 데이터가 업데이트되지 않습니다. 이를 위해 매번 다시 빌드할 수 없으므로
+`revalidate`를 사용해 페이지의 재생성을 요청하는 방식을 사용했으며, **주기적으로 정적 페이지를 업데이트하는 방식**이 `ISR`입니다.
+
+적용 방법은 아주 간단합니다. 페이지 컴포넌트 상단에 `export const revalidate = 60 * 60 * 6`을 선언하면,
+해당 페이지는 6시간 간격으로 업데이트 됩니다.
+
+```tsx
+export const revalidate = 60 * 60 * 6;
+
+type Props = {
+  params: {
+    productId: number;
+  };
+};
+
+export default function ProductDetailPage({ params: { productId } }: Props) {
+  return (
+    <section className='mx-6 md:mx-36 lg:mx-52 flex justify-center'>
+      <ProductDetail productId={productId} />
+    </section>
+  );
+}
+```
+
+### 결과
+
+제품 상세 페이지를 `SSG`가 아닌 `ISR`로 구현하여 **주기적인 데이터 업데이트를 통해 최신 정보를 제공**하면서도
+**SEO 최적화**에 유리한 환경을 구축하였습니다.
+
+## SEO
+
+Next.js를 이용하면 정적 메타데이터(Static Metadata)와 동적 메타데이터(Dynamic Metadata),
+2가지 방법으로 metadata를 생성할 수 있습니다.
+
+페이지 내부에 metadata를 export하여 메타데이터 객체를 생성합니다.
+metadata객체의 속성인 `template`를 활용하면, 페이지 별로 타이틀이 바뀌게 됩니다.
+
+### 정적 메타데이터(Static Metadata)
+
+```tsx title="layout.tsx"
+export const metadata: Metadata = {
+  metadataBase: new URL('https://peach-bloom.vercel.app/'),
+  title: {
+    default: 'Peach Bloom',
+    template: 'Peach Bloom | %s',
+  },
+  description: '화장품을 판매하는 뷰티 종합 쇼핑몰 입니다.',
+  icons: {
+    icon: '/favicon.ico',
+  },
+  openGraph: {
+    title: 'Peach Bloom',
+    description: '화장품을 판매하는 뷰티 종합 쇼핑몰 입니다.',
+    url: 'https://peach-bloom.vercel.app/',
+    locale: 'ko_KR',
+    type: 'website',
+    siteName: 'Peach Bloom',
+  },
+  twitter: {
+    title: 'Peach Bloom',
+    description: '화장품을 판매하는 뷰티 종합 쇼핑몰 입니다.',
+    creator: '@River',
+    images: {
+      url: 'https://peach-bloom.vercel.app/',
+      alt: 'peach-bloom',
+    },
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'standard',
+      'max-snippet': -1,
+    },
+  },
+};
+```
+
+### 동적 메타데이터(Dynamic Metadata)
+
+**[slug]** 와 같이 동적 라우팅을 하는 경우 동적인 값을 받아오기 위해 `generateMetadata` 함수를 사용합니다.
+메타데이터를 `generateMetadata` 함수를 사용해 `fetch`하여 동적으로 생성합니다.
+
+```tsx title="products/[categories]"
+export async function generateMetadata({
+  params: { categories },
+}: Props): Promise<Metadata> {
+  const { products } = await getProductsList(categories);
+
+  return products
+    ? {
+        title: `${categories} 의 제품 리스트`,
+        description: `${categories} 에 해당하는 제품들을 확인할 수 있습니다.`,
+        openGraph: {
+          title: `${categories} 의 제품 리스트`,
+          description: `${categories}에 해당하는 제품들을 확인할 수 있습니다.`,
+          images: [products[0].imageUrl],
+          type: 'website',
+          url: `https://peach-bloom.vercel.app/detail/${categories}`,
+          emails: 'seokho0120@gmail.com',
+        },
+      }
+    : {};
+}
+```
+
+### robots.txt
+
+`robots.txt`은 봇들에게 사이트에 어떤 페이지가 있는지 알려주는,
+크롤러에게 웹페이지를 수집할 수 있도록 허용하거나 제한하는 파일입니다.
+
+```tsx title="robots.ts"
+import { MetadataRoute } from 'next';
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: '*',
+      allow: '/',
+    },
+    sitemap: 'https://peach-bloom.vercel.app/sitemap.xml',
+    host: 'https://peach-bloom.vercel.app/',
+  };
+}
+```
+
+### sitemap.xml
+
+`sitemap`은 사이트에 있는 페이지, 동영상 및 기타 파일과 그 관계에 관한 정보를 제공하는 파일입니다.
+Google과 같은 검색엔진은 이 파일을 읽고 사이트를 더 효율적으로 크롤링합니다.
+
+```tsx title="robots.ts"
+import { MetadataRoute } from 'next';
+import { getProductsList } from './api/firesotre';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const CATEGORIES = [
+    'all',
+    'exclusive',
+    'skincare',
+    'haircare',
+    'bodycare',
+    'makeup',
+    'mens',
+  ];
+
+  const categoryPages = CATEGORIES.map((category) => ({
+    url: `https://peach-bloom.vercel.app/products/${category}`,
+    lastModified: new Date().toISOString().split('T')[0],
+  }));
+
+  const productLists = await Promise.all(
+    CATEGORIES.map((category) => getProductsList(category))
+  );
+
+  const productPages = productLists.flat().flatMap((productList) =>
+    productList.products.map((product) => ({
+      url: `https://peach-bloom.vercel.app/products/${product.productId}`,
+      lastModified: new Date().toISOString().split('T')[0],
+    }))
+  );
+
+  return [...categoryPages, ...productPages];
+}
+```
+
+### 결과
+
+이와 같이 Next에서 제공하는 API를 사용해 쉽고 간단하게 검색 엔진 최적화를 구현했습니다.
+
+> ✨ 아래의 링크에서 확인할 수 있습니다.
+
+- [peach-bloom.vercel.app/sitemap.xml](https://peach-bloom.vercel.app/sitemap.xml)
+- [peach-bloom.vercel.app/robots.txt](https://peach-bloom.vercel.app/robots.txt)
+
+## Lighthouse 시작하기
+
+> ✨ Lighthouse의 정확한 측정을 위해서는 **항상 프로덕션 환경에서 테스트**를 해야합니다.
+
+이미 배포된 웹 페이지들은 상관 없지만, 개발 환경에서는 프로덕션 환경보다 성능이 더 낮게 측정되기 때문에<br/>
+**빌드를 한 뒤 yarn start로 프로덕션 환경에서 테스트**를 해야합니다.
+
+```tsx
+yarn build && yarn start
+
+npm run build && npm run start
+```
+
+- **Performance**
+
+  - 웹 페이지의 웹 성능을 측정
+  - 화면에 콘텐츠가 표시되는 데에 시간이 얼마나 걸리는지
+  - 표시된 후 사용자와 상호작용하기까지 얼마나 걸리는지
+  - 화면에 불안정한 요소는 없는지 등
+
+- **Accessibility**
+
+  - 웹 페이지가 웹 접근성을 잘 갖추고 있는지 확인
+  - 대체 텍스트를 잘 작성했는지
+  - 배경색과 콘텐츠 색상의 대비가 충분한지
+  - 적절한 WAI-ARIA 속성을 사용했는지 등
+
+- **Best Practices**
+
+  - 웹 페이지가 웹 표준 모범 사례를 잘 따르고 있는지 확인
+  - HTTPS 프로토콜을 사용하는지
+  - 사용자가 확인할 확률은 높지 않지만 콘솔 창에 오류가 표시되지는 않는지 등
+
+- **SEO**
+
+  - 웹 페이지가 검색 엔진 최적화가 잘 되었는지 확인
+  - 어플리케이션의 robot.txt가 유효한지
+  - `<meta>`요소가 잘 작성되어있는지, 텍스트 크기가 읽기에 무리가 없는지 등
+
+- **PWA(Progressive Web App)**
+
+  - 웹 페이지가 모바일 애플리케이션으로서도 잘 작동하는지 확이
+  - 앱 아이콘을 제공하는지
+  - 스플래시 화면이 있는지
+  - 화면 크기에 맞게 콘텐츠를 적절하게 배치했는지 등
+
+![image](https://github.com/Seokho0120/peach-bloom/assets/93597794/6881cc2f-8e85-440b-a0bc-b67bda77b281)
+
+## Performance
+
+Performance는 사용자가 얼마나 빠르게 컨텐츠를 인식하는지를 평가하는 지표이며, 성능 점수는 6가지 점수들의 평균값으로 계산됩니다.
+
+![performance](https://github.com/Seokho0120/peach-bloom/assets/93597794/0d8cac46-097a-4c20-aa96-58e293450f38)
+
+### LCP(Largest Contentful Paint) - 25%
+
+- 가장 큰 컨텐츠를 렌더링 하는데 걸리는 시간
+
+![lcp](https://github.com/Seokho0120/peach-bloom/assets/93597794/1fb619db-1c11-4685-9755-045a496346be)
+
+### TBT(Total Blocking Time) - 30%
+
+- 사용자 입력에 페이지가 응답하지 못하도록 차단되어진 총 시간
+- FCP와 TTI 사이에 긴 시간이 걸리는 작업들을 모두 기록하여 측정합니다.
+
+![tbt](https://github.com/Seokho0120/peach-bloom/assets/93597794/e2241c10-ecbc-4f9d-b446-ea4b694b0295)
+
+### CLS(Cumulative Layout Shift) - 15%
+
+- 사용자에게 발생하는 레이아웃 이동 빈도 측정
+- 크기를 알 수 없는 이미지나 동영상, 대체 크기보다 크거나 작게 렌더링 된 폰트 등 예상치 못한 레이아웃 이동에 대한 점수
+
+### TTI(Time to Interactive) - 10%
+
+- 사용자와 페이지가 완전히 상호작용 가능하기까지의 시간
+
+### FCP(First Contentful Paint) - 10%
+
+- 페이지 로드가 시작된 후 뷰포트내에 의미있는 컨텐츠 일부가 처음 화면에 렌더링될때까지의 시간
+
+### Speed Index - 10%
+
+- 컨텐츠가 눈에 띄게 채워지는 속도 측정
+
+## 개선 방법
+
+**Performance** 성능 개선을 위해 다음과 같은 방식을 사용할 수 있습니다.
+
+- ✨ **번들 최적화**
+
+  - Javascript 실행 시간을 단축하면 **사용자가 더 빨리 상호작용**을 할 수 있기 때문에 TBT와 TTI 성능을 개선할 수 있습니다.
+  - next의 `dynamic import`를 사용하면 현재 필요한 코드만 다운받을 수 있기 때문에 번들 사이즈를 줄일 수 있습니다.
+
+- ✨ **이미지 최적화**
+
+  - 웹페이지에서 대부분 가장 큰 용량을 차지하는 요소는 이미지 입니다. 그렇기에 **LCP를 개선**하기 위해서는 이미지 최적화가 가장 중요합니다.
+    이미지 최적화만 잘해도 Performance 점수의 30% 이상 개선할 수 있다고 합니다.
+  - 압축률이 좋은 **avif, webp** 파일 형식을 사용
+  - `next/image`를 사용해 `lazy` 속성으로 필요에 따라 불러오거나, `priority` 속성으로 가장 먼저 불러오기
+
+- ✨ **폰트 최적화**
+
+  - 폰트 로딩이 지연되면 **컨텐츠를 늦게 표시하는데 영향**을 주며, **레이아웃 움직임을 유발**할 수 있기 때문에 FCP나 CLS 성능에 영항을 줄 수 있습니다.
+  - `font-display: swap` 속성으로 폰트 로딩 전에 시스템 폰트를 보여주며, 빈 화면을 방지합니다.
+  - `next/font`를 사용하면 네트워크 요청 없이 바로 font 사용 가능
+
+## 개선 하기
+
+### ✨ 번들 최적화
+
+사용자가 **컨텐츠를 얼마나 빠르게 인식할 수 있는지**가 가장 중요하다고 판단하여, **Performance 항목을 개선하기 위해 집중**했습니다.
+
+### bundle-analyzer 적용 및 리팩토링
+
+번들 파일이 어떻게 구성되었는지 쉽게 파악하게 해주는 시각화 도구 입니다.
+
+```tsx
+// 설치
+yarn add -D @next/bundle-analyzer
+
+// next.config.js
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: true,
+  openAnalyzer: true,
+});
+```
+
+`@next/bundle-analyzer`을 설치 후 실행하면 3가지 html 결과물이 생성됩니다. client.html, edge.html, nodejs.html 중 클라이언트 번들링 결과를 시각적으로 분석한 **client.html**을 확인했습니다.
+
+![analyzer11](https://github.com/Seokho0120/peach-bloom/assets/93597794/e744448f-ff18-4fbb-8765-82351c395cd2)
+
+번들 파일 중 가장 큰 사이즈에 해당하는 파일 2개입니다. 제 눈에 가장 띄었던것은 `next-auth`와 `crypto-browserify`였습니다.
+
+<p align='center'>
+  <img
+    src='https://github.com/Seokho0120/peach-bloom/assets/93597794/d53ef60d-2540-457d-8fb7-154a7c521707'
+    width={800}
+    alt='crypto-browserify'
+  />
+</p>
+
+<img
+    src='https://github.com/Seokho0120/peach-bloom/assets/93597794/dcce6bf9-969f-452b-9ad9-3f340b01e61c'
+    width={800}
+    alt='crypto-browserify'
+  />
+
+</p>
+
+특히, `crypto-browserify` 라는 친구가 있는데, 그런걸 쓰지 않는데? 라고 생각했지만
+
+<p align='center'>
+  <img
+    src='https://github.com/Seokho0120/peach-bloom/assets/93597794/5ec7e759-f88f-482d-b247-afba0510a828'
+    width={900}
+    alt='crypto-browserify'
+  />
+</p>
+
+코드를 간결하게 사용하기 위해 서버와 클라이언트에서 session 정보를 가져오는 **`useUserSession` 커스텀훅이 오히려
+불필요한 리소스를 발생**시킨다고 판단했습니다.
+
+아래의 코드는 개선 전 코드입니다. 생각해보니 당연한것이, 클라이언트와 서버에서 사용되는 `next-auth`의 훅들을 한곳에서 사용하는게 적절하지 않았습니다.
+
+```tsx title="useUserSession.ts"
+import { useSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+
+export function useUserSession() {
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  return user;
+}
+
+export async function getServerUser() {
+  const sessoin = await getServerSession(authOptions);
+  const user = sessoin?.user;
+}
+```
+
+그렇기에 client에서 session 정보를 불러오는 `useSession` 훅을 삭제하고, 사용하는 페이지에서 `useSession`을 직접 사용하도록 수정했습니다.
+
+```tsx title="useUserSession.ts"
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+
+export async function getServerUser() {
+  const sessoin = await getServerSession(authOptions);
+  const user = sessoin?.user;
+}
+```
+
+```tsx title="MyInfo.tsx"
+'use client';
+
+import { signOut, useSession } from 'next-auth/react';
+
+export default function MyInfo() {
+  const { data: session } = useSession();
+  const user = session?.user;
+  ...
+}
+```
+
+### dynamic import
+
+**dynamic import**는 필요한 모듈이나 컴포넌트를 **필요한 시점에 비동기적으로 로드**하는 기능입니다.
+이를 통해 초기 로딩을 최적화하고 특정 기능이나 페이지가 필요한 경우에만 해당 리소스를 가져올 수 있습니다.
+
+즉, 사용자의 **상호작용에 따라 필요한 요소**만 로드하게 되며, 코드 분할을 통해 **초기 번들 사이즈와 초기 로딩 속도를 크게 개선**할 수 있습니다.
+
+대표적으로 `Loading spinner`와 같이 초기 렌더링에 필요하지 않은 요소에서 주로 사용됩니다.
+이 외에도 미리 렌더링하지 않아도 되는 컴포넌트에 dynamic을 적용했습니다.
+
+```tsx title="GridSpinner.tsx"
+import dynamic from 'next/dynamic';
+
+const GridLoader = dynamic(
+  () => import('react-spinners').then((lib) => lib.GridLoader),
+  {
+    ssr: false,
+  }
+);
+
+type Props = {
+  color?: string;
+};
+
+export default function GridSpinner({ color = 'red' }: Props) {
+  return <GridLoader color={color} size={20} />;
+}
+```
+
+```tsx title="app/page.tsx"
+import dynamic from 'next/dynamic';
+const Carousel = dynamic(() => import('@/components/Carousel'));
+const ScrollToTopBtn = dynamic(() => import('@/components/ScrollToTopBtn'));
+
+export default function Home() {
+  return (
+    <main className='mx-6 md:mx-48 lg:mx-72'>
+      <Carousel />
+      <ScrollToTopBtn />
+    </main>
+  );
+}
+```
+
+### Tree Shaking
+
+> ✨ Tree shaking은 사용되지 않는 코드를 제거하기 위해 JavaScript 컨텍스트에서 일반적으로 사용되는 용어입니다. [webpack - Tree Shaking](https://webpack.kr/guides/tree-shaking/)
+
+사실 Tree shaking은 구글링을 통해 처음 접하게된 방법입니다. 실제로 사용하지 않는 코드는 `import`하지 않고,
+정확하게 필요한 컴포넌트와 함수들만 사용한다고 생각했는데, Tree shaking을 적용하는 것만으로도 **초기 번들 사이즈가 적절하게 조정**되었습니다.
+
+사용 방법은 생각보다 간단합니다.<br/>
+`package.json`에 `sideEffects` 옵션을 제공하여 웹팩에게 사이드 이펙트(부수 효과)가 있는 파일들을 알려줄 수 있습니다.
+`sideEffects`를 false로 설정하면, 사이드 이펙트가 없기 때문에 웹팩에게 사용하지 않은 export는 빌드 단계에서 제거하도록 알려줍니다.
+
+```tsx title="package.json" {4}
+{
+  "name": "peach-bloom",
+  "version": "0.1.0",
+  "sideEffects": false,
+  ...
+}
+```
+
+`sideEffects가` 있는 파일이 있으면 배열 안에 Glob 패턴의 문자열 값을 넣어줍니다. 이 파일들은 Tree Shaking 대상에서 제거됩니다.
+
+```tsx title="package.json"
+{
+  "name": "peach-bloom",
+  "version": "0.1.0",
+  "sideEffects": [
+    '**/*.css'
+  ]
+  ...
+}
+```
+
+### 결과
+
+리팩토링, dynamic import, tree shaking을 적용하고 재빌드한 후
+bundle-analyzer로 확인한 결과, 이전에 대용량 사이즈였던 `next-auth`와 `crypto-browserify`를 포함한 파일이 사라졌습니다.
+
+처음에는 두 파일이 보이지 않아 오류인가 싶었는데, 알고보니 bundle-analyzer는 특정 모듈의 크기가 줄어들면
+해당 모듈이 작아지거나, 사라진다는 것을 확인했습니다.
+
+결론적으로 초기에 **대용량 번들 파일들을 client.html에서 보이지 않을 정도로 번들 사이즈 최적화를 구현**했습니다.
+
+<p align='center'>
+  <img src='https://github.com/Seokho0120/peach-bloom/assets/93597794/d4d8d413-7a3f-4637-a6a3-933147e27f0f' width='auto' alt='analyzer22' />
+</p>
+
+### ✨ 이미지 최적화
+
+이미지는 웹사이트 리소스 중 용량이 큰 편에 속하기 때문에 로드 속도가 오래 걸리며, 컨텐츠 중 가장 큰 영역을 차지하는 경우
+**LCP 성능에 큰 영향**을 줄 수 있습니다.
+그렇기에 **이미지 최적화는 시간 투자 대비 성능 효율이 가장 좋다고** 생각합니다.
+
+#### webp, avif 형식과 이미지 사이즈
+
+이미지 최적화의 기본은 **포맷 조정과 리사이징** 입니다. 사실 사이즈 조정은 당연하지만 생각보다 까다로운 작업이 될 수 있습니다.
+그렇기에 작업 전에 웹사이트에서 사용하는 이미지의 최대 넓이와 높이 값을 인지하고 설정하는 것이 좋습니다.
+
+이미지 포맷은 jpg, png, webp 등 다양한 포맷이 존재합니다.<br/>
+`webp`을 사용하면 jpg, png보다 크기를 **26% 이상 줄일 수 있습니다.**
+`webp`는 구글이 웹페이지 로딩 속도를 높이기 위해 만든 포맷이며, **품질은 유지하면서 파일 크기를 더 작게 만드는** 무손실 압축 확장자입니다.
+
+더불어 `webp`보다 **20% 높은 압축률을 자랑하는 형식**이 등장 했으며, 무손실 압축과 고품질 이미지의 특징을 가진 `avif`형식 입니다.
+`jpg`와 비교 시 동일 품질 대비 **최대 10배의 작은 용량**을 가집니다.
+
+![formatcategory](https://github.com/Seokho0120/peach-bloom/assets/93597794/54428c2e-b6ce-4e77-b019-83a3ee382213)
+
+### Cloudinary
+
+Cloudinary는 이미지와 동영상을 관리하고 최적화, 전송할 수 있는 클라우드 기반 서비스입니다.<br/>
+Cloudinary에서 제공하는 주요 기능에는 이미지 업로드와 저장 및 관리, 최적화를 위한 URL 기반 변환과 자동형식 변환,
+이미지 커스텀, 글로벌 CDN을 통한 빠른 전송 등이 있습니다.
+
+가장 많이 사용되는 AWS S3, Firebase Storage와 다르게 이미지와 동영상만을 위한 서비스이며, 특히 **업로드 즉시
+빠르고 쉽게 최적화를 구현**할 수 있기 때문에 선택했습니다.
+
+### Cloudinary 적용하기
+
+업로드 과정은 대략 아래의 순서와 같습니다.
+
+- 관리자권한 계정 유저가 제품 정보를 `product` 상태에 저장
+- `uploadImage` 함수를 통해 선택된 이미지를 Cloudinary에 업로드하고, 변환된 이미지 URL을 `url` 변수에 저장
+- `addNewProduct` 함수를 호출해 Firestore에 제품 정보와 이미지 URL 추가
+- 추가된 `ProductId`에 해당하는 제품 상세 내용 업로드 페이지로 이동
+
+```tsx title="addNewProduct.tsx"
+const [file, setFile] = useState<File>();
+const [product, setProduct] = useState<ProductListType>({
+  brandTitle: '',
+  category: '',
+  imageUrl: '',
+ ...
+});
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value, files, checked, type } = e.target;
+
+  if (name === 'file') {
+    if (!files) return;
+    setFile(files && files[0]);
+    return;
+  }
+
+  const parsedValue = type === 'number' ? Number(value) : value;
+
+  if (type === 'checkbox') {
+    setProduct((product) => ({ ...product, [name]: checked }));
+  } else {
+    setProduct((product) => ({ ...product, [name]: parsedValue }));
+  }
+};
+
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  if (!file) return;
+
+  const url = await uploadImage(file);
+  const firebaseProductId = await addNewProduct({ product, imageUrl: url });
+
+  const data = await getProductById(firebaseProductId);
+
+  await router.push(`/upload/${data}`); //제품 디테일 업로드로 이동
+};
+```
+
+이미지를 업로드하는 함수 `uploadImage`에서 **Cloudinary의
+기능들(이미지 리사이징, 포멧 최적화)을 이용해 이미지 최적화**를 구현했습니다.
+
+#### 이미지 리사이징
+
+이미지 리사이징을 위해 `w_500`과 `ar_1:1` 옵션을 사용했습니다.<br/>
+웹사이트에서 이미지의 `width`가 500이상 필요한 화면이 없기 때문에 `width` 를 고정값으로 지정했으며,
+`width` 만 지정하면 비율이 일정하지 않을 수 있기 때문에 `aspect ratio=1:1`을 의미하는
+`ar_1:1` 옵션으로 정사각형 비율을 유지시켰습니다.
+
+#### 포맷 최적화
+
+마지막으로 포맷 최적화를 위해 `f_auto`옵션을 사용했습니다.<br/>
+`format=auto`를 의미하며, 브라우저에 알맞는 format으로 자동 변환하는 기능입니다.
+최신 버전의 chrome 같은 경우 `avif`와 `webp`로,
+`avif`를 지원하지 않는 safari 브라우저 같은 경우 `jpeg`로 이미지를 서빙해줍니다.
+
+```tsx title="uploader.ts" {18}
+export async function uploadImage(file: File) {
+  const data = new FormData();
+  data.append('file', file);
+  data.append(
+    'upload_preset',
+    process.env.NEXT_PUBLIC_CLOUDINANRY_PRESET || ''
+  );
+
+  try {
+    const response = await axios({
+      method: 'POST',
+      url: process.env.NEXT_PUBLIC_CLOUDINANRY_URL,
+      data: data,
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+
+    const url = response.data.url;
+    const transformedUrl = url.replace(
+      '/upload/',
+      '/upload/w_500,ar_1:1,f_auto/'
+    );
+
+    return transformedUrl;
+  } catch (error) {
+    console.error('이미지 업로드 에러 발생 🚨', error);
+    throw error;
+  }
+}
+```
+
+### 결과
+
+Cloudinary가 제공하는 다양한 기능을 적절히 활용함으로써, **이미지들의 사이즈를 평균 80% 이상 개선하며 이미지 최적화**를 구현했습니다.
+
+> ✨ 링크를 통해 **개선 전과 후의 이미지를 비교**할 수 있습니다.
+
+- [개선 전](https://res.cloudinary.com/dsycahvpu/image/upload/v1700818085/bg6o5ayafbbjfdmaudas.jpg)
+- [개선 후](https://res.cloudinary.com/dsycahvpu/image/upload/w_500,ar_1:1,q_auto:best/v1700818085/bg6o5ayafbbjfdmaudas.jpg)
