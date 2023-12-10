@@ -1759,3 +1759,14 @@ Lighthouse의 Performance 점수는 **97점**으로, 총 **57% 향상에 성공*
 
 물론 아직 더 개선해야할 점이 많이 남아있으며, 추후 First Load JS에 집중해 개선 예정이고 댓글과 스켈레톤 UI, 결제 연동 등
 추가 기능도 개발 예정입니다.
+
+## ✨ 총 정리
+
+- Lighthouse의 Performance 62점 → 97점 / 성능 57% 향상
+- LCP 2.7s → 1.3s / CLS 0.328 → 0 / Speed Index 1.5s → 0.7s 개선
+- bundle-analyzer를 사용해 번들 사이즈 측정 후 Client 번들 파일을 위주로 시간 투자대비 효율이 좋은 순서로 리팩토링 진행
+- Next.js의 Dynamic import를 사용해 코드 분할을 적용하여 번들 파일 사이즈 감소 및 초기 로딩 속도 향상
+- Tree Shaking을 적용해 사용하지 않는 코드 제거 및 번들 사이즈 최소화
+- Next/Image의 srcSet 재설정, 이미지 우선순위에 맞게 priority 사용, 로컬 이미지에 placeholder 적용하여 이미지 최적화
+- Cloudinary로 이미지를 관리하며, 리사이징 및 포맷 최적화 기능으로 이미지 평균 사이즈 80% 감소 (캐러셀 이미지 43KB → 7KB)
+- Next/Font를 활용하고 swap 설정으로 폰트 최적화
