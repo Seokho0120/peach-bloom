@@ -1493,3 +1493,269 @@ Cloudinary가 제공하는 다양한 기능을 적절히 활용함으로써, **�
 
 - [개선 전](https://res.cloudinary.com/dsycahvpu/image/upload/v1700818085/bg6o5ayafbbjfdmaudas.jpg)
 - [개선 후](https://res.cloudinary.com/dsycahvpu/image/upload/w_500,ar_1:1,q_auto:best/v1700818085/bg6o5ayafbbjfdmaudas.jpg)
+
+![cloudinary-image](https://github.com/Seokho0120/peach-bloom/assets/93597794/47726a4c-ceba-4e94-a8e8-8798cfc79b6b)
+
+### Next/Image
+
+Next/Image 컴포넌트에서 제공하는 대표적인 기능은 다음의 3가지입니다.
+
+- #### lazy loading
+
+  lazy loading은 이미지 로드하는 시점을 필요할 때 까지 지연시키는 기술입니다.<br/>
+  Next/Image를 사용하면 자동으로 lazy loading이 적용되며, 적용하고 싶지 않은 경우 기능을 끌 수 있습니다. Image 컴포넌트의
+  priority 옵션을 true로 설정하거나, loading에 eager 값을 설정하면됩니다. 빌드 시 priority 값을 설정하는 것이 더 권장되는 방식입니다.
+
+- #### 이미지 사이즈 최적화
+
+  Next/Image는 디바이스 크기 별로 srcSet을 미리 지정해두고, 사용자의 디바이스에 맞는 이미지를 다운로드할 수 있게 지원합니다.
+  또한, Next.js는 이미지를 webp와 같이 용량이 작은 포맥으로 변환해서 제공합니다.
+
+  그렇다면 Next/Image를 사용하면 포맷 최적화가 되는데, Cloudinary의 포맷 최적화 기능을 사용했을까요?<br/>
+
+  Next/Image를 사용했을 시 대부분 webp 형식으로 최적화가 이루어졌는데, Cloudinary의 포맷 최적화를 사용하니 avif 형식으로 변환되는
+  비율이 더 높았습니다. 그렇기에 Cloudinary의 포맷 최적화 기능과 Next/Image를 함께 사용해서 최상의 최적화를 시도했습니다.
+
+- #### placeholder 제공
+
+  Next/Image는 레이아웃이 흔들리는 현상을 방지하기 위해 placeholder를 제공합니다.
+  placeholder는 빈 영역 또는 blur 이미지(로컬 이미지의 경우 build 타임에 생성,
+  리모트 이미지의 경우에는 base64로 인코딩된 data url 을 지정해 줘야 함)로 적용할 수도 있고, 커스텀 하게 설정할 수도 있습니다.
+
+대표적인 기능들 덕분에 얻게되는 장점은 아래와 같습니다.
+
+1. 성능 향상: 디바이스마다 적절한 사이즈의 이미지를 서빙하고, webp와 같은 작은 용량의 포맷을 사용함
+2. 시각적인 안정성: 이미지 로드 전 placeholder를 제공하여 CLS(Cumulative Layout Shift) 방지
+3. 빠른 페이지 로딩: viewport에 들어왔을 때만 이미지를 로드하고, 작은 사이즈의 blur 이미지를 미리 로딩하여 사용자에게 더 빠른 페이지를 보여줄 수 있음
+
+#### 결과
+
+srcSet을 개선하여 필요에 맞게 이미지를 로드하여 효율적으로 사용하게 되었습니다.
+
+![srcSet](https://github.com/Seokho0120/peach-bloom/assets/93597794/c6363040-7422-4995-8c29-e680fd0535f6)
+
+#### Priority
+
+`priority`는 우선순위라는 뜻으로, 이 속성을 설정하면 **브라우저가 미리 렌더링**을 합니다. <br/>
+그래서 랜딩 페이지에서 제일 처음 보이는 이미지에는 `priority`을 지정하는게 **성능면에서 당연히 유리**합니다.
+
+사실 처음에는 모든 Image에 `priority`를 설정하면 LCP 성능이 개선되는줄 알았습니다.
+하지만 모든 Image에 `priority`를 설정하면, 웹 브라우저는 모든 이미지를 동시에 불러오려고 시도하고, 이는 **네트워크에 부담을 주기에 LCP를 느리게** 만들 수 있습니다.
+또한, 중요하지 않은 이미지가 먼저 로드되어 **중요한 이미지의 로드를 지연시키는 이슈**가 발생할 수도 있습니다.
+
+`priority` 속성은 대표적으로 메인 화면에서 유용하게 사용되었습니다.<br/>
+화면 로드 시 처음에 보이는 이미지의 개수만 `priority` 속성을 적용 시키기 위해 `priorityIndices` prop을
+`CarouselSwiper`컴포넌트에 전달해주며 **type 별로 초기 로드되는 이미지의 개수를 다르게 설정**했습니다.
+
+```tsx title="Carousel.tsx" {9, 17 ,25}
+export default function Carousel() {
+  ...
+  return (
+    <section className='flex flex-col gap-8 md:gap-12 lg:gap-20'>
+      <CarouselSwiper
+        title='BEST'
+        subtitle='인기 많은 상품만 모았어요!'
+        productList={mainRankingList}
+        priorityIndices={[0]}
+        type='BEST'
+      />
+
+      <CarouselSwiper
+        title='On Sale'
+        subtitle='할인 중인 상품만 모았어요!'
+        productList={mainSaleRateList}
+        priorityIndices={[0, 1, 2]}
+        type='On Sale'
+      />
+
+      <CarouselSwiper
+        title='New Arrival'
+        subtitle='새로운 화장품을 만나보세요!'
+        productList={mainIsNewList}
+        priorityIndices={[0, 1, 2]}
+        type='New Arrival'
+      />
+    </section>
+  );
+}
+```
+
+```tsx title="Carousel.tsx" {15, 27}
+export default function CarouselSwiper(...) {
+  ...
+  const swiperSlides = useMemo(() => {
+    if (type === 'BEST') {
+      return productList.map(
+        ({ productId, brandTitle, productTitle, imageUrl }, idx) => (
+          <SwiperSlide key={productId}>
+            <div className='relative flex justify-center sm:z-0'>
+              ...
+              <Image
+                src={imageUrl}
+                alt={productTitle}
+                fill
+                className='relative object-cover rounded-full z-0'
+                priority={priorityIndices.includes(idx)}
+                sizes='(min-width: 1440px) 450px, 100vw'
+              />
+            </div>
+          </SwiperSlide>
+        )
+      );
+    } else {
+      return productList.map((product, idx) => (
+        <SwiperSlide key={product.productId}>
+          <ProductCard
+            product={product}
+            priority={priorityIndices.includes(idx)}
+          />
+        </SwiperSlide>
+      ));
+    }
+  }, [handleProductClick, priorityIndices, productList, type]);
+...
+}
+```
+
+#### 결과
+
+`priority`를 적절하게 설정하여 메인 화면에서 BEST 상품은 1개, 나머지는 각 3개씩
+총 7개의 이미지가 **미리 렌더링되어 LCP 성능을 개선**했습니다.
+
+![priority](https://github.com/Seokho0120/peach-bloom/assets/93597794/bd464591-d595-478d-9658-0d6cde03666e)
+
+#### placeholder
+
+사용자가 **예상하지 못한 순간 레이아웃이 흔들리는 현상을 CLS(Cumulative Layout Shift)** 라고 합니다<br/>
+만약 이미지 로드되기 전까지 영역의 높이가 0이었다가, 로드된 후 이미지만큼 영역이 확장된다면 CLS 성능에 안 좋은 영향을 줍니다.
+
+`next/image`는 `placeholder` 속성을 통해 **빈 영역 또는 blur 이미지를 제공하여, 레이아웃이 흔들리지 않게 합니다.**
+기본 설정으로 빈 영역을 제공합니다.
+
+#### placeholder 적용하기
+
+`placeholder`는 로컬 이미지와 리모트 이미지 여부에 따라 사용 방법이 다릅니다.<br/>
+로컬 이미지의 경우 빌드 타임에 import된 이미지 파일을 기준으로 자동으로 width, height를 지정하고, base64로 인코딩된
+blur 이미지가 생성되어 별도의 작업 없이 `placeholder='blur'`를 사용할 수 있습니다.
+
+그렇기에 로컬에서 사용하는 이미지인 `Symbol`과 `Logo`에 `placeholder='blur'`를 적용했습니다.
+
+```tsx title="Signin.tsx"
+export default function Signin({ providers, callbackUrl }: Props) {
+  return (
+    <div className='flex flex-col justify-center items-center'>
+      <Image
+        src={Symbol}
+        alt='Symbol'
+        className={`my-8 w-[8%] sm:w-[5%] h-auto`}
+        placeholder='blur' // Optional blur-up while loading
+        priority
+      />
+      ...
+  )}
+```
+
+#### 결과
+
+**로컬**에서 사용하는 이미지인 **`Symbol`과 `Logo`에 blur 처리가 되어 CLS를 개선**했습니다.
+
+![placeholder-sm](https://github.com/Seokho0120/peach-bloom/assets/93597794/1430aa14-ad7c-491f-908c-e4c898014332)
+
+### ✨ 폰트 최적화
+
+**swap 속성**
+
+- CSS의 `@font-face` 부분에 `font-display: swap` 를 적용하면 폰트가 로딩되지 않았을 때 시스템 폰트를 보여줍니다.
+  따라서 **화면이 비어있는 시간이 줄어들어 FP(First Content Paint) 시간을 단축**할 수 있습니다.
+
+**@next/font**
+
+- 구글 폰트를 사용한다면 폰트를 다운받기 위해 구글에 네트워크 요청을 보냅니다.
+  하지만 `@next/font`를 사용한다면, 네트워크 요청 없이 폰트를 바로 사용할 수 있기에 네트워크 페이로드를 줄일 수 있습니다.
+
+#### 적용하기
+
+[Next.js의 가이드](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts#local-fonts)에 따라 **최적화를 진행**했습니다.<br/>
+`next/font/local`의 로컬 폰트를 로드하고 **swap 설정**을 해줬고, `layout`의 **html에 적용**했습니다.
+
+```tsx title="fontUtil" {22, 23}
+import localFont from 'next/font/local';
+
+export const pretendardFont = localFont({
+  src: [
+    {
+      path: '../../public/fonts/NanumSquareL.ttf',
+      weight: '300',
+    },
+    {
+      path: '../../public/fonts/NanumSquareR.ttf',
+      weight: '400',
+    },
+    {
+      path: '../../public/fonts/NanumSquareB.ttf',
+      weight: '600',
+    },
+    {
+      path: '../../public/fonts/NanumSquareEB.ttf',
+      weight: '700',
+    },
+  ],
+  variable: '--font-pretendard',
+  display: 'swap',
+});
+```
+
+```tsx title="layout.tsx" {9}
+import { pretendardFont } from '@/utils/fontUtil';
+...
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
+      ...
+    </html>
+  );
+}
+```
+
+#### 결과
+
+폰트가 google이 아닌 **next에서 로드**되는 것을 확인할 수 있으며 **CLS 점수도 0점으로 최적화**할 수 있었습니다.
+
+<p align='center'>
+  <img src='https://github.com/Seokho0120/peach-bloom/assets/93597794/e4d9fb72-e8b0-4122-bf96-243ef21a9cb0' width='auto' alt='analyzer22' />
+</p>
+
+## 성능 개선 결과 및 회고
+
+Lighthouse를 통해 이미지와 폰트 등 다양한 리소스의 최적화 방법과 번들 사이즈 측정 등 다양한 방식으로 개선할 수 있었습니다.
+
+✨ **최적화 이전** <br/>
+Lighthouse의 Performance 점수는 **67점**입니다.
+
+<p align='center'>
+  <img src='https://github.com/Seokho0120/peach-bloom/assets/93597794/05485f57-175c-41f9-9875-017a6e7b1d7c' width='auto' alt='analyzer22' />
+</p>
+
+✨ **최적화 이후** <br/>
+Lighthouse의 Performance 점수는 **97점**으로, 총 **57% 향상에 성공**했습니다.<br/>
+특히 LCP와 Speed Index가 가장 많이 개선되었고, 실제로 개선 전 보다 웹사이트의 UX가 눈에 띄게 유연함을 체감할 수 있었습니다.
+
+**FCP** 0.3s → 0.3s<br/>
+**LCP** 2.7s → 1.3s<br/>
+**TBT** 0ms → 0ms<br/>
+**CLS** 0.328 → 0<br/>
+**Speed Index** 1.5s → 0.7s<br/>
+
+<p align='center'>
+  <img src='https://github.com/Seokho0120/peach-bloom/assets/93597794/311e5ed8-e5f4-4207-8013-9b2c30d43e0a' width='auto' alt='analyzer22' />
+</p>
+
+부끄럽지만 현업에서도, 이전의 프로젝트에서도 이처럼 성능 개선에 집중한 경험이 없었습니다. 항상 기능 구현에만 초점을 두고 급하게 개발하던
+제가 성능에 집중하며 테스트를 한다니 감개무량합니다.
+
+물론 아직 더 개선해야할 점이 많이 남아있으며, 추후 First Load JS에 집중해 개선 예정이고 댓글과 스켈레톤 UI, 결제 연동 등
+추가 기능도 개발 예정입니다.
