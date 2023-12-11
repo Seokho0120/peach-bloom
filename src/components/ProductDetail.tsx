@@ -25,7 +25,7 @@ import { useSession } from 'next-auth/react';
 const ProductInfo = dynamic(() => import('./ProductInfo'));
 const QuantityControl = dynamic(() => import('./QuantityControl'));
 const DetailBtn = dynamic(() =>
-  import('./DetailBtn').then((mod) => mod.DetailBtn)
+  import('./DetailBtn').then((mod) => mod.DetailBtn),
 );
 const Modal = dynamic(() => import('./Modal'));
 
@@ -200,14 +200,14 @@ export default function ProductDetail({ productId }: Props) {
   }, []);
 
   return (
-    <article className='flex flex-col w-full'>
+    <article className="flex flex-col w-full">
       {isLoading && (
-        <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
+        <div className="absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20">
           <GridSpinner />
         </div>
       )}
       {isError && (
-        <p className='w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold'>
+        <p className="w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold">
           Error loading data.
         </p>
       )}
@@ -224,21 +224,21 @@ export default function ProductDetail({ productId }: Props) {
           }) => (
             <div
               key={productId}
-              className='flex flex-col md:flex-row justify-between gap-4 lg:gap-16'
+              className="flex flex-col md:flex-row justify-between gap-4 lg:gap-16"
             >
-              <div className='flex-shrink-0 relative w-[452px] h-[452px] md:w-[350px] md:h-[350px] lg:w-[500px] lg:h-[500px]'>
+              <div className="flex-shrink-0 relative w-[452px] h-[452px] md:w-[350px] md:h-[350px] lg:w-[500px] lg:h-[500px]">
                 <Image
                   src={imageUrl}
                   alt={productTitle}
                   fill
-                  sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-                  className='absolute'
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="absolute"
                   priority
                 />
               </div>
-              <div className='flex-grow flex flex-col gap-2 lg:gap-5'>
+              <div className="flex-grow flex flex-col gap-2 lg:gap-5">
                 {isUpdating && (
-                  <div className='absolute z-20 inset-0 flex justify-center items-center'>
+                  <div className="absolute z-20 inset-0 flex justify-center items-center">
                     <GridSpinner />
                   </div>
                 )}
@@ -260,21 +260,21 @@ export default function ProductDetail({ productId }: Props) {
                   discountedPrice={discountedPrice}
                 />
 
-                <div className='flex gap-4 mt-3 lg:mt-0'>
-                  <DetailBtn text='장바구니 담기' onClick={handleAddToCart} />
-                  <DetailBtn text='바로 구매하기' onClick={handleBuy} />
+                <div className="flex gap-4 mt-3 lg:mt-0">
+                  <DetailBtn text="장바구니 담기" onClick={handleAddToCart} />
+                  <DetailBtn text="바로 구매하기" onClick={handleBuy} />
                   <Modal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
                     onClick={handleAddToCart}
                     goToCart={goToCart}
-                    text='장바구니에 상품이 담겼습니다.'
-                    modalText='장바구니 바로가기'
+                    text="장바구니에 상품이 담겼습니다."
+                    modalText="장바구니 바로가기"
                   />
                 </div>
               </div>
             </div>
-          )
+          ),
         )}
     </article>
   );

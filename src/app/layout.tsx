@@ -53,18 +53,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
+    <html lang="ko" className={`${pretendardFont.variable} font-sans`}>
       <meta
-        name='google-site-verification'
-        content='DrXuqvDuhqEVVfKJMO_1BwzoHwMQ7jktZxGV1XOB56c'
+        name="google-site-verification"
+        content="DrXuqvDuhqEVVfKJMO_1BwzoHwMQ7jktZxGV1XOB56c"
       />
 
-      <body className='w-full'>
+      <body className="w-full">
         <AuthSession>
           <Provider>
             <Navbar />
-            <main className='grow min-h-screen'>{children}</main>
-            <div id='global-modal'></div>
+            <main className="grow min-h-screen">{children}</main>
+            <div id="global-modal"></div>
             <Footer />
           </Provider>
         </AuthSession>
