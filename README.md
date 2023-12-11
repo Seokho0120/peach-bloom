@@ -2,6 +2,14 @@
 
 <img width="1433" alt="peach-bloom" src="https://github.com/Seokho0120/river.dev/assets/93597794/28e8efd5-ec94-44f1-895c-af6076356bdb">
 
+## Info
+
+✨ **기간:** 2023.11.01 - 2023.11.28
+
+✨ **주소:** https://peach-bloom.vercel.app/
+
+✨ **블로그:** https://river-dev.vercel.app/posts/peach-bloom-4
+
 ## 소개
 
 유튜브와 인스타그램 클론코딩으로 개발을 처음 접했을때 언젠가는 혼자 백엔드부터 프론트까지, 로그인부터 시작해서 유저가 페이지를 닫을 때 까지의
