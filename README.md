@@ -2,7 +2,7 @@
 
 <img width="1433" alt="peach-bloom" src="https://github.com/Seokho0120/river.dev/assets/93597794/28e8efd5-ec94-44f1-895c-af6076356bdb">
 
-## Info
+## 정보
 
 ✨ **기간:** 2023.11.01 - 2023.11.28
 
@@ -322,11 +322,11 @@ export default function SearchBar() {
   return (
     <form>
       <input
-        type='text'
-        name='search'
+        type="text"
+        name="search"
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
-        className='rounded-3xl w-48 sm:w-64 text-xs p-2 box-border'
+        className="rounded-3xl w-48 sm:w-64 text-xs p-2 box-border"
         placeholder={`검색어 입력 후 엔터를 눌러주세요.`}
       />
     </form>
@@ -479,7 +479,7 @@ export function useGetProductList(category: string) {
 ```tsx title="firestore.ts"
 export async function getProductsList(
   category?: string,
-  pageParam?: DocumentData | unknown
+  pageParam?: DocumentData | unknown,
 ): Promise<{
   products: ProductListType[];
   lastDoc: DocumentSnapshot | undefined;
@@ -519,18 +519,18 @@ export default function ProductsList({ category }: Props) {
   const productsList = useRecoilValue(productsListAtom);
 
   return (
-    <article className='flex flex-col items-center gap-20'>
+    <article className="flex flex-col items-center gap-20">
       {isLoading && (
-        <div className='absolute inset-0 z-50 text-center pt-[30%] bg-slate-500/20'>
+        <div className="absolute inset-0 z-50 text-center pt-[30%] bg-slate-500/20">
           <GridSpinner />
         </div>
       )}
       {isError && (
-        <p className='w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold'>
+        <p className="w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold">
           Error loading data.
         </p>
       )}
-      <ul className='w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5'>
+      <ul className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {productsList &&
           productsList.map((product) => (
             <li key={product.productId}>
@@ -544,8 +544,8 @@ export default function ProductsList({ category }: Props) {
         <button
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage}
-          className='flex justify-center p-1 rounded-lg font-semibold bg-navypoint hover:bg-pinkpoint text-white w-1/3'
-          aria-label='NextPage Button'
+          className="flex justify-center p-1 rounded-lg font-semibold bg-navypoint hover:bg-pinkpoint text-white w-1/3"
+          aria-label="NextPage Button"
         >
           {isFetchingNextPage ? '로딩 중...' : hasNextPage && '더 보기'}
         </button>
@@ -779,7 +779,7 @@ const Modal = ({ open, onClose, children }) => {
         {children}
       </div>
     </>,
-    document.getElementById('portal')
+    document.getElementById('portal'),
   );
 };
 ```
@@ -809,28 +809,28 @@ export default function Modal({
 
   return ReactDOM.createPortal(
     <>
-      <div className='fixed inset-0 bg-gray-950 opacity-20'></div>
-      <div className='fixed inset-0 flex items-center justify-center'>
-        <div className='relative flex flex-col items-center bg-white w-96 p-10 rounded-lg'>
+      <div className="fixed inset-0 bg-gray-950 opacity-20"></div>
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="relative flex flex-col items-center bg-white w-96 p-10 rounded-lg">
           <button
-            className='absolute top-3 right-3'
+            className="absolute top-3 right-3"
             onClick={() => setIsModalOpen(false)}
-            aria-label='Cancel Button'
+            aria-label="Cancel Button"
           >
             <CancelIcon />
           </button>
-          <p className='mt-4'>{text}</p>
+          <p className="mt-4">{text}</p>
           <button
-            className='px-4 py-2 mt-10 rounded bg-navypoint hover:bg-pinkpoint text-white'
+            className="px-4 py-2 mt-10 rounded bg-navypoint hover:bg-pinkpoint text-white"
             onClick={goToCart}
-            aria-label='Modal Button'
+            aria-label="Modal Button"
           >
             {modalText}
           </button>
         </div>
       </div>
     </>,
-    document.getElementById('global-modal') as HTMLElement
+    document.getElementById('global-modal') as HTMLElement,
   );
 }
 ```
@@ -844,13 +844,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='ko' className={`${pretendardFont.variable} font-sans`}>
-      <body className='w-full'>
+    <html lang="ko" className={`${pretendardFont.variable} font-sans`}>
+      <body className="w-full">
         <AuthSession>
           <Provider>
             <Navbar />
-            <main className='grow min-h-screen'>{children}</main>
-            <div id='global-modal'></div>
+            <main className="grow min-h-screen">{children}</main>
+            <div id="global-modal"></div>
             <Footer />
           </Provider>
         </AuthSession>
@@ -879,7 +879,7 @@ productId에 해당하는 데이터를 정적으로 생성했습니다.
 export async function generateStaticParams() {
   const snapshot = await getDocs(collection(db, 'productDetail'));
   const productDetails = snapshot.docs.map(
-    (doc) => doc.data() as ProductDetailType
+    (doc) => doc.data() as ProductDetailType,
   );
 
   return productDetails.map((product) => ({
@@ -910,7 +910,7 @@ type Props = {
 
 export default function ProductDetailPage({ params: { productId } }: Props) {
   return (
-    <section className='mx-6 md:mx-36 lg:mx-52 flex justify-center'>
+    <section className="mx-6 md:mx-36 lg:mx-52 flex justify-center">
       <ProductDetail productId={productId} />
     </section>
   );
@@ -1047,14 +1047,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const productLists = await Promise.all(
-    CATEGORIES.map((category) => getProductsList(category))
+    CATEGORIES.map((category) => getProductsList(category)),
   );
 
   const productPages = productLists.flat().flatMap((productList) =>
     productList.products.map((product) => ({
       url: `https://peach-bloom.vercel.app/products/${product.productId}`,
       lastModified: new Date().toISOString().split('T')[0],
-    }))
+    })),
   );
 
   return [...categoryPages, ...productPages];
@@ -1293,7 +1293,7 @@ const GridLoader = dynamic(
   () => import('react-spinners').then((lib) => lib.GridLoader),
   {
     ssr: false,
-  }
+  },
 );
 
 type Props = {
@@ -1312,7 +1312,7 @@ const ScrollToTopBtn = dynamic(() => import('@/components/ScrollToTopBtn'));
 
 export default function Home() {
   return (
-    <main className='mx-6 md:mx-48 lg:mx-72'>
+    <main className="mx-6 md:mx-48 lg:mx-72">
       <Carousel />
       <ScrollToTopBtn />
     </main>
@@ -1468,7 +1468,7 @@ export async function uploadImage(file: File) {
   data.append('file', file);
   data.append(
     'upload_preset',
-    process.env.NEXT_PUBLIC_CLOUDINANRY_PRESET || ''
+    process.env.NEXT_PUBLIC_CLOUDINANRY_PRESET || '',
   );
 
   try {
@@ -1482,7 +1482,7 @@ export async function uploadImage(file: File) {
     const url = response.data.url;
     const transformedUrl = url.replace(
       '/upload/',
-      '/upload/w_500,ar_1:1,f_auto/'
+      '/upload/w_500,ar_1:1,f_auto/',
     );
 
     return transformedUrl;
