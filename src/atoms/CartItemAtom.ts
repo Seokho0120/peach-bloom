@@ -1,4 +1,4 @@
-import { cartItemType } from '@/types/Product';
+import { cartItemType } from '@/types/ProductType';
 import { atom, selector } from 'recoil';
 
 type CartItem = {

@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import useDisCountedPrice from '@/hooks/useDiscountedPrice';
 import { useGetLikeCountDocId, useGetProductDetail } from '@/hooks/useProducts';
 import { CartItemAtom } from '@/atoms/CartItemAtom';
-import { arrProductDetailType } from '@/types/Product';
+import { arrProductDetailType } from '@/types/ProductType';
 import { addToCartType } from '@/types/FirestoreType';
 import {
   addToCart,

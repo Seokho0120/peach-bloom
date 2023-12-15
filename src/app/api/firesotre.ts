@@ -26,7 +26,7 @@ import {
   ProductDetailType,
   addProductType,
   cartItemType,
-} from '@/types/Product';
+} from '@/types/ProductType';
 import {
   InitialLikeStatusType,
   addToCartType,
@@ -43,14 +43,14 @@ export function getAllProductsList(): Promise<ProductListType[]> {
   return getDocs(collection(db, 'products')).then((snapshot) =>
     snapshot.empty
       ? []
-      : snapshot.docs.map((doc) => doc.data() as ProductListType)
+      : snapshot.docs.map((doc) => doc.data() as ProductListType),
   );
 }
 
 // 모든 데이터 필터 o
 export async function getProductsList(
   category?: string,
-  pageParam?: DocumentData | unknown
+  pageParam?: DocumentData | unknown,
 ): Promise<{
   products: ProductListType[];
   lastDoc: DocumentSnapshot | undefined;
@@ -78,11 +78,11 @@ export async function getProductsList(
 }
 
 export async function getProductDetail(
-  productId: number
+  productId: number,
 ): Promise<ProductDetailType> {
   const productQuery = query(
     collection(db, 'productDetail'),
-    where('productId', '==', productId)
+    where('productId', '==', productId),
   );
 
   const querySnapshot = await getDocs(productQuery);
@@ -137,7 +137,7 @@ export const addNewDeatil = async (productDetail: ProductDetailType) => {
 export async function getLikeCountDocId(productId: number) {
   const productQuery = query(
     collection(db, 'products'),
-    where('productId', '==', productId)
+    where('productId', '==', productId),
   );
 
   const querySnapshot = await getDocs(productQuery);
@@ -152,7 +152,7 @@ export async function getLikeCountDocId(productId: number) {
 
 export const updateLikedCount = async (
   docId: string | undefined,
-  likedCount: number
+  likedCount: number,
 ) => {
   const productRef = doc(db, 'products', `${docId}`);
 
@@ -167,7 +167,7 @@ export const likesRef = (productId: number) =>
 
 // likes 컬렉션에 productId 문서있는지 체크 및 생성
 export const checkAndCreateLikeDoc = async (
-  likesDocRef: DocumentReference<unknown, DocumentData> | undefined
+  likesDocRef: DocumentReference<unknown, DocumentData> | undefined,
 ) => {
   if (!likesDocRef) return;
   const likesData = await getDoc(likesDocRef);
@@ -260,7 +260,7 @@ export const subscribeToLikes = (userId: number, callback: () => void) => {
     },
     (error) => {
       console.error(error);
-    }
+    },
   );
 };
 
@@ -288,7 +288,7 @@ export async function addToCart(cartItem: addToCartType[]) {
       if (docSnap.exists()) {
         const existingCartItemList = docSnap.data().items;
         const existingCartItemIndex = existingCartItemList.findIndex(
-          (i: any) => i.productId === productId
+          (i: any) => i.productId === productId,
         );
 
         if (existingCartItemIndex !== -1) {
@@ -301,7 +301,7 @@ export async function addToCart(cartItem: addToCartType[]) {
       } else {
         await setDoc(userCartRef, { items: [newCartItem] });
       }
-    })
+    }),
   );
 }
 
@@ -346,7 +346,7 @@ export function subscribeToCartItems(userId: number, callback: () => void) {
     },
     (error) => {
       console.error(error);
-    }
+    },
   );
 }
 
@@ -382,7 +382,7 @@ export async function removeFromCart({ userId, productId }: removeCartType) {
 
   const items = userCartSnap.data().items;
   const updatedItems = items.filter(
-    (item: cartItemType) => item.productId !== productId
+    (item: cartItemType) => item.productId !== productId,
   );
 
   await updateDoc(userCartRef, {

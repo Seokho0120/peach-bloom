@@ -26,7 +26,7 @@ import {
   ProductDetailType,
   SelectedProductDetailType,
   ProductsResponse,
-} from '../types/Product';
+} from '../types/ProductType';
 import { CartItemUpdateAtom } from '@/atoms/CartItemAtom';
 import { searchItemAtom } from '@/atoms/SearchListAtom';
 import {
@@ -146,7 +146,7 @@ export function useGetProductDetail(productId: number) {
 
   useEffect(() => {
     const savedProductDetail = localStorage.getItem(
-      `productDetail_${productId}`
+      `productDetail_${productId}`,
     );
 
     if (savedProductDetail) {
@@ -154,7 +154,7 @@ export function useGetProductDetail(productId: number) {
     } else if (selectedProductDetail) {
       localStorage.setItem(
         `productDetail_${productId}`,
-        JSON.stringify(selectedProductDetail)
+        JSON.stringify(selectedProductDetail),
       );
     }
 
@@ -264,7 +264,7 @@ export function useGetSearchList(keyword: string) {
       const searchProductList = productsList.filter(
         (product) =>
           product.brandTitle.toLowerCase().includes(lowerCaseKeyword) ||
-          product.productTitle.toLowerCase().includes(lowerCaseKeyword)
+          product.productTitle.toLowerCase().includes(lowerCaseKeyword),
       );
 
       setSearchList(searchProductList);
@@ -293,7 +293,7 @@ export function useGetMainList() {
       const saleRankSortedList = [...productsList]
         .sort(
           (a: ProductListType, b: ProductListType) =>
-            (a.saleRank || 0) - (b.saleRank || 0)
+            (a.saleRank || 0) - (b.saleRank || 0),
         )
         .slice(0, 5);
 
@@ -302,7 +302,7 @@ export function useGetMainList() {
       const saleSaleRateSortedList = [...productsList]
         .sort(
           (a: ProductListType, b: ProductListType) =>
-            (b.saleRate || 0) - (a.saleRate || 0)
+            (b.saleRate || 0) - (a.saleRate || 0),
         )
         .slice(0, 5);
       setMainSaleRateList(saleSaleRateSortedList);

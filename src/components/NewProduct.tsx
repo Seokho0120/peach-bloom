@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { addNewProduct, getProductById } from '@/app/api/firesotre';
 import { uploadImage } from '@/app/api/uploader';
-import { ProductListType } from '@/types/Product';
+import { ProductListType } from '@/types/ProductType';
 
 export default function NewProduct() {
   const router = useRouter();
@@ -56,173 +56,173 @@ export default function NewProduct() {
   };
 
   return (
-    <article className='w-full text-center'>
-      <h2 className='text-2xl lg:text-4xl font-bold my-4 text-navypoint'>
+    <article className="w-full text-center">
+      <h2 className="text-2xl lg:text-4xl font-bold my-4 text-navypoint">
         새로운 제품 등록
       </h2>
 
       <form
-        className='flex flex-col px-3 lg:px-12 bg-slate-50 p-2 lg:p-10 gap-3'
+        className="flex flex-col px-3 lg:px-12 bg-slate-50 p-2 lg:p-10 gap-3"
         onSubmit={handleSubmit}
       >
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>상품 이미지</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">상품 이미지</p>
           <input
-            type='file'
-            accept='image/*'
-            name='file'
+            type="file"
+            accept="image/*"
+            name="file"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 bg-white p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 bg-white p-2 lg:p-3"
           />
         </div>
         {file && (
           <Image
-            className='w-96 mx-auto mb-2'
+            className="w-96 mx-auto mb-2"
             src={URL.createObjectURL(file)}
             width={400}
             height={400}
-            alt='local file'
+            alt="local file"
             priority
           />
         )}
-        <div className='flex items-center gap-8'>
-          <div className='flex'>
-            <p className='text-base lg:text-lg font-semibold'>세일 여부</p>
+        <div className="flex items-center gap-8">
+          <div className="flex">
+            <p className="text-base lg:text-lg font-semibold">세일 여부</p>
             <input
-              type='checkbox'
-              name='isSale'
-              placeholder='세일여부'
+              type="checkbox"
+              name="isSale"
+              placeholder="세일여부"
               required
               onChange={handleChange}
-              className='w-28 lg:w-10'
+              className="w-28 lg:w-10"
             />
           </div>
-          <div className='flex'>
-            <p className='text-base lg:text-lg font-semibold'>신상품 여부</p>
+          <div className="flex">
+            <p className="text-base lg:text-lg font-semibold">신상품 여부</p>
             <input
-              type='checkbox'
-              name='isNew'
-              placeholder='신상순'
+              type="checkbox"
+              name="isNew"
+              placeholder="신상순"
               required
               onChange={handleChange}
-              className='w-28 lg:w-10'
+              className="w-28 lg:w-10"
             />
           </div>
         </div>
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>브랜드명</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">브랜드명</p>
           <input
-            type='text'
-            name='brandTitle'
+            type="text"
+            name="brandTitle"
             value={product?.brandTitle ?? ''}
-            placeholder='브랜드명'
+            placeholder="브랜드명"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>카테고리</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">카테고리</p>
           <input
-            type='text'
-            name='category'
+            type="text"
+            name="category"
             value={product?.category ?? ''}
-            placeholder='카테고리'
+            placeholder="카테고리"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>제품명</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">제품명</p>
           <input
-            type='text'
-            name='productTitle'
+            type="text"
+            name="productTitle"
             value={product?.productTitle ?? 0}
-            placeholder='제품명'
+            placeholder="제품명"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>제품 Id</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">제품 Id</p>
           <input
-            type='number'
-            name='productId'
+            type="number"
+            name="productId"
             value={product?.productId ?? 0}
-            placeholder='제품id'
+            placeholder="제품id"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>가격</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">가격</p>
           <input
-            type='number'
-            name='price'
+            type="number"
+            name="price"
             value={product?.price ?? 0}
-            placeholder='가격'
+            placeholder="가격"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>좋아요수</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">좋아요수</p>
           <input
-            type='number'
-            name='likedCount'
+            type="number"
+            name="likedCount"
             value={product?.likedCount ?? 0}
-            placeholder='좋아요수'
+            placeholder="좋아요수"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
 
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>리뷰수</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">리뷰수</p>
           <input
-            type='number'
-            name='reviewCount'
+            type="number"
+            name="reviewCount"
             value={product?.reviewCount ?? 0}
-            placeholder='리뷰수'
+            placeholder="리뷰수"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>랭크순</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">랭크순</p>
           <input
-            type='number'
-            name='saleRank'
+            type="number"
+            name="saleRank"
             value={product?.saleRank ?? 0}
-            placeholder='랭크순'
+            placeholder="랭크순"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
-        <div className='flex items-center justify-between'>
-          <p className='text-base lg:text-lg font-semibold'>세일율</p>
+        <div className="flex items-center justify-between">
+          <p className="text-base lg:text-lg font-semibold">세일율</p>
           <input
-            type='number'
-            name='saleRate'
+            type="number"
+            name="saleRate"
             value={product?.saleRate ?? 0}
-            placeholder='세일율'
+            placeholder="세일율"
             required
             onChange={handleChange}
-            className='w-9/12 lg:w-11/12 p-2 lg:p-3'
+            className="w-9/12 lg:w-11/12 p-2 lg:p-3"
           />
         </div>
 
         <button
-          className='bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white'
-          aria-label='New detail'
+          className="bg-navypoint hover:bg-pinkpoint text-lg font-bold p-2 cursor-pointer text-white"
+          aria-label="New detail"
         >
           상세 내용 등록하러 가기
         </button>

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/app/api/firesotre';
 import ProductDetail from '@/components/ProductDetail';
-import { ProductDetailType, ProductListType } from '@/types/Product';
+import { ProductDetailType, ProductListType } from '@/types/ProductType';
 
 export const revalidate = 60 * 60 * 6;
 
@@ -14,7 +14,7 @@ type Props = {
 
 export default function ProductDetailPage({ params: { productId } }: Props) {
   return (
-    <section className='mx-6 md:mx-36 lg:mx-52 flex justify-center'>
+    <section className="mx-6 md:mx-36 lg:mx-52 flex justify-center">
       <ProductDetail productId={productId} />
     </section>
   );
@@ -23,7 +23,7 @@ export default function ProductDetailPage({ params: { productId } }: Props) {
 export async function generateStaticParams() {
   const snapshot = await getDocs(collection(db, 'productDetail'));
   const productDetails = snapshot.docs.map(
-    (doc) => doc.data() as ProductDetailType
+    (doc) => doc.data() as ProductDetailType,
   );
 
   return productDetails.map((product) => ({
@@ -38,7 +38,7 @@ export async function generateMetadata({
 
   const productQuery = query(
     collection(db, 'productDetail'),
-    where('productId', '==', productId)
+    where('productId', '==', productId),
   );
 
   const querySnapshot = await getDocs(productQuery);
@@ -51,7 +51,7 @@ export async function generateMetadata({
     : [];
 
   const selectedProduct = productList?.find(
-    (product) => product.productId === NumProductId
+    (product) => product.productId === NumProductId,
   );
 
   const newProductDetail = selectedProduct
