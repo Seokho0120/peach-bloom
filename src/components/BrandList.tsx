@@ -21,30 +21,30 @@ export default function BrandList({ category }: Props) {
   const filterByBrand = useFilterByBrand();
 
   return (
-    <article className='mb-6'>
-      <h2 className='font-bold text-2xl lg:text-4xl text-slate-600'>
+    <article className="mb-6">
+      <h2 className="font-bold text-2xl lg:text-4xl text-slate-600">
         <Image
           src={Symbol}
-          alt='Symbol'
+          alt="Symbol"
           className={`my-8 w-[8%] sm:w-[5%] h-auto`}
-          placeholder='blur'
+          placeholder="blur"
         />
 
         {category.toUpperCase()}
-        <div className='border-b border-navypoint mt-4' />
+        <div className="border-b border-navypoint mt-4" />
       </h2>
-      <ul className='flex flex-wrap p-4 md:p-6 lg:p-10 bg-gray-100 gap-4 text-sm font-semibold text-slate-800'>
-        <Filter />
+      <ul className="flex flex-wrap p-4 md:p-6 lg:p-10 bg-gray-100 gap-4 text-sm font-semibold text-slate-800">
+        <Filter category={category} />
         <p
           onClick={() => filterByBrand('전체')}
-          className='text-navypoint hover:brightness-150 cursor-pointer'
+          className="text-navypoint hover:brightness-150 cursor-pointer"
         >
           전체+
         </p>
         {brandList.map((brand, idx) => (
           <li
             onClick={() => filterByBrand(brand)}
-            className='hover:text-gray-400 cursor-pointer'
+            className="hover:text-gray-400 cursor-pointer"
             key={idx}
           >
             {brand}

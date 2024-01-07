@@ -43,8 +43,8 @@ export default function Menubar() {
   };
 
   return (
-    <ul className='relative'>
-      <li className='mt-6 mb-4 lg:my-6 text-navypoint hover:text-pinkpoint'>
+    <ul className="relative">
+      <li className="mt-6 mb-4 lg:my-6 text-navypoint hover:text-pinkpoint">
         <MenuIcon onClick={toggleMenu} />
       </li>
       <li
@@ -56,7 +56,7 @@ export default function Menubar() {
             <Link
               href={href}
               key={idx}
-              className='text-sm md:text-base font-semibold text-navypoint hover:text-pinkpoint'
+              className="text-sm md:text-base font-semibold text-navypoint hover:text-pinkpoint"
               aria-label={title}
             >
               {title}

@@ -2,14 +2,18 @@
 
 import { productsListAtom } from '@/atoms/ProductsAtom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ArrowIcon from './ui/ArrowIcon';
 import { FilterAtom } from '@/atoms/FilterAtom';
 import { filterProducts } from '@/utils/filterProducts';
 
 const FILTER = ['랭킹순', '좋아요순', '가격높은순', '가격낮은순', '높은할인순'];
 
-export default function Filter() {
+type Props = {
+  category: string;
+};
+
+export default function Filter({ category }: Props) {
   const productsList = useRecoilValue(productsListAtom);
   const setFilteredProducts = useSetRecoilState(productsListAtom);
   const [selectedFilter, setSelectedFilter] = useRecoilState(FilterAtom);
@@ -27,6 +31,13 @@ export default function Filter() {
     const newSortedProducts = sortProducts(productsList, filter);
     setFilteredProducts(newSortedProducts);
   };
+
+  useEffect(() => {
+    setSelectedFilter('랭킹순');
+    const newSortedProducts = sortProducts(productsList, '랭킹순');
+
+    setFilteredProducts(newSortedProducts);
+  }, [category]);
 
   return (
     <section className="relative">
