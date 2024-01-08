@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
 import MenuIcon from './ui/MenuIcon';
+import { useRecoilState } from 'recoil';
+import { MenubarAtom } from '@/atoms/MenubarAtom';
 
 const PRODUCTS_MENU = [
   {
@@ -36,7 +37,7 @@ const PRODUCTS_MENU = [
 ];
 
 export default function Menubar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useRecoilState(MenubarAtom);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
