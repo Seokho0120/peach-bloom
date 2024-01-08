@@ -1,12 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import { productsListAtom } from '@/atoms/ProductsAtom';
 import { FilterAtom } from '@/atoms/FilterAtom';
 import { filterProducts } from '@/utils/filterProducts';
@@ -19,8 +14,7 @@ type Props = {
 };
 
 export default function Filter({ category }: Props) {
-  const productsList = useRecoilValue(productsListAtom);
-  const setFilteredProducts = useSetRecoilState(productsListAtom);
+  const [productsList, setProductsList] = useRecoilState(productsListAtom);
   const [selectedFilter, setSelectedFilter] = useRecoilState(FilterAtom);
   const resetFilter = useResetRecoilState(FilterAtom);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -36,7 +30,7 @@ export default function Filter({ category }: Props) {
     setIsOpen(false);
 
     const newSortedProducts = sortProducts(productsList, filter);
-    setFilteredProducts(newSortedProducts);
+    setProductsList(newSortedProducts);
   };
 
   useEffect(() => {
