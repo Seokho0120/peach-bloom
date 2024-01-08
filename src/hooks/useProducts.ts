@@ -20,6 +20,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   productsListAtom,
   initialProductsListAtom,
+  prevProductsListAtom,
 } from '@/atoms/ProductsAtom';
 import {
   ProductListType,
@@ -38,6 +39,8 @@ import {
 export function useGetProductList(category: string) {
   const setProductList = useSetRecoilState(productsListAtom);
   const setInitialProductList = useSetRecoilState(initialProductsListAtom);
+  const prevProductsList = useRecoilValue(prevProductsListAtom); // 이전 상품 리스트 상태를 가져옴
+  const setPrevProductsList = useSetRecoilState(prevProductsListAtom); // 이전 상품 리스트 상태를 설정함
 
   const {
     data: productsList,

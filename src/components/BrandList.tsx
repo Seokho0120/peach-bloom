@@ -6,6 +6,7 @@ import { useRecoilValue } from 'recoil';
 import useFilterByBrand from '@/hooks/useFilterByBrand';
 import { productsListAtom } from '@/atoms/ProductsAtom';
 import Symbol from '../../public/images/symbol.png';
+import { useEffect } from 'react';
 const Filter = dynamic(() => import('./Filter'));
 
 type Props = {
@@ -19,6 +20,10 @@ export default function BrandList({ category }: Props) {
   ];
 
   const filterByBrand = useFilterByBrand();
+
+  useEffect(() => {
+    localStorage.setItem('category', category);
+  }, [category]);
 
   return (
     <article className="mb-6">

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import MenuIcon from './ui/MenuIcon';
 import { useRecoilState } from 'recoil';
 import { MenubarAtom } from '@/atoms/MenubarAtom';
+import { useEffect, useState } from 'react';
 
 const PRODUCTS_MENU = [
   {
@@ -41,7 +42,15 @@ export default function Menubar() {
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+    sessionStorage.setItem('isOpen', JSON.stringify(!isOpen));
   };
+
+  useEffect(() => {
+    const savedState = sessionStorage.getItem('isOpen');
+    if (savedState !== null) {
+      setIsOpen(JSON.parse(savedState));
+    }
+  }, []);
 
   return (
     <ul className="relative">
