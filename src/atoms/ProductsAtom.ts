@@ -12,7 +12,7 @@ export const productsListAtom = atom<ProductListType[]>({
   default: [],
 });
 
-export const prevProductsListAtom = atom({
+export const prevProductsListAtom = atom<ProductListType[]>({
   key: 'prevProductsList',
   default: [],
 });
@@ -20,4 +20,9 @@ export const prevProductsListAtom = atom({
 export const discountedPriceAtom = atom<number>({
   key: 'discountedPriceAtom',
   default: 0,
+});
+
+export const categoryAtom = atom<string>({
+  key: 'categoryAtom',
+  default: '',
 });

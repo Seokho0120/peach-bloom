@@ -17,8 +17,6 @@ export default function ProductsList({ category }: Props) {
     useGetProductList(category);
   const productsList = useRecoilValue(productsListAtom);
 
-  // console.log('productsList 컴포넌트~', productsList);
-
   return (
     <article className="flex flex-col items-center gap-20">
       {isLoading && (

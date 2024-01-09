@@ -2,9 +2,9 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import useFilterByBrand from '@/hooks/useFilterByBrand';
-import { productsListAtom } from '@/atoms/ProductsAtom';
+import { categoryAtom, productsListAtom } from '@/atoms/ProductsAtom';
 import Symbol from '../../public/images/symbol.png';
 import { useEffect } from 'react';
 const Filter = dynamic(() => import('./Filter'));
@@ -19,9 +19,12 @@ export default function BrandList({ category }: Props) {
     ...new Set(productsList.map((product) => product.brandTitle)),
   ];
 
+  const test = useSetRecoilState(categoryAtom);
+  const testt = useRecoilValue(categoryAtom);
   const filterByBrand = useFilterByBrand();
 
   useEffect(() => {
+    // test(category);
     localStorage.setItem('category', category);
   }, [category]);
 
