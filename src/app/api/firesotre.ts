@@ -39,22 +39,22 @@ import {
 export const db = getFirestore(app);
 
 // 모든 데이터 필터 x
-export function getAllProductsList(): Promise<ProductListType[]> {
+const getAllProductsList = () => {
   return getDocs(collection(db, 'products')).then((snapshot) =>
     snapshot.empty
       ? []
       : snapshot.docs.map((doc) => doc.data() as ProductListType),
   );
-}
+};
 
 // 모든 데이터 필터 o
-export async function getProductsList(
+const getProductsList = async (
   category?: string,
   pageParam?: DocumentData | unknown,
 ): Promise<{
   products: ProductListType[];
   lastDoc: DocumentSnapshot | undefined;
-}> {
+}> => {
   const baseQuery = collection(db, 'products');
   const categoryConstraint =
     category !== 'all' && category ? where('category', '==', category) : null;
@@ -75,11 +75,11 @@ export async function getProductsList(
     products: snapshot.docs.map((doc) => doc.data() as ProductListType),
     lastDoc,
   };
-}
+};
 
-export async function getProductDetail(
+const getProductDetail = async (
   productId: number,
-): Promise<ProductDetailType> {
+): Promise<ProductDetailType> => {
   const productQuery = query(
     collection(db, 'productDetail'),
     where('productId', '==', productId),
@@ -94,9 +94,9 @@ export async function getProductDetail(
   }
 
   return productData;
-}
+};
 
-export const addNewProduct = async ({ product, imageUrl }: addProductType) => {
+const addNewProduct = async ({ product, imageUrl }: addProductType) => {
   try {
     const docRef = await addDoc(collection(db, 'products'), {
       ...product,
@@ -110,7 +110,7 @@ export const addNewProduct = async ({ product, imageUrl }: addProductType) => {
   }
 };
 
-export const getProductById = async (productId: string) => {
+const getProductById = async (productId: string) => {
   const docRef = doc(db, 'products', productId);
   const docSnap = await getDoc(docRef);
 
@@ -122,7 +122,7 @@ export const getProductById = async (productId: string) => {
   }
 };
 
-export const addNewDeatil = async (productDetail: ProductDetailType) => {
+const addNewDeatil = async (productDetail: ProductDetailType) => {
   try {
     const docRef = await addDoc(collection(db, 'productDetail'), {
       ...productDetail,
@@ -133,8 +133,9 @@ export const addNewDeatil = async (productDetail: ProductDetailType) => {
     throw error;
   }
 };
+
 // 초기값 설정
-export async function getLikeCountDocId(productId: number) {
+const getLikeCountDocId = async (productId: number) => {
   const productQuery = query(
     collection(db, 'products'),
     where('productId', '==', productId),
@@ -148,9 +149,9 @@ export async function getLikeCountDocId(productId: number) {
   const docId = productDocs.id; // 문서 ID
 
   return { likeCountData, docId };
-}
+};
 
-export const updateLikedCount = async (
+const updateLikedCount = async (
   docId: string | undefined,
   likedCount: number,
 ) => {
@@ -162,11 +163,10 @@ export const updateLikedCount = async (
 };
 
 // productId에 해당하는 문서를 가리키는 포인터
-export const likesRef = (productId: number) =>
-  doc(db, 'likes', productId.toString());
+const likesRef = (productId: number) => doc(db, 'likes', productId.toString());
 
 // likes 컬렉션에 productId 문서있는지 체크 및 생성
-export const checkAndCreateLikeDoc = async (
+const checkAndCreateLikeDoc = async (
   likesDocRef: DocumentReference<unknown, DocumentData> | undefined,
 ) => {
   if (!likesDocRef) return;
@@ -178,7 +178,7 @@ export const checkAndCreateLikeDoc = async (
 };
 
 // 좋아요 했으면, likerList에서 userId 삭제 및 추가
-export const updateLikerList = async ({
+const updateLikerList = async ({
   likesDocRef,
   userId,
   isLiked,
@@ -195,7 +195,7 @@ export const updateLikerList = async ({
   }
 };
 
-export const getInitialLikeStatus = async (props: InitialLikeStatusType) => {
+const getInitialLikeStatus = async (props: InitialLikeStatusType) => {
   const {
     likesDocRef,
     setLikerList,
@@ -217,7 +217,7 @@ export const getInitialLikeStatus = async (props: InitialLikeStatusType) => {
   }
 };
 
-export const monitoringLikesData = (props: monitoringLikesDataType) => {
+const monitoringLikesData = (props: monitoringLikesDataType) => {
   const { likesDocRef, userId, setLikerList, setIsLiked } = props;
   if (!likesDocRef || !userId) return;
 
@@ -232,7 +232,7 @@ export const monitoringLikesData = (props: monitoringLikesDataType) => {
 };
 
 // MY LIKE 데이터 가져오기
-export const getLikedProducts = async (userId: number) => {
+const getLikedProducts = async (userId: number) => {
   const likesCollection = collection(db, 'likes');
   const productsCollection = collection(db, 'products');
 
@@ -250,7 +250,7 @@ export const getLikedProducts = async (userId: number) => {
   return likedProducts;
 };
 
-export const subscribeToLikes = (userId: number, callback: () => void) => {
+const subscribeToLikes = (userId: number, callback: () => void) => {
   const likesCollection = collection(db, 'likes');
 
   return onSnapshot(
@@ -264,7 +264,7 @@ export const subscribeToLikes = (userId: number, callback: () => void) => {
   );
 };
 
-export async function addToCart(cartItem: addToCartType[]) {
+const addToCart = async (cartItem: addToCartType[]) => {
   await Promise.all(
     cartItem.map(async (item) => {
       const {
@@ -303,9 +303,9 @@ export async function addToCart(cartItem: addToCartType[]) {
       }
     }),
   );
-}
+};
 
-export async function getCartItems(userId: number): Promise<cartItemType[]> {
+const getCartItems = async (userId: number): Promise<cartItemType[]> => {
   const userCartRef = doc(db, 'carts', userId.toString());
   const docSnap = await getDoc(userCartRef);
 
@@ -315,9 +315,9 @@ export async function getCartItems(userId: number): Promise<cartItemType[]> {
   } else {
     return [];
   }
-}
+};
 
-export function fetchCartItems(userId: number): Promise<cartItemType[]> {
+const fetchCartItems = (userId: number): Promise<cartItemType[]> => {
   const userCartRef = doc(db, 'carts', userId.toString());
 
   return new Promise((resolve, reject) => {
@@ -334,9 +334,10 @@ export function fetchCartItems(userId: number): Promise<cartItemType[]> {
         reject(error);
       });
   });
-}
+};
+
 // 카트 아이템 실시간 업데이트
-export function subscribeToCartItems(userId: number, callback: () => void) {
+const subscribeToCartItems = (userId: number, callback: () => void) => {
   const userCartRef = doc(db, 'carts', userId.toString());
 
   return onSnapshot(
@@ -348,10 +349,10 @@ export function subscribeToCartItems(userId: number, callback: () => void) {
       console.error(error);
     },
   );
-}
+};
 
 // 카트 아이템 수량 업데이트
-export async function updateCartItem({ userId, product }: cartUpdateType) {
+const updateCartItem = async ({ userId, product }: cartUpdateType) => {
   const userCartRef = await doc(db, 'carts', userId.toString());
   const userCartSanp = await getDoc(userCartRef);
   if (!userCartSanp.exists()) {
@@ -371,9 +372,9 @@ export async function updateCartItem({ userId, product }: cartUpdateType) {
   await updateDoc(userCartRef, {
     items: updatedItems,
   });
-}
+};
 
-export async function removeFromCart({ userId, productId }: removeCartType) {
+const removeFromCart = async ({ userId, productId }: removeCartType) => {
   const userCartRef = doc(db, 'carts', userId.toString());
   const userCartSnap = await getDoc(userCartRef);
   if (!userCartSnap.exists()) {
@@ -388,7 +389,7 @@ export async function removeFromCart({ userId, productId }: removeCartType) {
   await updateDoc(userCartRef, {
     items: updatedItems,
   });
-}
+};
 
 // // Dummy data List로직
 // export async function fetchProducts() {
@@ -410,3 +411,27 @@ export async function removeFromCart({ userId, productId }: removeCartType) {
 
 //   return productDetailData;
 // }
+
+export {
+  getAllProductsList,
+  getProductsList,
+  getProductDetail,
+  addNewProduct,
+  getProductById,
+  addNewDeatil,
+  getLikeCountDocId,
+  updateLikedCount,
+  likesRef,
+  checkAndCreateLikeDoc,
+  updateLikerList,
+  getInitialLikeStatus,
+  monitoringLikesData,
+  getLikedProducts,
+  subscribeToLikes,
+  addToCart,
+  getCartItems,
+  fetchCartItems,
+  subscribeToCartItems,
+  updateCartItem,
+  removeFromCart,
+};

@@ -42,6 +42,8 @@ export function useGetProductList(category: string) {
   const prevProductsList = useRecoilValue(prevProductsListAtom); // 이전 상품 리스트 상태를 가져옴
   const setPrevProductsList = useSetRecoilState(prevProductsListAtom); // 이전 상품 리스트 상태를 설정함
 
+  console.log('prevProductsList', prevProductsList);
+
   const {
     data: productsList,
     fetchNextPage,

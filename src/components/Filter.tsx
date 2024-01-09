@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRecoilState, useResetRecoilState } from 'recoil';
-import { productsListAtom } from '@/atoms/ProductsAtom';
+import { prevProductsListAtom, productsListAtom } from '@/atoms/ProductsAtom';
 import { FilterAtom } from '@/atoms/FilterAtom';
 import { filterProducts } from '@/utils/filterProducts';
 import ArrowIcon from './ui/ArrowIcon';
@@ -15,9 +15,14 @@ type Props = {
 
 export default function Filter({ category }: Props) {
   const [productsList, setProductsList] = useRecoilState(productsListAtom);
+  const [prevProductsList, setPrevProductsList] =
+    useRecoilState(prevProductsListAtom);
+
   const [selectedFilter, setSelectedFilter] = useRecoilState(FilterAtom);
   const resetFilter = useResetRecoilState(FilterAtom);
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const sortProducts = filterProducts();
 
   const toggleDropdown = () => {
@@ -27,12 +32,28 @@ export default function Filter({ category }: Props) {
   const handleSelection = (filter: string) => {
     setSelectedFilter(filter);
     setIsOpen(false);
+
     const newSortedProducts = sortProducts(productsList, filter);
+    localStorage.setItem(
+      'newSortedProducts',
+      JSON.stringify(newSortedProducts),
+    );
     setProductsList(newSortedProducts);
   };
 
   useEffect(() => {
-    resetFilter();
+    const savedCategory = localStorage.getItem('category');
+    const savedProductsList = localStorage.getItem('newSortedProducts');
+    const parsedProductsList =
+      savedProductsList && JSON.parse(savedProductsList);
+
+    if (category === savedCategory) {
+      // category가 변하지 않았을 때 로컬에 저장된 상품 리스트를 불러옴
+      setPrevProductsList(parsedProductsList);
+    } else {
+      // category가 변했을 때 필터를 초기화하고 상품 리스트를 업데이트
+      resetFilter();
+    }
   }, [category]);
 
   return (
