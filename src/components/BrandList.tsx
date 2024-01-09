@@ -17,7 +17,7 @@ const BrandList = ({ category }: Props) => {
   const brandList = [
     ...new Set(productsList.map((product) => product.brandTitle)),
   ];
-  const filterByBrand = useFilterByBrand();
+  const { filterByBrand } = useFilterByBrand();
 
   return (
     <article className="mb-6">

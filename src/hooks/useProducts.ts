@@ -35,13 +35,11 @@ import {
   mainSaleRateAtom,
 } from '@/atoms/MainListAtom';
 
-export function useGetProductList(category: string) {
+const useGetProductList = (category: string) => {
   const setProductList = useSetRecoilState(productsListAtom);
   const setInitialProductList = useSetRecoilState(initialProductsListAtom);
-  const prevProductsList = useRecoilValue(prevProductsListAtom); // 이전 상품 리스트 상태를 가져옴
-  const setPrevProductsList = useSetRecoilState(prevProductsListAtom); // 이전 상품 리스트 상태를 설정함
-
-  console.log('prevProductsList', prevProductsList);
+  // const prevProductsList = useRecoilValue(prevProductsListAtom); // 이전 상품 리스트 상태를 가져옴
+  // const setPrevProductsList = useSetRecoilState(prevProductsListAtom); // 이전 상품 리스트 상태를 설정함
 
   const {
     data: productsList,
@@ -97,9 +95,9 @@ export function useGetProductList(category: string) {
     isFetchingNextPage,
     getProductsList,
   };
-}
+};
 
-export function useGetProductDetail(productId: number) {
+const useGetProductDetail = (productId: number) => {
   const searchProductList = useRecoilValue(searchItemAtom);
   const mainRankingList = useRecoilValue(mainRankingAtom);
   const mainSaleRateList = useRecoilValue(mainSaleRateAtom);
@@ -174,9 +172,9 @@ export function useGetProductDetail(productId: number) {
     isLoading,
     isError,
   };
-}
+};
 
-export function useLikedProducts(userId: number) {
+const useLikedProducts = (userId: number) => {
   const queryClient = useQueryClient();
   const setProductList = useSetRecoilState(productsListAtom);
 
@@ -209,18 +207,18 @@ export function useLikedProducts(userId: number) {
   }, [likedProducts, error, setProductList]);
 
   return { isLoading, isError };
-}
+};
 
-export function useGetLikeCountDocId(productId: number) {
+const useGetLikeCountDocId = (productId: number) => {
   const { data: likeCountDocId } = useQuery({
     queryKey: ['likeCountDocId', productId],
     queryFn: () => getLikeCountDocId(productId),
   });
 
   return { likeCountDocId };
-}
+};
 
-export function useGetCartItems(userId: number) {
+const useGetCartItems = (userId: number) => {
   const queryClient = useQueryClient();
   const setCartList = useSetRecoilState(CartItemUpdateAtom);
 
@@ -247,9 +245,9 @@ export function useGetCartItems(userId: number) {
   }, [userId, queryClient]);
 
   return { isLoading, isError, data: cartItems };
-}
+};
 
-export function useGetSearchList(keyword: string) {
+const useGetSearchList = (keyword: string) => {
   const setSearchList = useSetRecoilState(searchItemAtom);
 
   const {
@@ -276,9 +274,9 @@ export function useGetSearchList(keyword: string) {
   }, [keyword, productsList, setSearchList]);
 
   return { isLoading, isError };
-}
+};
 
-export function useGetMainList() {
+const useGetMainList = () => {
   const setMainRankingList = useSetRecoilState(mainRankingAtom);
   const setMainSaleRateList = useSetRecoilState(mainSaleRateAtom);
   const setMainIsNewList = useSetRecoilState(mainIsNewAtom);
@@ -319,4 +317,14 @@ export function useGetMainList() {
   }, [productsList, setMainIsNewList, setMainRankingList, setMainSaleRateList]);
 
   return { isLoading, isError };
-}
+};
+
+export {
+  useGetProductList,
+  useGetProductDetail,
+  useLikedProducts,
+  useGetLikeCountDocId,
+  useGetCartItems,
+  useGetSearchList,
+  useGetMainList,
+};

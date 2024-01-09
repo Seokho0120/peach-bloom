@@ -1,17 +1,17 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   initialProductsListAtom,
   productsListAtom,
 } from '@/atoms/ProductsAtom';
 import { FilterAtom } from '@/atoms/FilterAtom';
 
-export default function useFilterByBrand() {
-  const productsList = useRecoilValue(productsListAtom);
-  const setFilteredProductsList = useSetRecoilState(productsListAtom);
+const useFilterByBrand = () => {
+  const [productsList, setFilteredProductsList] =
+    useRecoilState(productsListAtom);
   const initialProductsList = useRecoilValue(initialProductsListAtom);
   const setSelectedFilter = useSetRecoilState(FilterAtom);
 
-  return (brand: string) => {
+  const filterByBrand = (brand: string) => {
     if (productsList)
       if (brand === '전체') {
         setSelectedFilter('랭킹순');
@@ -23,4 +23,8 @@ export default function useFilterByBrand() {
         setFilteredProductsList(filtered);
       }
   };
-}
+
+  return { filterByBrand };
+};
+
+export default useFilterByBrand;
