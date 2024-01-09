@@ -12,15 +12,15 @@ type Props = {
   };
 };
 
-export default function ProductDetailPage({ params: { productId } }: Props) {
+const ProductDetailPage = ({ params: { productId } }: Props) => {
   return (
     <section className="mx-6 md:mx-36 lg:mx-52 flex justify-center">
       <ProductDetail productId={productId} />
     </section>
   );
-}
+};
 
-export async function generateStaticParams() {
+const generateStaticParams = async () => {
   const snapshot = await getDocs(collection(db, 'productDetail'));
   const productDetails = snapshot.docs.map(
     (doc) => doc.data() as ProductDetailType,
@@ -29,11 +29,11 @@ export async function generateStaticParams() {
   return productDetails.map((product) => ({
     params: { productId: product.productId },
   }));
-}
+};
 
-export async function generateMetadata({
+const generateMetadata = async ({
   params: { productId },
-}: Props): Promise<Metadata> {
+}: Props): Promise<Metadata> => {
   const NumProductId = Number(productId);
 
   const productQuery = query(
@@ -75,4 +75,6 @@ export async function generateMetadata({
         },
       }
     : {};
-}
+};
+
+export { generateStaticParams, generateMetadata, ProductDetailPage as default };

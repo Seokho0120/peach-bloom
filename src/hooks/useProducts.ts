@@ -15,7 +15,6 @@ import {
   subscribeToLikes,
 } from '../app/api/firesotre';
 import { useEffect, useMemo, useState } from 'react';
-
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   productsListAtom,

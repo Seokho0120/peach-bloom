@@ -7,23 +7,25 @@ const LikedProductsList = dynamic(
   () => import('@/components/LikedProductsList'),
   {
     loading: () => <GridSpinner />,
-  }
+  },
 );
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'MY LIKE',
   description: '좋아요한 상품들을 확인할 수 있습니다.',
 };
 
-export default async function MyLikePage() {
+const MyLikePage = async () => {
   const user = await getServerUser();
   if (!user) {
     redirect('/auth/signin');
   }
 
   return (
-    <section className='mx-6 md:mx-36 lg:mx-52'>
+    <section className="mx-6 md:mx-36 lg:mx-52">
       <LikedProductsList userId={user.id} />
     </section>
   );
-}
+};
+
+export { MyLikePage as default, metadata };
