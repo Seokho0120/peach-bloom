@@ -8,7 +8,7 @@ const Navbar = dynamic(() => import('@/components/Navbar'));
 const Footer = dynamic(() => import('@/components/Footer'));
 const VercelAnalytics = dynamic(() => import('@/components/VercelAnalytics'));
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   metadataBase: new URL('https://peach-bloom.vercel.app/'),
   title: {
     default: 'Peach Bloom',
@@ -47,11 +47,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="ko" className={`${pretendardFont.variable} font-sans`}>
       <meta
@@ -72,4 +68,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export { RootLayout as default, metadata };

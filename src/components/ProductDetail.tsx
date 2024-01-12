@@ -35,7 +35,7 @@ type Props = {
 
 export const revalidate = 60 * 60 * 6;
 
-export default function ProductDetail({ productId }: Props) {
+const ProductDetail = ({ productId }: Props) => {
   const router = useRouter();
   const NumProductId = Number(productId);
   const [isPending, startTransition] = useTransition();
@@ -278,4 +278,6 @@ export default function ProductDetail({ productId }: Props) {
         )}
     </article>
   );
-}
+};
+
+export default ProductDetail;

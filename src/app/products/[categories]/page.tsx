@@ -10,18 +10,18 @@ type Props = {
   };
 };
 
-export default function ProductsListPage({ params: { categories } }: Props) {
+const ProductsListPage = ({ params: { categories } }: Props) => {
   return (
     <section className="mx-6 md:mx-36 lg:mx-52">
       <BrandList category={categories} />
       <ProductsList category={categories} />
     </section>
   );
-}
+};
 
-export async function generateMetadata({
+const generateMetadata = async ({
   params: { categories },
-}: Props): Promise<Metadata> {
+}: Props): Promise<Metadata> => {
   const { products } = await getProductsList(categories);
 
   return products
@@ -38,4 +38,6 @@ export async function generateMetadata({
         },
       }
     : {};
-}
+};
+
+export { ProductsListPage as defatul, generateMetadata };

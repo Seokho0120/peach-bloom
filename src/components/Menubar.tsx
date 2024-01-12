@@ -4,7 +4,7 @@ import Link from 'next/link';
 import MenuIcon from './ui/MenuIcon';
 import { useRecoilState } from 'recoil';
 import { MenubarAtom } from '@/atoms/MenubarAtom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const PRODUCTS_MENU = [
   {
@@ -37,7 +37,7 @@ const PRODUCTS_MENU = [
   },
 ];
 
-export default function Menubar() {
+const Menubar = () => {
   const [isOpen, setIsOpen] = useRecoilState(MenubarAtom);
 
   const toggleMenu = () => {
@@ -75,4 +75,6 @@ export default function Menubar() {
       </li>
     </ul>
   );
-}
+};
+
+export default Menubar;

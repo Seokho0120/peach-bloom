@@ -6,10 +6,12 @@ export const metadata: Metadata = {
   description: '로그인을 하면 자신의 정보를 확인할 수 있습니다.',
 };
 
-export default function MyPage() {
+const MyPage = () => {
   return (
-    <section className='mx-6 md:mx-36 lg:mx-52 flex justify-center'>
+    <section className="mx-6 md:mx-36 lg:mx-52 flex justify-center">
       <MyInfo />
     </section>
   );
-}
+};
+
+export default MyPage;

@@ -9,7 +9,7 @@ type Props = {
   productId: string;
 };
 
-export default function NewProductDetail({ productId }: Props) {
+const NewProductDetail = ({ productId }: Props) => {
   const router = useRouter();
   const [productDetail, setProductDetail] = useState<ProductDetailType>({
     description: '',
@@ -96,4 +96,6 @@ export default function NewProductDetail({ productId }: Props) {
       </form>
     </section>
   );
-}
+};
+
+export default NewProductDetail;

@@ -7,10 +7,12 @@ type Props = {
   };
 };
 
-export default function UploadDeatilPage({ params: { productId } }: Props) {
+const UploadDeatilPage = ({ params: { productId } }: Props) => {
   return (
     <>
       <NewProductDetail productId={productId} />
     </>
   );
-}
+};
+
+export default UploadDeatilPage;

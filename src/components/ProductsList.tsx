@@ -12,7 +12,7 @@ type Props = {
   category: string;
 };
 
-export default function ProductsList({ category }: Props) {
+const ProductsList = ({ category }: Props) => {
   const { fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
     useGetProductList(category);
   const productsList = useRecoilValue(productsListAtom);
@@ -51,4 +51,6 @@ export default function ProductsList({ category }: Props) {
       )}
     </article>
   );
-}
+};
+
+export default ProductsList;

@@ -11,7 +11,7 @@ type Props = {
   priority?: boolean;
 };
 
-export default function ProductCard({ product, priority = false }: Props) {
+const ProductCard = ({ product, priority = false }: Props) => {
   const {
     imageUrl,
     productId,
@@ -83,4 +83,6 @@ export default function ProductCard({ product, priority = false }: Props) {
       </div>
     </Link>
   );
-}
+};
+
+export default ProductCard;

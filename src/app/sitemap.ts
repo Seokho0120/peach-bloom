@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getProductsList } from './api/firesotre';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const CATEGORIES = [
     'all',
     'exclusive',
@@ -18,15 +18,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const productLists = await Promise.all(
-    CATEGORIES.map((category) => getProductsList(category))
+    CATEGORIES.map((category) => getProductsList(category)),
   );
 
   const productPages = productLists.flat().flatMap((productList) =>
     productList.products.map((product) => ({
       url: `https://peach-bloom.vercel.app/products/${product.productId}`,
       lastModified: new Date().toISOString().split('T')[0],
-    }))
+    })),
   );
 
   return [...categoryPages, ...productPages];
-}
+};
+
+export default sitemap;

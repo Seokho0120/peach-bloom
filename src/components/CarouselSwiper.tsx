@@ -21,13 +21,13 @@ type Props = {
   type: string;
 };
 
-export default function CarouselSwiper({
+const CarouselSwiper = ({
   title,
   subtitle,
   productList,
   priorityIndices,
   type,
-}: Props) {
+}: Props) => {
   const router = useRouter();
 
   const handleProductClick = useCallback(
@@ -147,4 +147,6 @@ export default function CarouselSwiper({
       </Swiper>
     </div>
   );
-}
+};
+
+export default CarouselSwiper;

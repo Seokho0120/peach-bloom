@@ -11,48 +11,50 @@ import {
 import GridSpinner from './ui/GridSpinner';
 import CarouselSwiper from './CarouselSwiper';
 
-export default function Carousel() {
+const Carousel = () => {
   const { isError, isLoading } = useGetMainList();
   const mainRankingList = useRecoilValue(mainRankingAtom);
   const mainSaleRateList = useRecoilValue(mainSaleRateAtom);
   const mainIsNewList = useRecoilValue(mainIsNewAtom);
 
   return (
-    <section className='flex flex-col gap-8 md:gap-12 lg:gap-20'>
+    <section className="flex flex-col gap-8 md:gap-12 lg:gap-20">
       {isLoading && (
-        <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
+        <div className="absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20">
           <GridSpinner />
         </div>
       )}
       {isError && (
-        <p className='w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold'>
+        <p className="w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold">
           Error loading data.
         </p>
       )}
 
       <CarouselSwiper
-        title='BEST'
-        subtitle='인기 많은 상품만 모았어요!'
+        title="BEST"
+        subtitle="인기 많은 상품만 모았어요!"
         productList={mainRankingList}
         priorityIndices={[0]}
-        type='BEST'
+        type="BEST"
       />
 
       <CarouselSwiper
-        title='On Sale'
-        subtitle='할인 중인 상품만 모았어요!'
+        title="On Sale"
+        subtitle="할인 중인 상품만 모았어요!"
         productList={mainSaleRateList}
         priorityIndices={[0, 1, 2]}
-        type='On Sale'
+        type="On Sale"
       />
 
       <CarouselSwiper
-        title='New Arrival'
-        subtitle='새로운 화장품을 만나보세요!'
+        title="New Arrival"
+        subtitle="새로운 화장품을 만나보세요!"
         productList={mainIsNewList}
         priorityIndices={[0, 1, 2]}
-        type='New Arrival'
+        type="New Arrival"
       />
     </section>
   );
-}
+};
+
+export default Carousel;

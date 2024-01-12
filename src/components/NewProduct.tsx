@@ -7,7 +7,7 @@ import { addNewProduct, getProductById } from '@/app/api/firesotre';
 import { uploadImage } from '@/app/api/uploader';
 import { ProductListType } from '@/types/ProductType';
 
-export default function NewProduct() {
+const NewProduct = () => {
   const router = useRouter();
   const [file, setFile] = useState<File>();
   const [product, setProduct] = useState<ProductListType>({
@@ -229,4 +229,6 @@ export default function NewProduct() {
       </form>
     </article>
   );
-}
+};
+
+export default NewProduct;

@@ -26,7 +26,7 @@ const EqualIcon = dynamic(() => import('./ui/EqualIcon'), {
   ssr: false,
 });
 
-export default function CartsList() {
+const CartsList = () => {
   const SHIPPING = 3000;
   const { data: session } = useSession();
   const userId = session?.user.id;
@@ -37,53 +37,55 @@ export default function CartsList() {
   const hasCartItem = cartItem && cartItem.length > 0;
 
   return (
-    <article className='min-h-screen'>
+    <article className="min-h-screen">
       {isLoading && (
-        <div className='absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20'>
+        <div className="absolute inset-0 z-20 text-center pt-[30%] bg-slate-500/20">
           <GridSpinner />
         </div>
       )}
       {isError && (
-        <p className='w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold'>
+        <p className="w-full bg-red-100 text-red-600 text-center p-4 mb-4 font-bold">
           Error loading data.
         </p>
       )}
-      <h2 className='font-bold text-2xl lg:text-4xl text-slate-600 mb-6'>
+      <h2 className="font-bold text-2xl lg:text-4xl text-slate-600 mb-6">
         장바구니
-        <div className='border-b border-navypoint mt-4' />
+        <div className="border-b border-navypoint mt-4" />
       </h2>
 
       {!hasCartItem && <p>장바구니에 상품이 없습니다. 지금 쇼핑하세요 💄</p>}
       {hasCartItem && (
         <>
-          <div className='flex items-center gap-1 mr-16 mb-4'>
-            <p className='text-base lg:text-xl font-semibold'>총 상품 개수: </p>
-            <p className='text-base lg:text-xl font-bold'>{totalQuantity}개</p>
+          <div className="flex items-center gap-1 mr-16 mb-4">
+            <p className="text-base lg:text-xl font-semibold">총 상품 개수: </p>
+            <p className="text-base lg:text-xl font-bold">{totalQuantity}개</p>
           </div>
-          <div className='border-b mb-4' />
-          <ul className='flex flex-col gap-4 mb-8'>
+          <div className="border-b mb-4" />
+          <ul className="flex flex-col gap-4 mb-8">
             {cartItem &&
               cartItem.map((product) => (
                 <CartItem product={product} key={product.productId} />
               ))}
           </ul>
-          <div className='flex justify-between items-center px-0 md:px-8 lg:px-16 mb-10'>
-            <PriceCard text='총 주문금액' price={totalPrice} />
+          <div className="flex justify-between items-center px-0 md:px-8 lg:px-16 mb-10">
+            <PriceCard text="총 주문금액" price={totalPrice} />
             <PlusIcon />
-            <PriceCard text='총 배송비' price={SHIPPING} />
+            <PriceCard text="총 배송비" price={SHIPPING} />
             <EqualIcon />
             <PriceCard
-              text='총 결제금액'
+              text="총 결제금액"
               price={totalPrice && totalPrice + SHIPPING}
             />
           </div>
           <NormalBtn
-            text='주문하기'
-            size='large'
+            text="주문하기"
+            size="large"
             onClick={() => console.log('주문하기')}
           />
         </>
       )}
     </article>
   );
-}
+};
+
+export default CartsList;

@@ -1,5 +1,7 @@
 import { AiOutlineUser } from 'react-icons/ai';
 
-export default function UserIcon() {
-  return <AiOutlineUser className='w-5 h-5' />;
-}
+const UserIcon = () => {
+  return <AiOutlineUser className="w-5 h-5" />;
+};
+
+export default UserIcon;

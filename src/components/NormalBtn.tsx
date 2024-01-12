@@ -7,12 +7,7 @@ type Props = {
   size?: 'small' | 'medium' | 'large';
 };
 
-export default function NormalBtn({
-  text,
-  onClick,
-  disabled,
-  size = 'medium',
-}: Props) {
+const NormalBtn = ({ text, onClick, disabled, size = 'medium' }: Props) => {
   const sizeClasses = (() => {
     switch (size) {
       case 'small':
@@ -34,4 +29,6 @@ export default function NormalBtn({
       {text}
     </button>
   );
-}
+};
+
+export default NormalBtn;

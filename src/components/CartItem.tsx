@@ -16,7 +16,7 @@ type Props = {
   product: cartItemType;
 };
 
-export default function CartItem({ product }: Props) {
+const CartItem = ({ product }: Props) => {
   const { imageUrl, price, productId, productTitle, quantity, brandTitle } =
     product;
   const { data: session } = useSession();
@@ -105,4 +105,6 @@ export default function CartItem({ product }: Props) {
       </button>
     </li>
   );
-}
+};
+
+export default CartItem;

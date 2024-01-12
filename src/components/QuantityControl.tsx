@@ -8,7 +8,7 @@ type Props = {
   discountedPrice: number | undefined;
 };
 
-export default function QuantityControl(props: Props) {
+const QuantityControl = (props: Props) => {
   const { setQuantity, quantity, discountedPrice } = props;
   return (
     <>
@@ -38,4 +38,6 @@ export default function QuantityControl(props: Props) {
       </div>
     </>
   );
-}
+};
+
+export default QuantityControl;

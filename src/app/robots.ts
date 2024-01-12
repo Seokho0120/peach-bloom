@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-export default function robots(): MetadataRoute.Robots {
+const robots = (): MetadataRoute.Robots => {
   return {
     rules: {
       userAgent: '*',
@@ -9,4 +9,6 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: 'https://peach-bloom.vercel.app/sitemap.xml',
     host: 'https://peach-bloom.vercel.app/',
   };
-}
+};
+
+export default robots;

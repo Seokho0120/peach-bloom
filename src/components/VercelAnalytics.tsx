@@ -2,6 +2,8 @@
 
 import { Analytics } from '@vercel/analytics/react';
 
-export default function VercelAnalytics() {
+const VercelAnalytics = () => {
   return <Analytics />;
-}
+};
+
+export default VercelAnalytics;

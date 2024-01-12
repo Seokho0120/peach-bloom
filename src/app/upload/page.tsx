@@ -8,10 +8,12 @@ export const metadata: Metadata = {
 
 const NewProduct = dynamic(() => import('@/components/NewProduct'));
 
-export default function UploadPage() {
+const UploadPage = () => {
   return (
-    <section className='mx-6 md:mx-36 lg:mx-52'>
+    <section className="mx-6 md:mx-36 lg:mx-52">
       <NewProduct />
     </section>
   );
-}
+};
+
+export default UploadPage;
