@@ -40,4 +40,4 @@ const generateMetadata = async ({
     : {};
 };
 
-export { ProductsListPage as defatul, generateMetadata };
+export { ProductsListPage as default, generateMetadata };
